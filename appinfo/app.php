@@ -32,7 +32,7 @@ if (OCP\App::isEnabled('user_cas')) {
 	OCP\App::registerAdmin('user_cas', 'settings');
 
 	// register user backend
-	OC_User::useBackend( 'CAS' );
+	\OC_User::useBackend( 'CAS' );
 
 	OC::$CLASSPATH['OC_USER_CAS_Hooks'] = 'user_cas/lib/hooks.php';
 	OCP\Util::connectHook('OC_User', 'post_createUser', 'OC_USER_CAS_Hooks', 'post_createUser');
@@ -47,7 +47,7 @@ if (OCP\App::isEnabled('user_cas')) {
 
 			phpCAS::forceAuthentication();
 
-			if (!OC_User::login('', '')) {
+			if (!\OC_User::login('', '')) {
 				$error = true;
 				\OCP\Util::writeLog('cas','Error trying to authenticate the user', \OCP\Util::DEBUG);
 			}
@@ -59,12 +59,12 @@ if (OCP\App::isEnabled('user_cas')) {
 		}
 
 		OC::$REQUESTEDAPP = '';
-		OC_Util::redirectToDefaultPage();
+		\OC_Util::redirectToDefaultPage();
 	}
 
 
 	if (!phpCAS::isAuthenticated() && !OCP\User::isLoggedIn()) {
-		OC_App::registerLogIn(array('href' => '?app=user_cas', 'name' => 'CAS Login'));
+		\OC_App::registerLogIn(array('href' => '?app=user_cas', 'name' => 'CAS Login'));
 	}
 
 }

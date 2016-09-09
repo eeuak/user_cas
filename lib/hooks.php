@@ -149,7 +149,7 @@ function update_groups($uid, $groups, $protected_groups=array(), $just_created=f
 		$old_groups = OC_Group::getUserGroups($uid);
 		foreach($old_groups as $group) {
 			if(!in_array($group, $protected_groups) && !in_array($group, $groups)) {
-				OC_Group::removeFromGroup($uid,$group);
+				\OC_Group::removeFromGroup($uid,$group);
 				\OCP\Util::writeLog('cas','Removed "'.$uid.'" from the group "'.$group.'"', \OCP\Util::DEBUG);
 			}
 		}
@@ -160,12 +160,12 @@ function update_groups($uid, $groups, $protected_groups=array(), $just_created=f
 			\OCP\Util::writeLog('cas','Invalid group "'.$group.'", allowed chars "a-zA-Z0-9" and "_.@-" ',\OCP\Util::DEBUG);
 		}
 		else {
-			if (!OC_Group::inGroup($uid, $group)) {
+			if (!\OC_Group::inGroup($uid, $group)) {
 				if (!OC_Group::groupExists($group)) {
-					OC_Group::createGroup($group);
+					\OC_Group::createGroup($group);
 					\OCP\Util::writeLog('cas','New group created: '.$group, \OCP\Util::DEBUG);
 				}
-				OC_Group::addToGroup($uid, $group);
+				\OC_Group::addToGroup($uid, $group);
 				\OCP\Util::writeLog('cas','Added "'.$uid.'" to the group "'.$group.'"', \OCP\Util::DEBUG);
 			}
 		}
