@@ -32,7 +32,7 @@ if (OCP\App::isEnabled('user_cas')) {
 	OCP\App::registerAdmin('user_cas', 'settings');
 
 	// register user backend
-	\OC\User\User::useBackend( 'CAS' );
+	\OC\User::useBackend( 'CAS' );
 
 	OC::$CLASSPATH['OC_USER_CAS_Hooks'] = 'user_cas/lib/hooks.php';
 	OCP\Util::connectHook('OC_User', 'post_createUser', 'OC_USER_CAS_Hooks', 'post_createUser');
@@ -47,7 +47,7 @@ if (OCP\App::isEnabled('user_cas')) {
 
 			phpCAS::forceAuthentication();
 
-			if (!\OC\User\User::login('', '')) {
+			if (!\OC\User::login('', '')) {
 				$error = true;
 				\OCP\Util::writeLog('cas','Error trying to authenticate the user', \OCP\Util::DEBUG);
 			}
