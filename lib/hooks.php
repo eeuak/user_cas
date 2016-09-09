@@ -30,7 +30,7 @@ class OC_USER_CAS_Hooks {
 
 		$uid = $parameters['uid'];
 		$casBackend = OC_USER_CAS::getInstance();
-		$userDatabase = new OC_User_Database;
+		$userDatabase = new \OC\User\Database;
 
 		if (phpCAS::isAuthenticated()) {
 			// $cas_attributes may vary in name, therefore attributes are fetched to $attributes
