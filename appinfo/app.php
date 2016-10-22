@@ -47,10 +47,10 @@ if (OCP\App::isEnabled('user_cas')) {
 
 			phpCAS::forceAuthentication();
 
-			if (!\OC_User::isLoggedIn()) {
-				$error = true;
-				\OCP\Util::writeLog('cas','Error trying to authenticate the user', \OCP\Util::DEBUG);
-			}
+			$user = phpCAS::getUser();
+			$application = new \OC\Core\Application();
+			$loginController = $application->getContainer()->query('LoginController');
+			$loginController->tryLogin($user,NULL,NULL);
 		
 			if (isset($_SERVER["QUERY_STRING"]) && !empty($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] != 'app=user_cas') {
 				header( 'Location: ' . OC::$WEBROOT . '/?' . $_SERVER["QUERY_STRING"]);
