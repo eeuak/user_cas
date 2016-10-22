@@ -22,8 +22,8 @@
  *
  */
 
-require_once(__DIR__ . '/lib/ldap_backend_adapter.php');
-use OCA\user_cas\lib\LdapBackendAdapter;
+#require_once(__DIR__ . '/lib/ldap_backend_adapter.php');
+#use OCA\user_cas\lib\LdapBackendAdapter;
 
 class OC_USER_CAS extends OC_User_Backend {
 
@@ -50,7 +50,7 @@ class OC_USER_CAS extends OC_User_Backend {
 
 	public function __construct() {
 		$this->autocreate = OCP\Config::getAppValue('user_cas', 'cas_autocreate', true);
-		$this->cas_link_to_ldap_backend = \OCP\Config::getAppValue('user_cas', 'cas_link_to_ldap_backend', false);
+		#$this->cas_link_to_ldap_backend = \OCP\Config::getAppValue('user_cas', 'cas_link_to_ldap_backend', false);
 		$this->updateUserData = OCP\Config::getAppValue('user_cas', 'cas_update_user_data', true);
 		$this->defaultGroup = OCP\Config::getAppValue('user_cas', 'cas_default_group', '');
 		$this->protectedGroups = explode (',', str_replace(' ', '', OCP\Config::getAppValue('user_cas', 'cas_protected_groups', '')));
@@ -107,9 +107,9 @@ class OC_USER_CAS extends OC_User_Backend {
 		if (!$this->cas_link_to_ldap_backend) {
 			return false;
 		}
-		if ($this -> ldapBackendAdapter === false) {
+		/*if ($this -> ldapBackendAdapter === false) {
 			$this -> ldapBackendAdapter = new LdapBackendAdapter();
-		}
+		}*/
 		return true;
 	}
 
@@ -128,7 +128,7 @@ class OC_USER_CAS extends OC_User_Backend {
 			return false;
 		}
 
-		if ($this->initializeLdapBackendAdapter()) {
+		/*if ($this->initializeLdapBackendAdapter()) {
 			\OCP\Util::writeLog('cas',"Search CAS user '$uid' in LDAP", \OCP\Util::DEBUG);
 			//Retrieve user in LDAP directory
 			$ocname = $this->ldapBackendAdapter->getUuid($uid);
@@ -137,7 +137,7 @@ class OC_USER_CAS extends OC_User_Backend {
 				\OCP\Util::writeLog('cas',"Found CAS user '$uid' in LDAP with name '$ocname'", \OCP\Util::DEBUG);
 				return $ocname;
 			}
-		}
+		}*/
 		return $uid;
 	}
 

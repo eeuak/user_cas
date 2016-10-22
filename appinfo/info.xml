@@ -1,14 +1,32 @@
 <?xml version="1.0"?>
 <info>
-	<id>user_cas</id>
-	<name>CAS user and group backend</name>
-	<description>Authenticate Users by a CAS SERVER</description>
-	<licence>AGPL</licence>
-	<author>Leonis Holding, Felix Rupp</author>
-	<require>9.1.0</require>
-	<version>1.3</version>
-	<types>
+    <id>user_cas</id>
+    <name>CAS user and group backend</name>
+    <description>Authenticate Users by a CAS SERVER</description>
+    <licence>AGPL</licence>
+    <author>Leonis Holding, Felix Rupp</author>
+    <namespace>UserCas</namespace>
+    <version>1.3</version>
+    <types>
         <prelogin/>
         <authentication/>
-	</types>
+    </types>
+
+    <category>tool</category>
+
+    <website>https://github.com/owncloud/user_cas</website>
+
+    <bugs>https://github.com/owncloud/user_cas/issues</bugs>
+
+    <repository type="git">https://github.com/owncloud/user_cas.git</repository>
+
+    <dependencies>
+        <php min-version="5.6" max-version="5.6.99"/>
+        <database>sqlite</database>
+        <database>mysql</database>
+        <lib>curl</lib>
+        <os>Linux</os>
+        <command os="linux">curl</command>
+        <owncloud min-version="9.1.0" max-version="9.1.99"/>
+    </dependencies>
 </info>
