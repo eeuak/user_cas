@@ -50,7 +50,7 @@ class UserCAS extends OC_User_Backend
     /**
      * @var \OCA\User_CAS\Service\UserService $userService
      */
-    private $userService
+    private $userService;
 
 
     // cached settings
