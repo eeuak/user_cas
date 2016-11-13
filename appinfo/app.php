@@ -4,8 +4,11 @@
  * ownCloud - user_cas
  *
  * @author Sixto Martin <sixto.martin.garcia@gmail.com>
+ * @author Felix Rupp <kontakt@felixrupp.com>
+ *
  * @copyright Sixto Martin Garcia. 2012
  * @copyright Leonis. 2014 <devteam@leonis.at>
+ * @copyright Felix Rupp <kontakt@felixrupp.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -23,78 +26,33 @@
  */
 
 
-
+$ocUserCas = \OCA\User_CAS\UserCAS::getInstance();
 
 if (OCP\App::isEnabled('user_cas')) {
 
-	require_once 'user_cas/user_cas.php';
+    $forceLogin = $ocUserCas->isEnforceAuthentication();
 
-	OCP\App::registerAdmin('user_cas', 'settings');
+    if ((isset($_GET['app']) && $_GET['app'] == 'user_cas') || $forceLogin) {
 
-	// register user backend
-	\OC_User::useBackend( 'CAS' );
+        if ($ocUserCas->isInitialized()) {
 
-	OC::$CLASSPATH['OC_USER_CAS_Hooks'] = 'user_cas/lib/hooks.php';
-	OCP\Util::connectHook('OC_User', 'post_createUser', 'OC_USER_CAS_Hooks', 'post_createUser');
-	OCP\Util::connectHook('OC_User', 'post_login', 'OC_USER_CAS_Hooks', 'post_login');
-	OCP\Util::connectHook('OC_User', 'logout', 'OC_USER_CAS_Hooks', 'logout');
+            phpCAS::forceAuthentication();
 
-	$force_login = shouldEnforceAuthentication();
+            $userName = phpCAS::getUser();
 
-	if( (isset($_GET['app']) && $_GET['app'] == 'user_cas') || $force_login ) {
+            $result = $ocUserCas->login($userName);
 
-		if (OC_USER_CAS :: initialized_php_cas()) {
+            if (isset($_SERVER["QUERY_STRING"]) && !empty($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] !== 'app=user_cas') {
+                header('Location: ' . OC::$WEBROOT . '/?' . $_SERVER["QUERY_STRING"]);
+                exit();
+            }
+        }
 
-			phpCAS::forceAuthentication();
+        OC::$REQUESTEDAPP = '';
+        \OC_Util::redirectToDefaultPage();
+    }
 
-			$user = phpCAS::getUser();
-			$application = new \OC\Core\Application();
-			$loginController = $application->getContainer()->query('LoginController');
-			$loginController->tryLogin($user,NULL,NULL);
-		
-			if (isset($_SERVER["QUERY_STRING"]) && !empty($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] != 'app=user_cas') {
-				header( 'Location: ' . OC::$WEBROOT . '/?' . $_SERVER["QUERY_STRING"]);
-				exit();
-			}
-		}
-
-		OC::$REQUESTEDAPP = '';
-		\OC_Util::redirectToDefaultPage();
-	}
-
-
-	if (!phpCAS::isAuthenticated() && !OCP\User::isLoggedIn()) {
-		\OC_App::registerLogIn(array('href' => '?app=user_cas', 'name' => 'CAS Login'));
-	}
-
+    if (!phpCAS::isAuthenticated() && !OCP\User::isLoggedIn()) {
+        \OC_App::registerLogIn(array('href' => '?app=user_cas', 'name' => 'CAS Login'));
+    }
 }
-
-/**
- * Check if login should be enforced using user_cas
- */
-function shouldEnforceAuthentication()
-{
-	if (OC::$CLI) {
-		return false;
-	}
-
-	if (OCP\Config::getAppValue('user_cas', 'cas_force_login', false) !== 'on') {
-		return false;
-	}
-
-	if (OCP\User::isLoggedIn() || isset($_GET['admin_login'])) {
-		return false;
-	}
-
-	$script = basename($_SERVER['SCRIPT_FILENAME']);
-	return !in_array(
-		$script,
-		array(
-			'cron.php',
-			'public.php',
-			'remote.php',
-			'status.php',
-		)
-	);
-}
-

@@ -25,32 +25,31 @@
 OC_Util::checkAdminUser();
 
 $params = array('cas_server_version', 'cas_server_hostname', 'cas_server_port', 'cas_server_path', 'cas_force_login', 'cas_autocreate',
-	'cas_update_user_data', 'cas_protected_groups', 'cas_default_group', 'cas_email_mapping', 'cas_displayName_mapping','cas_group_mapping',
-	'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url');
+    'cas_update_user_data', 'cas_protected_groups', 'cas_default_group', 'cas_email_mapping', 'cas_displayName_mapping', 'cas_group_mapping',
+    'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url');
 
 OCP\Util::addscript('user_cas', 'settings');
 OCP\Util::addStyle('user_cas', 'settings');
 
 if ($_POST) {
-	// CSRF check
-	OCP\JSON::callCheck();
+    // CSRF check
+    OCP\JSON::callCheck();
 
-	foreach($params as $param) {
-		if (isset($_POST[$param])) {
-			OCP\Config::setAppValue('user_cas', $param, $_POST[$param]);
-		}
-		elseif (in_array($param,array('cas_force_login', 'cas_autocreate','cas_update_user_data','cas_link_to_ldap_backend','cas_disable_logout'))) {
-			// unchecked checkboxes are not included in the post paramters
-			OCP\Config::setAppValue('user_cas', $param, 0);
-		}
-	}
+    foreach ($params as $param) {
+        if (isset($_POST[$param])) {
+            OCP\Config::setAppValue('user_cas', $param, $_POST[$param]);
+        } elseif (in_array($param, array('cas_force_login', 'cas_autocreate', 'cas_update_user_data', 'cas_link_to_ldap_backend', 'cas_disable_logout'))) {
+            // unchecked checkboxes are not included in the post paramters
+            OCP\Config::setAppValue('user_cas', $param, 0);
+        }
+    }
 }
 
 // fill template
-$tmpl = new OCP\Template( 'user_cas', 'settings');
+$tmpl = new OCP\Template('user_cas', 'settings');
 foreach ($params as $param) {
-		$value = htmlentities(OCP\Config::getAppValue('user_cas', $param,''));
-		$tmpl->assign($param, $value);
+    $value = htmlentities(OCP\Config::getAppValue('user_cas', $param, ''));
+    $tmpl->assign($param, $value);
 }
 
 return $tmpl->fetchPage();
