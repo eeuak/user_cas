@@ -39,7 +39,7 @@ namespace OCA\User_CAS;
  *
  * @since 1.4.0
  */
-class UserCAS extends OC_User_Backend
+class UserCAS extends \OC\User\Backend
 {
 
     /**
@@ -108,15 +108,15 @@ class UserCAS extends OC_User_Backend
      */
     protected function __construct()
     {
-        $this->autocreate = OCP\Config::getAppValue('user_cas', 'cas_autocreate', true);
+        $this->autocreate = \OCP\Config::getAppValue('user_cas', 'cas_autocreate', true);
         #$this->cas_link_to_ldap_backend = \OCP\Config::getAppValue('user_cas', 'cas_link_to_ldap_backend', false);
-        $this->updateUserData = OCP\Config::getAppValue('user_cas', 'cas_update_user_data', true);
-        $this->defaultGroup = OCP\Config::getAppValue('user_cas', 'cas_default_group', '');
-        $this->protectedGroups = explode(',', str_replace(' ', '', OCP\Config::getAppValue('user_cas', 'cas_protected_groups', '')));
-        $this->mailMapping = OCP\Config::getAppValue('user_cas', 'cas_email_mapping', '');
-        $this->displayNameMapping = OCP\Config::getAppValue('user_cas', 'cas_displayName_mapping', '');
-        $this->groupMapping = OCP\Config::getAppValue('user_cas', 'cas_group_mapping', '');
-        $this->disableLogout = OCP\Config::getAppValue('user_cas', 'cas_disable_logout', false);
+        $this->updateUserData = \OCP\Config::getAppValue('user_cas', 'cas_update_user_data', true);
+        $this->defaultGroup = \OCP\Config::getAppValue('user_cas', 'cas_default_group', '');
+        $this->protectedGroups = explode(',', str_replace(' ', '', \OCP\Config::getAppValue('user_cas', 'cas_protected_groups', '')));
+        $this->mailMapping = \OCP\Config::getAppValue('user_cas', 'cas_email_mapping', '');
+        $this->displayNameMapping = \OCP\Config::getAppValue('user_cas', 'cas_displayName_mapping', '');
+        $this->groupMapping = \OCP\Config::getAppValue('user_cas', 'cas_group_mapping', '');
+        $this->disableLogout = \OCP\Config::getAppValue('user_cas', 'cas_disable_logout', false);
 
         $this->userManager = new \OC\User\Manager();
         $this->userService = new \OCA\User_CAS\Service\UserService();
@@ -173,14 +173,14 @@ class UserCAS extends OC_User_Backend
         $this->userManager->registerBackend('CAS');
 
         // Gather all app config values
-        $casVersion = OCP\Config::getAppValue('user_cas', 'cas_server_version', '2.0');
-        $casHostname = OCP\Config::getAppValue('user_cas', 'cas_server_hostname', $_SERVER['SERVER_NAME']);
-        $casPort = OCP\Config::getAppValue('user_cas', 'cas_server_port', 443);
-        $casPath = OCP\Config::getAppValue('user_cas', 'cas_server_path', '/cas');
-        $casDebugFile = OCP\Config::getAppValue('user_cas', 'cas_debug_file', '');
-        $casCertPath = OCP\Config::getAppValue('user_cas', 'cas_cert_path', '');
-        //$php_cas_path = OCP\Config::getAppValue('user_cas', 'cas_php_cas_path', 'CAS.php');
-        $cas_service_url = OCP\Config::getAppValue('user_cas', 'cas_service_url', '');
+        $casVersion = \OCP\Config::getAppValue('user_cas', 'cas_server_version', '2.0');
+        $casHostname = \OCP\Config::getAppValue('user_cas', 'cas_server_hostname', $_SERVER['SERVER_NAME']);
+        $casPort = \OCP\Config::getAppValue('user_cas', 'cas_server_port', 443);
+        $casPath = \OCP\Config::getAppValue('user_cas', 'cas_server_path', '/cas');
+        $casDebugFile = \OCP\Config::getAppValue('user_cas', 'cas_debug_file', '');
+        $casCertPath = \OCP\Config::getAppValue('user_cas', 'cas_cert_path', '');
+        //$php_cas_path = \OCP\Config::getAppValue('user_cas', 'cas_php_cas_path', 'CAS.php');
+        $cas_service_url = \OCP\Config::getAppValue('user_cas', 'cas_service_url', '');
 
         if(!class_exists('\\phpCAS')) {
 
@@ -244,11 +244,11 @@ class UserCAS extends OC_User_Backend
             return false;
         }
 
-        if (OCP\Config::getAppValue('user_cas', 'cas_force_login', false) !== 'on') {
+        if (\OCP\Config::getAppValue('user_cas', 'cas_force_login', false) !== 'on') {
             return false;
         }
 
-        if (OCP\User::isLoggedIn() || isset($_GET['admin_login'])) {
+        if (\OCP\User::isLoggedIn() || isset($_GET['admin_login'])) {
             return false;
         }
 
