@@ -11,5 +11,5 @@
 
 return ['routes' => [
     array('name' => 'settings#admin', 'url' => '/settings', 'verb' => 'POST'),
-    array('name' => 'authentication#login', 'url' => '/login', 'verb' => 'POST')
+    array('name' => 'authentication#login', 'url' => '/login/cas', 'verb' => 'POST')
 ]];

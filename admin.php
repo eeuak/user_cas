@@ -9,4 +9,4 @@ $app = new \OCA\User_CAS\AppInfo\Application();
 
 $controller = $app->getContainer()->query('SettingsController');
 
-return $controller->displayPanel();
+return $controller->displayPanel()->render();

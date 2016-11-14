@@ -62,7 +62,8 @@ class Application extends App
             return new SettingsController(
                 $c->query('AppName'),
                 $c->query('Request'),
-                $c->query('Config')
+                $c->query('Config'),
+                $c->query('L10N')
             );
         });
 
@@ -107,6 +108,14 @@ class Application extends App
         // getUID() method on it
         $container->registerService('User', function (IContainer $c) {
             return $c->query('UserSession')->getUser();
+        });
+
+        $container->registerService('Config', function($c) {
+            return $c->query('ServerContainer')->getConfig();
+        });
+
+        $container->registerService('L10N', function($c) {
+            return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });
     }
 }
