@@ -50,7 +50,7 @@ class SettingsController extends Controller
 
     private $params = array('cas_server_version', 'cas_server_hostname', 'cas_server_port', 'cas_server_path', 'cas_force_login', 'cas_autocreate',
         'cas_update_user_data', 'cas_protected_groups', 'cas_default_group', 'cas_email_mapping', 'cas_displayName_mapping', 'cas_group_mapping',
-        'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'casServiceUrl');
+        'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url');
 
     protected $appName;
 
@@ -108,7 +108,7 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_debug_file', $cas_debug_file);
             $this->config->setAppValue($this->appName, 'cas_php_cas_path', $cas_php_cas_path);
 
-            $this->config->setAppValue($this->appName, 'casServiceUrl', $cas_service_url);
+            $this->config->setAppValue($this->appName, 'cas_service_url', $cas_service_url);
 
             $this->config->setAppValue($this->appName, 'cas_force_login', ($cas_force_login !== NULL) ? 'on' : 'off');
             $this->config->setAppValue($this->appName, 'cas_autocreate', ($cas_autocreate !== NULL) ? 'on' : 'off');
@@ -128,38 +128,6 @@ class SettingsController extends Controller
                 'message' => 'Your settings could not be updated. Please try again.'
             );
         }
-
-        /*if (($allowed_domains === '') || ($allowed_domains === NULL)) {
-            $this->config->deleteAppValue($this->appName, 'allowed_domains');
-        } else {
-            $this->config->setAppValue($this->appName, 'allowed_domains', $allowed_domains);
-        }
-        $groups = $this->groupmanager->search('');
-        $group_id_list = array();
-        foreach ($groups as $group) {
-            $group_id_list[] = $group->getGid();
-        }
-        if ($registered_user_group === 'none') {
-            $this->config->deleteAppValue($this->appName, 'registered_user_group');
-            return new DataResponse(array(
-                'data' => array(
-                    'message' => (string)$this->l10n->t('Your settings have been updated.'),
-                ),
-            ));
-        } else if (in_array($registered_user_group, $group_id_list)) {
-            $this->config->setAppValue($this->appName, 'registered_user_group', $registered_user_group);
-            return new DataResponse(array(
-                'data' => array(
-                    'message' => (string)$this->l10n->t('Your settings have been updated.'),
-                ),
-            ));
-        } else {
-            return new DataResponse(array(
-                'data' => array(
-                    'message' => (string)$this->l10n->t('No such group'),
-                ),
-            ), Http::STATUS_NOT_FOUND);
-        }*/
     }
 
     /**

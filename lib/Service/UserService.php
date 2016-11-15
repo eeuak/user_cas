@@ -94,6 +94,14 @@ class UserService
     }
 
     /**
+     * IsLoggedIn method.
+     */
+    public function isLoggedIn() {
+
+        return $this->userSession->isLoggedIn();
+    }
+
+    /**
      * Logout hook method.
      */
     public function logout()

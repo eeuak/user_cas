@@ -199,16 +199,20 @@ class UserHooks
 
     /**
      * Logout hook method.
-     *
-     * @return bool
      */
     public function logout()
     {
+
+        \OCP\Util::writeLog('cas', 'Logout hook triggered.', \OCP\Util::DEBUG);
+
         if ($this->config->getAppValue($this->appName, 'cas_disable_logout') === 'off' && \phpCAS::isAuthenticated()) {
 
             \phpCAS::logout();
-        }
 
-        return TRUE;
+            \OCP\Util::writeLog('cas', 'phpCAS logging our.', \OCP\Util::DEBUG);
+        }
+        else {
+            \OCP\Util::writeLog('cas', 'phpCAS not logging out.', \OCP\Util::DEBUG);
+        }
     }
 }

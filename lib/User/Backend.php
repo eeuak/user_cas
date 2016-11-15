@@ -38,11 +38,11 @@ class Backend extends \OC\User\Backend
 {
 
     /**
-     * @param string $uid
+     * @param string|boolean $uid
      * @param string $password
      * @return bool|string
      */
-    public function checkPassword($uid = NULL, $password = NULL)
+    public function checkPassword($uid = FALSE, $password = NULL)
     {
 
         if(\phpCAS::isInitialized()) {
@@ -50,13 +50,13 @@ class Backend extends \OC\User\Backend
             if (!\phpCAS::isAuthenticated()) {
 
                 \OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCP\Util::ERROR);
-                return false;
+                return FALSE;
             }
 
-            if ($uid === false) {
+            if ($uid === FALSE) {
 
                 \OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCP\Util::ERROR);
-                return false;
+                return FALSE;
             }
 
             return $uid;
@@ -64,7 +64,7 @@ class Backend extends \OC\User\Backend
         else {
 
             \OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCP\Util::ERROR);
-            return false;
+            return FALSE;
         }
 
     }

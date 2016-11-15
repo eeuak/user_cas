@@ -35,14 +35,19 @@ if (\OCP\App::isEnabled($c->getAppName())) {
     \OCP\App::registerAdmin($c->getAppName(), 'admin');
 
     $appService = $c->query('AppService');
+    $userService = $c->query('UserService');
 
     $appService->registerBackend();
 
-    if ($appService->isEnforceAuthentication()) {
+    if ($appService->isEnforceAuthentication() && !$userService->isLoggedIn()) {
 
-        $c->query('AuthenticationController')->casLogin();
-    } else {
+        $appService->init();
 
-        \OC_App::registerLogIn(array('href' => $appService->linkToRoute($c->getAppName() . '.authentication.casLogin'), 'name' => 'CAS Login'));
+        if(\phpCAS::isInitialized() && !\phpCAS::isAuthenticated()) {
+
+            $c->query('AuthenticationController')->casLogin();
+        }
     }
+
+    \OC_App::registerLogIn(array('href' => $appService->linkToRoute($c->getAppName() . '.authentication.casLogin'), 'name' => 'CAS Login'));
 }

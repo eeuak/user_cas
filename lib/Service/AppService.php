@@ -220,7 +220,7 @@ class AppService
             return FALSE;
         }
 
-        if ($this->config->getAppValue($this->appName, 'cas_force_login', false) !== 'on') {
+        if ($this->config->getAppValue($this->appName, 'cas_force_login') !== 'on') {
             return FALSE;
         }
 

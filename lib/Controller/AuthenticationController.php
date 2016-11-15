@@ -79,46 +79,56 @@ class AuthenticationController extends Controller
     public function casLogin()
     {
 
-        if ($this->appService->isCasInitialized()) {
+        if(!$this->userService->isLoggedIn()) {
 
-            try {
+            if ($this->appService->isCasInitialized()) {
 
-                if (\phpCAS::isAuthenticated()) {
+                try {
 
-                    \OCP\Util::writeLog('cas', "phpCAS user is authenticated", \OCP\Util::DEBUG);
+                    if (\phpCAS::isAuthenticated()) {
 
-                    $userName = \phpCAS::getUser();
+                        $userName = \phpCAS::getUser();
 
-                    \OCP\Util::writeLog('cas', "phpCAS user: " . $userName, \OCP\Util::DEBUG);
+                        \OCP\Util::writeLog('cas', "phpCAS user ".$userName." has been authenticated.", \OCP\Util::DEBUG);
 
-                    $isLoggedIn = $this->userService->login($userName, NULL);
+                        $isLoggedIn = $this->userService->login($userName, NULL);
 
-                    if ($isLoggedIn) {
+                        if ($isLoggedIn) { //TODO Fix owncloud login mechanism. Users are NOT logged in. Don’t know why!
 
-                        \OCP\Util::writeLog('cas', "phpCAS user is authenticated against owncloud.", \OCP\Util::DEBUG);
+                            \OCP\Util::writeLog('cas', "phpCAS user has been authenticated against owncloud.", \OCP\Util::DEBUG);
 
-                        $url = $this->appService->linkToRoute('files.view.index');
+                            $url = $this->appService->linkToRoute('files.view.index');
 
-                        return new RedirectResponse($url);
+                            return new RedirectResponse($url);
+                        }
+                        else { # Not authenticated against owncloud
 
+                            \OCP\Util::writeLog('cas', "phpCAS user has not been authenticated against owncloud.", \OCP\Util::ERROR);
+
+                            return new RedirectResponse("./");
+                        }
+                    } else { # Not authenticated against CAS
+
+                        \OCP\Util::writeLog('cas', "phpCAS user is not authenticated, redirect to CAS server.", \OCP\Util::DEBUG);
+
+                        \phpCAS::forceAuthentication();
                     }
-                } else { # Not authenticated against CAS
+                } catch (\CAS_Exception $e) {
 
-                    \OCP\Util::writeLog('cas', "phpCAS user is not authenticated, redirect to CAS server.", \OCP\Util::DEBUG);
+                    \OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
 
-                    \phpCAS::forceAuthentication();
+                    return new RedirectResponse("./");
                 }
-            } catch (\CAS_Exception $e) {
+            } else { # Not casInitialized
 
-                \OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
+                \OCP\Util::writeLog('cas', "phpCAS has not been initialized correctly. Can not log in.", \OCP\Util::ERROR);
 
                 return new RedirectResponse("./");
             }
-        } else { # Not casInitialized
+        }
+        else {
 
-            \OCP\Util::writeLog('cas', "phpCAS has not been initialized correctly. Can not log in.", \OCP\Util::ERROR);
-
-            return new RedirectResponse("./");
+            \OCP\Util::writeLog('cas', "phpCAS user is already authenticated against owncloud.", \OCP\Util::DEBUG);
         }
     }
 }
