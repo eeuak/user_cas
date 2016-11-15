@@ -1,6 +1,4 @@
-<!-- <link rel="stylesheet" type="text/css" href="../apps/user_cas/css/cas.css"/> -->
-
-<form id="cas" class='section' action="#" method="post">
+<form id="user_cas" class='section' method="post">
     <h2><?php p($l->t('CAS Authentication backend')); ?></h2>
 
     <div id="casSettings" class="personalblock">
@@ -57,7 +55,7 @@
             <p><input type="checkbox" id="cas_autocreate"
                       name="cas_autocreate" <?php print_unescaped((($_['cas_autocreate'] === 'on') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'
-                       for="cas_autocreate"><?php p($l->t('Autocreate user after CAS login?')); ?></label><?php var_dump($_['cas_autocreate']); ?>
+                       for="cas_autocreate"><?php p($l->t('Autocreate user after CAS login?')); ?></label>
             </p>
             <!-- <p><input type="checkbox" id="cas_link_to_ldap_backend"
                       name="cas_link_to_ldap_backend" <?php print_unescaped((($_['cas_link_to_ldap_backend'] === 'on') ? 'checked="checked"' : '')); ?>>
@@ -108,7 +106,7 @@
                                                                                                   value="<?php p($_['cas_debug_file']); ?>"/>
             </p>
         </fieldset> -->
-        <input type="submit" value="<?php p($l->t('Save')); ?>"/>
+        <input id="casSettingsSubmit" type="submit" value="<?php p($l->t('Save')); ?>"/>
     </div>
 
 </form>

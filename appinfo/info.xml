@@ -5,7 +5,7 @@
     <description>Authenticate Users against a jasig/apero CAS Server (https://github.com/apereo/cas)</description>
     <licence>AGPL</licence>
     <author>Felix Rupp, Leonis Holding, Sixto Martin</author>
-    <namespace>User_CAS</namespace>
+    <namespace>UserCAS</namespace>
     <version>1.4</version>
     <types>
         <prelogin/>

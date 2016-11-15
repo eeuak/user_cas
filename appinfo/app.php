@@ -27,52 +27,22 @@
 
 require_once __DIR__ . '/../vendor/phpCAS/CAS.php';
 
-$app = new \OCA\User_CAS\AppInfo\Application();
+$app = new \OCA\UserCAS\AppInfo\Application();
 $c = $app->getContainer();
 
 if (\OCP\App::isEnabled($c->getAppName())) {
 
-    $ocUserCas = \OCA\User_CAS\UserCAS::getInstance();
-
     \OCP\App::registerAdmin($c->getAppName(), 'admin');
 
-    $urlGenerator = \OC::$server->getURLGenerator();
+    $appService = $c->query('AppService');
 
-    \OC_App::registerLogIn(array('href' => $urlGenerator->linkToRoute('user_cas.authentication.login'), 'name' => 'CAS Login'));
+    $appService->registerBackend();
 
-    $forceLogin = $ocUserCas->isEnforceAuthentication();
+    if ($appService->isEnforceAuthentication()) {
 
-    if($forceLogin) {
+        $c->query('AuthenticationController')->casLogin();
+    } else {
 
-        $c->query('AuthenticationController')->login();
+        \OC_App::registerLogIn(array('href' => $appService->linkToRoute($c->getAppName() . '.authentication.casLogin'), 'name' => 'CAS Login'));
     }
-
-    /*if ((isset($_GET['app']) && $_GET['app'] === $c->getAppName()) || $forceLogin) {
-
-        if ($ocUserCas->isInitialized()) {
-
-            phpCAS::forceAuthentication();
-
-            $userName = phpCAS::getUser();
-
-            $result = $ocUserCas->login($userName);
-
-            if($isLoggedIn) {
-
-
-            }
-
-            if (isset($_SERVER["QUERY_STRING"]) && !empty($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] !== 'app=user_cas') {
-                header('Location: ' . \OC::$WEBROOT . '/?' . $_SERVER["QUERY_STRING"]);
-                exit();
-            }
-        }
-
-        \OC::$REQUESTEDAPP = '';
-        \OC_Util::redirectToDefaultPage();
-    }*/
-
-    /*if (!phpCAS::isAuthenticated() && !\OCP\User::isLoggedIn()) {
-        \OC_App::registerLogIn(array('href' => '?app=user_cas', 'name' => 'CAS Login'));
-    }*/
 }

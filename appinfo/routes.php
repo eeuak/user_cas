@@ -1,4 +1,7 @@
 <?php
+
+namespace OCA\UserCAS\AppInfo;
+
 /**
  * ownCloud - user_cas
  *
@@ -9,7 +12,10 @@
  * @copyright Felix Rupp <kontakt@felixrupp.com>
  */
 
-return ['routes' => [
-    array('name' => 'settings#admin', 'url' => '/settings', 'verb' => 'POST'),
-    array('name' => 'authentication#login', 'url' => '/login/cas', 'verb' => 'POST')
-]];
+$application = new \OCA\UserCAS\AppInfo\Application();
+$application->registerRoutes($this, array(
+    'routes' => [
+        array('name' => 'settings#saveSettings', 'url' => '/settings/save', 'verb' => 'POST'),
+        array('name' => 'authentication#casLogin', 'url' => '/login', 'verb' => 'GET')
+    ]
+));

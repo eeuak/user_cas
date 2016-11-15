@@ -20,7 +20,7 @@
  *
  */
 
-namespace OCA\User_CAS\Controller;
+namespace OCA\UserCAS\Controller;
 
 use \OCP\IRequest;
 use \OCP\AppFramework\Http\TemplateResponse;
@@ -36,7 +36,7 @@ use \OCP\IUser;
 /**
  * Class SettingsController
  *
- * @package OCA\User_CAS\Controller
+ * @package OCA\UserCAS\Controller
  *
  * @author Felix Rupp <kontakt@felixrupp.com>
  * @copyright Felix Rupp <kontakt@felixrupp.com>
@@ -50,14 +50,15 @@ class SettingsController extends Controller
 
     private $params = array('cas_server_version', 'cas_server_hostname', 'cas_server_port', 'cas_server_path', 'cas_force_login', 'cas_autocreate',
         'cas_update_user_data', 'cas_protected_groups', 'cas_default_group', 'cas_email_mapping', 'cas_displayName_mapping', 'cas_group_mapping',
-        'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url');
+        'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'casServiceUrl');
 
     protected $appName;
 
-    public function __construct($appName, IRequest $request, IConfig $config)
+    public function __construct($appName, IRequest $request, IConfig $config, IL10N $l10n)
     {
         $this->config = $config;
         $this->appName = $appName;
+        $this->l10n = $l10n;
         parent::__construct($appName, $request);
     }
 
@@ -85,35 +86,48 @@ class SettingsController extends Controller
      * @param null $cas_disable_logout
      * @return DataResponse
      */
-    public function admin($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_update_user_data, $cas_protected_groups,
-          $cas_default_group, $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url,
-          $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL, $cas_disable_logout = NULL)
+    public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group,
+                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url,
+                                 $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL, $cas_disable_logout = NULL)
     {
 
-        $this->config->setAppValue($this->appName, 'cas_server_version', $cas_server_version);
-        $this->config->setAppValue($this->appName, 'cas_server_hostname', $cas_server_hostname);
-        $this->config->setAppValue($this->appName, 'cas_server_port', $cas_server_port);
-        $this->config->setAppValue($this->appName, 'cas_server_path', $cas_server_path);
-        $this->config->setAppValue($this->appName, 'cas_force_login', ($cas_force_login !== NULL) ? 'on' : 'off');
-        $this->config->setAppValue($this->appName, 'cas_autocreate', ($cas_autocreate !== NULL) ? 'on' : 'off');
-        $this->config->setAppValue($this->appName, 'cas_update_user_data', ($cas_update_user_data !== NULL) ? 'on' : 'off');
-        $this->config->setAppValue($this->appName, 'cas_protected_groups', $cas_protected_groups);
-        $this->config->setAppValue($this->appName, 'cas_default_group', $cas_default_group);
-        $this->config->setAppValue($this->appName, 'cas_email_mapping', $cas_email_mapping);
-        $this->config->setAppValue($this->appName, 'cas_displayName_mapping', $cas_displayName_mapping);
-        $this->config->setAppValue($this->appName, 'cas_group_mapping', $cas_group_mapping);
-        $this->config->setAppValue($this->appName, 'cas_cert_path', $cas_cert_path);
-        $this->config->setAppValue($this->appName, 'cas_debug_file', $cas_debug_file);
-        $this->config->setAppValue($this->appName, 'cas_php_cas_path', $cas_php_cas_path);
-        $this->config->setAppValue($this->appName, 'cas_link_to_ldap_backend', ($cas_link_to_ldap_backend !== NULL) ? 'on' : 'off');
-        $this->config->setAppValue($this->appName, 'cas_disable_logout', ($cas_disable_logout !== NULL) ? 'on' : 'off');
-        $this->config->setAppValue($this->appName, 'cas_service_url', $cas_service_url);
+        try {
 
-        return new DataResponse(array(
-            'data' => array(
-                'message' => 'Your settings have been updated.',
-            ),
-        ));
+            $this->config->setAppValue($this->appName, 'cas_server_version', $cas_server_version);
+            $this->config->setAppValue($this->appName, 'cas_server_hostname', $cas_server_hostname);
+            $this->config->setAppValue($this->appName, 'cas_server_port', $cas_server_port);
+            $this->config->setAppValue($this->appName, 'cas_server_path', $cas_server_path);
+
+
+            $this->config->setAppValue($this->appName, 'cas_protected_groups', $cas_protected_groups);
+            $this->config->setAppValue($this->appName, 'cas_default_group', $cas_default_group);
+            $this->config->setAppValue($this->appName, 'cas_email_mapping', $cas_email_mapping);
+            $this->config->setAppValue($this->appName, 'cas_displayName_mapping', $cas_displayName_mapping);
+            $this->config->setAppValue($this->appName, 'cas_group_mapping', $cas_group_mapping);
+            $this->config->setAppValue($this->appName, 'cas_cert_path', $cas_cert_path);
+            $this->config->setAppValue($this->appName, 'cas_debug_file', $cas_debug_file);
+            $this->config->setAppValue($this->appName, 'cas_php_cas_path', $cas_php_cas_path);
+
+            $this->config->setAppValue($this->appName, 'casServiceUrl', $cas_service_url);
+
+            $this->config->setAppValue($this->appName, 'cas_force_login', ($cas_force_login !== NULL) ? 'on' : 'off');
+            $this->config->setAppValue($this->appName, 'cas_autocreate', ($cas_autocreate !== NULL) ? 'on' : 'off');
+            $this->config->setAppValue($this->appName, 'cas_update_user_data', ($cas_update_user_data !== NULL) ? 'on' : 'off');
+            $this->config->setAppValue($this->appName, 'cas_link_to_ldap_backend', ($cas_link_to_ldap_backend !== NULL) ? 'on' : 'off');
+            $this->config->setAppValue($this->appName, 'cas_disable_logout', ($cas_disable_logout !== NULL) ? 'on' : 'off');
+
+
+            return array(
+                'code' => 200,
+                'message' => 'Your settings have been updated.'
+            );
+        } catch (\Exception $e) {
+
+            return array(
+                'code' => 500,
+                'message' => 'Your settings could not be updated. Please try again.'
+            );
+        }
 
         /*if (($allowed_domains === '') || ($allowed_domains === NULL)) {
             $this->config->deleteAppValue($this->appName, 'allowed_domains');
@@ -151,19 +165,21 @@ class SettingsController extends Controller
     /**
      * @AdminRequired
      *
-     * @return TemplateResponse
+     * @return \OCP\AppFramework\Http\TemplateResponse
      */
     public function displayPanel()
     {
 
-        $tmpl = new TemplateResponse('user_cas', 'admin');
+        $templateParams = array();
 
         foreach ($this->params as $param) {
 
-            $value = htmlentities($this->config->getAppValue('user_cas', $param, ''));
-            $tmpl->assign($param, $value);
+            $value = htmlentities($this->config->getAppValue($this->appName, $param));
+            $templateParams[$param] = $value;
         }
 
-        return $tmpl->fetchPage();
+        $tmpl = new TemplateResponse($this->appName, 'admin', $templateParams, 'blank');
+
+        return $tmpl->render();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ownCloud - user_cas
  *
@@ -20,12 +21,12 @@
  *
  */
 
-namespace OCA\User_CAS\Service;
+namespace OCA\UserCAS\Service;
 
 /**
  * Class UserService
  *
- * @package OCA\User_CAS\Service
+ * @package OCA\UserCAS\Service
  *
  * @author Felix Rupp <kontakt@felixrupp.com>
  * @copyright Felix Rupp <kontakt@felixrupp.com>
@@ -34,6 +35,16 @@ namespace OCA\User_CAS\Service;
  */
 class UserService
 {
+
+    /**
+     * @var string $appName
+     */
+    private $appName;
+
+    /**
+     * @var \OCP\IConfig $appConfig
+     */
+    private $config;
 
     /**
      * @var \OC\User\Session $userSession
@@ -45,41 +56,39 @@ class UserService
      */
     private $userManager;
 
-    /**
-     * @var \OCA\User_CAS\UserCAS $ocUserCas
-     */
-    private $ocUserCas;
-
 
     /**
      * UserService constructor.
      *
      * @param $userSession
      */
-    public function __construct(\OC\User\Manager $userManager, \OC\User\Session $userSession)
+    public function __construct($appName, \OCP\IConfig $config, \OC\User\Manager $userManager, \OC\User\Session $userSession)
     {
 
+        $this->appName = $appName;
+        $this->config = $config;
         $this->userManager = $userManager;
         $this->userSession = $userSession;
-        $this->ocUserCas = \OCA\User_CAS\UserCAS::getInstance();
     }
 
     /**
      * Login hook method.
      *
-     * @param string $userId
+     * @param string $uid
      * @param string $password
      * @return boolean
      */
-    public function login($userId, $password = NULL)
+    public function login($uid, $password = NULL)
     {
 
         try {
 
-            return $this->userSession->login($userId, $password);
+            return $this->userSession->login($uid, $password);
+
         } catch (\OC\User\LoginException $e) {
 
-            \OCP\Util::writeLog('cas', 'Owncloud could not log in the user with UID: ' . $userId . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.', \OCP\Util::DEBUG);
+            \OCP\Util::writeLog('cas', 'Owncloud could not log in the user with UID: ' . $uid . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.', \OCP\Util::ERROR);
+
             return FALSE;
         }
     }
@@ -93,17 +102,17 @@ class UserService
     }
 
     /**
-     * @param string $userId
-     * @param string $password
-     * @return mixed
+     * @param $userId
+     * @return boolean|\OCP\IUser the created user or false
      */
-    public function create($userId, $password, $attributes)
+    public function create($userId)
     {
 
-        $user = $this->userManager->createUser($userId, $password);
+        $randomPassword = \OCP\Util::generateRandomBytes(20);
 
-        $this->updateUser($user, $attributes);
+        $user = $this->userManager->createUser($userId, $randomPassword);
 
+        return $user;
     }
 
     /**
@@ -130,7 +139,7 @@ class UserService
         }
         if (isset($attributes['cas_groups']) && is_object($user)) {
 
-            $this->updateGroups($user, $attributes['cas_groups'], $this->ocUserCas->protectedGroups, false);
+            $this->updateGroups($user, $attributes['cas_groups'], $this->config->getAppValue($this->appName, 'cas_protected_groups'), false);
         }
     }
 
@@ -144,7 +153,6 @@ class UserService
     {
 
         if ($email !== $user->getEMailAddress()) {
-
 
             $user->setEMailAddress($email);
             \OCP\Util::writeLog('cas', 'Set email "' . $email . '" for the user: ' . $user->getUID(), \OCP\Util::DEBUG);
@@ -170,21 +178,21 @@ class UserService
      *
      * @param $user
      * @param $groups
-     * @param array $protected_groups
-     * @param bool $just_created
+     * @param array $protectedGroups
+     * @param bool $justCreated
      */
-    private function updateGroups($user, $groups, $protected_groups = array(), $just_created = false)
+    private function updateGroups($user, $groups, $protectedGroups = array(), $justCreated = false)
     {
 
         $uid = $user->getUID();
 
-        if (!$just_created) {
+        if (!$justCreated) {
 
-            $old_groups = OC_Group::getUserGroups($uid);
+            $oldGroups = \OC_Group::getUserGroups($uid);
 
-            foreach ($old_groups as $group) {
+            foreach ($oldGroups as $group) {
 
-                if (!in_array($group, $protected_groups) && !in_array($group, $groups)) {
+                if (!in_array($group, $protectedGroups) && !in_array($group, $groups)) {
 
                     \OC_Group::removeFromGroup($uid, $group);
                     \OCP\Util::writeLog('cas', 'Removed "' . $uid . '" from the group "' . $group . '"', \OCP\Util::DEBUG);

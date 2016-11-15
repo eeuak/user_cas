@@ -20,8 +20,9 @@
  *
  */
 
-namespace OCA\User_CAS\Controller;
+namespace OCA\UserCAS\Controller;
 
+use OCA\UserCAS\Service\AppService;
 use \OCP\IRequest;
 use \OCP\AppFramework\Http\RedirectResponse;
 use \OCP\AppFramework\Http;
@@ -31,63 +32,93 @@ use \OCP\IL10N;
 use \OCP\IConfig;
 use \OCP\IUser;
 use \OCP\IURLGenerator;
+use \OCP\IUserManager;
 
-use \OCA\User_CAS\Service\UserService;
+use \OCA\UserCAS\Service\UserService;
 
 
 /**
  * Class AuthenticationController
  *
- * @package OCA\User_CAS\Controller
+ * @package OCA\UserCAS\Controller
  *
  * @author Felix Rupp <kontakt@felixrupp.com>
  * @copyright Felix Rupp <kontakt@felixrupp.com>
  *
- * @since 1.4
+ * @since 1.4.0
  */
-class AuthenticationController
+class AuthenticationController extends Controller
 {
-
-    private $l10n;
-    private $config;
-    private $userService;
 
     protected $appName;
 
-    public function __construct($appName, IRequest $request, IConfig $config, UserService $userService)
+    private $config;
+    private $userService;
+    private $appService;
+
+    public function __construct($appName, IRequest $request, IConfig $config, UserService $userService, AppService $appService)
     {
-        $this->config = $config;
         $this->appName = $appName;
+        $this->config = $config;
         $this->userService = $userService;
+        $this->appService = $appService;
         parent::__construct($appName, $request);
+
+        if (!$this->appService->isCasInitialized()) $this->appService->init();
     }
 
-
-    public function login()
+    /**
+     * Login method.
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @PublicPage
+     *
+     * @return RedirectResponse
+     */
+    public function casLogin()
     {
 
-        /*$ocUserCas = \OCA\User_CAS\UserCAS::getInstance();
+        if ($this->appService->isCasInitialized()) {
 
-        if ($ocUserCas->isInitialized()) {
+            try {
 
-            \phpCAS::forceAuthentication();
+                if (\phpCAS::isAuthenticated()) {
 
-            $userName = \phpCAS::getUser();
+                    \OCP\Util::writeLog('cas', "phpCAS user is authenticated", \OCP\Util::DEBUG);
 
-            $isLoggedIn = $this->userService->login($userName, NULL);
+                    $userName = \phpCAS::getUser();
 
-            if ($isLoggedIn) {
+                    \OCP\Util::writeLog('cas', "phpCAS user: " . $userName, \OCP\Util::DEBUG);
 
+                    $isLoggedIn = $this->userService->login($userName, NULL);
 
+                    if ($isLoggedIn) {
+
+                        \OCP\Util::writeLog('cas', "phpCAS user is authenticated against owncloud.", \OCP\Util::DEBUG);
+
+                        $url = $this->appService->linkToRoute('files.view.index');
+
+                        return new RedirectResponse($url);
+
+                    }
+                } else { # Not authenticated against CAS
+
+                    \OCP\Util::writeLog('cas', "phpCAS user is not authenticated, redirect to CAS server.", \OCP\Util::DEBUG);
+
+                    \phpCAS::forceAuthentication();
+                }
+            } catch (\CAS_Exception $e) {
+
+                \OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
+
+                return new RedirectResponse("./");
             }
+        } else { # Not casInitialized
 
-            /*if (isset($_SERVER["QUERY_STRING"]) && !empty($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] !== 'app=user_cas') {
-                header('Location: ' . \OC::$WEBROOT . '/?' . $_SERVER["QUERY_STRING"]);
-                exit();
-            }*/
-        #}
+            \OCP\Util::writeLog('cas', "phpCAS has not been initialized correctly. Can not log in.", \OCP\Util::ERROR);
 
-        #\OC::$REQUESTEDAPP = '';
-        #\OC_Util::redirectToDefaultPage();
+            return new RedirectResponse("./");
+        }
     }
 }
