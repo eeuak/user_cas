@@ -158,7 +158,7 @@ class UserService
         }
 
         \OCP\Util::writeLog('cas', 'Updating data of the user: ' . $userId, \OCP\Util::DEBUG);
-        \OCP\Util::writeLog('cas', 'Attributes: ' . $attributesString, \OCP\Util::DEBUG);
+        #\OCP\Util::writeLog('cas', 'Attributes: ' . $attributesString, \OCP\Util::DEBUG);
 
         if (isset($attributes['cas_email']) && is_object($user)) {
 

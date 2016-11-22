@@ -184,16 +184,16 @@ class UserHooks
 
                 $casAttributes = \phpCAS::getAttributes();
 
-                $casAttributesString = '';
+                /*$casAttributesString = '';
                 foreach ($casAttributes as $key => $attribute) {
 
                     $casAttributesString .= $key . ': ' . $attribute . '; ';
-                }
+                }*/
 
                 // parameters
                 $attributes = array();
 
-                \OCP\Util::writeLog('cas', 'Attributes for the user: ' . $uid . ' => ' . $casAttributesString, \OCP\Util::DEBUG);
+                #\OCP\Util::writeLog('cas', 'Attributes for the user: ' . $uid . ' => ' . $casAttributesString, \OCP\Util::DEBUG);
 
 
                 $displayNameMapping = $this->config->getAppValue($this->appName, 'cas_displayName_mapping');
