@@ -23,6 +23,10 @@
 
 namespace OCA\UserCAS\Service;
 
+use \OCP\IConfig;
+use \OC\User\Manager;
+use \OC\User\Session;
+
 /**
  * Class UserService
  *
@@ -60,9 +64,12 @@ class UserService
     /**
      * UserService constructor.
      *
-     * @param $userSession
+     * @param $appName
+     * @param IConfig $config
+     * @param Manager $userManager
+     * @param Session $userSession
      */
-    public function __construct($appName, \OCP\IConfig $config, \OC\User\Manager $userManager, \OC\User\Session $userSession)
+    public function __construct($appName, IConfig $config, Manager $userManager, Session $userSession)
     {
 
         $this->appName = $appName;

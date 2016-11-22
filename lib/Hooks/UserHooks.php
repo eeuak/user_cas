@@ -23,6 +23,13 @@
 
 namespace OCA\UserCAS\Hooks;
 
+use \OC\User\Manager;
+use \OC\User\Session;
+use \OCP\IConfig;
+
+use OCA\UserCAS\Service\UserService;
+use OCA\UserCAS\Service\AppService;
+
 /**
  * Class UserCAS_Hooks
  *
@@ -77,7 +84,7 @@ class UserHooks
      * @param \OCA\UserCAS\Service\UserService $userService
      * @param \OCA\UserCAS\Service\AppService $appService
      */
-    public function __construct($appName, \OC\User\Manager $userManager, \OC\User\Session $userSession, \OCP\IConfig $config, \OCA\UserCAS\Service\UserService $userService, \OCA\UserCAS\Service\AppService $appService)
+    public function __construct($appName, Manager $userManager, Session $userSession, IConfig $config, UserService $userService, AppService $appService)
     {
         $this->appName = $appName;
         $this->userManager = $userManager;
@@ -155,10 +162,10 @@ class UserHooks
     /**
      * postLogin method to update user data.
      *
-     * @param \OC\User\User $user
+     * @param \OCP\IUser $user
      * @return bool
      */
-    public function postLogin(\OC\User\User $user, $password)
+    public function postLogin(\OCP\IUser $user, $password)
     {
 
         if (!$this->appService->isCasInitialized()) $this->appService->init();

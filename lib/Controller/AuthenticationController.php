@@ -24,14 +24,8 @@ namespace OCA\UserCAS\Controller;
 
 use \OCP\IRequest;
 use \OCP\AppFramework\Http\RedirectResponse;
-use \OCP\AppFramework\Http;
 use \OCP\AppFramework\Controller;
-use \OCP\IGroupManager;
-use \OCP\IL10N;
 use \OCP\IConfig;
-use \OCP\IUser;
-use \OCP\IURLGenerator;
-use \OCP\IUserManager;
 use \OC\User\Session;
 
 use OCA\UserCAS\Service\AppService;

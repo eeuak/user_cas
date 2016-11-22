@@ -25,16 +25,12 @@ $(document).ready(function () {
         var method = $('#user_cas').attr('method');
         var url = OC.generateUrl('/apps/user_cas/settings/save');
 
-        //console.log("Form method: "+method);
-        //console.log("URL: "+url);
-
         $.ajax({
             method: method,
             url: url,
             data: postData,
             success: function (data) {
-                //console.log("Settings saved. Data: ");
-                //console.log(data);
+
                 var notification = OC.Notification.show("CAS settings have been successfully saved.");
 
                 setTimeout(function () {
@@ -43,8 +39,7 @@ $(document).ready(function () {
 
             },
             error: function (data) {
-                //console.log("Settings not saved. Data: ");
-                //console.log(data);
+
                 var notification = OC.Notification.show("CAS settings have not been saved.");
 
                 setTimeout(function () {

@@ -102,7 +102,6 @@ class Application extends App
             );
         });
 
-
         /**
          * Register SettingsController
          */
@@ -128,7 +127,6 @@ class Application extends App
                 $c->query('ServerContainer')->getUserSession()
             );
         });
-
 
         /**
          * Register UserHooks

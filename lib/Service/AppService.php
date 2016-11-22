@@ -25,7 +25,10 @@ namespace OCA\UserCAS\Service;
 
 use \OCP\IConfig;
 use \OC\User\Session;
+use \OC\User\Manager;
 use \OCP\IURLGenerator;
+
+use OCA\UserCAS\User\Backend;
 
 /**
  * Class UserService
@@ -114,7 +117,7 @@ class AppService
      * @param \OCP\IURLGenerator $urlGenerator
      * @param \OCA\UserCAS\User\Backend $backend
      */
-    public function __construct($appName, IConfig $config, \OC\User\Manager $userManager, Session $userSession, IURLGenerator $urlGenerator, \OCA\UserCAS\User\Backend $backend)
+    public function __construct($appName, IConfig $config, Manager $userManager, Session $userSession, IURLGenerator $urlGenerator, Backend $backend)
     {
 
         $this->appName = $appName;

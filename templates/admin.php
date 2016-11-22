@@ -109,5 +109,4 @@
         </fieldset>
         <input id="casSettingsSubmit" type="submit" value="<?php p($l->t('Save')); ?>"/>
     </div>
-
 </form>

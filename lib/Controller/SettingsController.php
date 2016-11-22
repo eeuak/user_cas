@@ -24,13 +24,9 @@ namespace OCA\UserCAS\Controller;
 
 use \OCP\IRequest;
 use \OCP\AppFramework\Http\TemplateResponse;
-use \OCP\AppFramework\Http\DataResponse;
-use \OCP\AppFramework\Http;
 use \OCP\AppFramework\Controller;
-use \OCP\IGroupManager;
 use \OCP\IL10N;
 use \OCP\IConfig;
-use \OCP\IUser;
 
 
 /**
@@ -84,7 +80,7 @@ class SettingsController extends Controller
      * @param null $cas_update_user_data
      * @param null $cas_link_to_ldap_backend
      * @param null $cas_disable_logout
-     * @return DataResponse
+     * @return mixed
      */
     public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group,
                                  $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url,

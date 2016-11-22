@@ -23,6 +23,8 @@
 
 namespace OCA\UserCAS\User;
 
+use \OC\User\Manager;
+
 
 /**
  * Class Backend
@@ -48,7 +50,7 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
      *
      * @param \OC\User\Manager $userManager
      */
-    public function __construct(\OC\User\Manager $userManager)
+    public function __construct(Manager $userManager)
     {
 
         $this->userManager = $userManager;
@@ -60,7 +62,8 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
      * @return string the name of the backend to be shown
      * @since 8.0.0
      */
-    public function getBackendName() {
+    public function getBackendName()
+    {
 
         return "CAS";
     }
@@ -123,7 +126,8 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
     }
 
     /**
-     * delete a user
+     * Delete a user.
+     *
      * @param string $uid The username of the user to delete
      * @return bool
      *
@@ -137,7 +141,8 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
     }
 
     /**
-     * get the user's home directory
+     * Get the user's home directory.
+     *
      * @param string $uid the username
      * @return boolean|string
      */
