@@ -151,11 +151,11 @@ class UserService
 
         $userId = $user->getUID();
 
-        $attributesString = '';
+        /*$attributesString = '';
         foreach ($attributes as $key => $attribute) {
 
             $attributesString .= $key . ': ' . $attribute . '; ';
-        }
+        }*/
 
         \OCP\Util::writeLog('cas', 'Updating data of the user: ' . $userId, \OCP\Util::DEBUG);
         #\OCP\Util::writeLog('cas', 'Attributes: ' . $attributesString, \OCP\Util::DEBUG);
