@@ -11,7 +11,7 @@ If you have questions about how to install or use ownCloud, please direct these 
   - Go to one of the repositories, click "issues" and type any word in the top search/command bar.
   - You can also filter by appending e. g. "state:open" to the search string.
   - More info on [search syntax within github](https://help.github.com/articles/searching-issues)
-* This repository ([user_cas](https://github.com/owncloud/user_cas/issues)) is *only* for issues within the ownCloud user_cas code.
+* This repository ([user_cas](https://github.com/felixrupp/user_cas/issues)) is *only* for issues within the ownCloud user_cas code.
 * __SECURITY__: Report any potential security bug to security@owncloud.com following our [security policy](https://owncloud.org/security/) instead of filing an issue in our bug tracker
 * Report the issue using our [template][template], it includes all the information we need to track down the issue.
 

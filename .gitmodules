@@ -1,0 +1,4 @@
+[submodule "vendor/phpCAS"]
+	path = vendor/phpCAS
+	url = https://github.com/Jasig/phpCAS.git
+	branch = 1.3-stable
