@@ -2,11 +2,11 @@
 <info>
     <id>user_cas</id>
     <name>CAS user and group backend</name>
-    <description>Authenticate Users by a CAS SERVER</description>
+    <description>Authenticate Users against a jasig/apero CAS Server (https://github.com/apereo/cas)</description>
     <licence>AGPL</licence>
-    <author>Leonis Holding, Felix Rupp</author>
-    <namespace>UserCas</namespace>
-    <version>1.3</version>
+    <author>Felix Rupp, Leonis Holding, Sixto Martin</author>
+    <namespace>UserCAS</namespace>
+    <version>1.4</version>
     <types>
         <prelogin/>
         <authentication/>
@@ -14,15 +14,23 @@
 
     <category>tool</category>
 
-    <website>https://github.com/owncloud/user_cas</website>
+    <website>https://github.com/felixrupp/user_cas</website>
 
-    <bugs>https://github.com/owncloud/user_cas/issues</bugs>
+    <documentation>
+        <user>https://github.com/felixrupp/user_cas/wiki</user>
+        <admin>https://github.com/felixrupp/user_cas/wiki</admin>
+        <developer>https://github.com/felixrupp/user_cas/wiki</developer>
+    </documentation>
 
-    <repository type="git">https://github.com/owncloud/user_cas.git</repository>
+    <bugs>https://github.com/felixrupp/user_cas/issues</bugs>
+
+    <repository type="git">https://github.com/felixrupp/user_cas.git</repository>
 
     <dependencies>
-        <php min-version="5.6"/>
+        <php min-version="5.5" max-version="5.9"/>
 
-        <owncloud min-version="9.1" max-version="9.2" />
+        <lib>curl</lib>
+
+        <owncloud min-version="9.1.0" max-version="9.1.99"/>
     </dependencies>
 </info>
