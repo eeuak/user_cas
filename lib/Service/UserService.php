@@ -215,8 +215,8 @@ class UserService
     private function updateGroups($user, $groups, $protectedGroups = array(), $justCreated = false)
     {
 
-        if (!is_array($groups)) $groups = explode(", ", $groups);
-        if (!is_array($protectedGroups)) $protectedGroups = explode(", ", $protectedGroups);
+        if (!is_array($groups)) $groups = explode(",", $groups);
+        if (!is_array($protectedGroups)) $protectedGroups = explode(",", $protectedGroups);
 
         $uid = $user->getUID();
 
