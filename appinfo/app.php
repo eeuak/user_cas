@@ -52,8 +52,19 @@ if (\OCP\App::isEnabled($c->getAppName())) {
 
 
     // Check for enforced authentication
-    if ($appService->isEnforceAuthentication() && !$userService->isLoggedIn()) {
+    /*if ($appService->isEnforceAuthentication() && !$userService->isLoggedIn() && !\phpCAS::isAuthenticated()) {
 
-        $c->query('AuthenticationController')->casLogin();
-    }
+        $loggedIn = $userService->login($c->query('Request'), '');
+
+        if (!$loggedIn) {
+
+            $defaultPage = $c->query("Config")->getAppValue('core', 'defaultpage');
+            if ($defaultPage) {
+
+                $location = $this->appService->getAbsoluteURL($defaultPage);
+
+                return new \OCP\AppFramework\Http\RedirectResponse($location);
+            }
+        }
+    }*/
 }

@@ -6,7 +6,7 @@
             <li><a href="#casSettings-1"><?php p($l->t('CAS Server')); ?></a></li>
             <li><a href="#casSettings-2"><?php p($l->t('Basic')); ?></a></li>
             <li><a href="#casSettings-3"><?php p($l->t('Mapping')); ?></a></li>
-            <!-- <li><a href="#casSettings-4"><?php p($l->t('PHP-CAS Library')); ?></a></li> -->
+            <li><a href="#casSettings-4"><?php p($l->t('PHP-CAS Library')); ?></a></li>
         </ul>
 
         <fieldset id="casSettings-1">
@@ -43,23 +43,23 @@
                     type="text" id="cas_cert_path" name="cas_cert_path" value="<?php p($_['cas_cert_path']); ?>"></p>
         </fieldset>
         <fieldset id="casSettings-2">
-            <p><input type="checkbox" id="cas_force_login"
-                      name="cas_force_login" <?php print_unescaped((($_['cas_force_login'] === 'true' || $_['cas_force_login'] === 'on') ? 'checked="checked"' : '')); ?>>
+            <!-- <p><input type="checkbox" id="cas_force_login"
+                      name="cas_force_login" <?php /*print_unescaped((($_['cas_force_login'] === 'true' || $_['cas_force_login'] === 'on') ? 'checked="checked"' : ''));*/ ?>>
                 <label class='checkbox' for="cas_force_login"><?php p($l->t('Force user login using CAS?')); ?></label>
             </p>
             <p><input type="checkbox" id="cas_disable_logout"
-                      name="cas_disable_logout" <?php print_unescaped((($_['cas_disable_logout'] === 'true' || $_['cas_disable_logout'] === 'on') ? 'checked="checked"' : ''));
-                                                        print_unescaped((($_['cas_force_login'] === 'false' || $_['cas_force_login'] === 'off') ? 'disabled="disabled"' : '')); ?>>
+                      name="cas_disable_logout" <?php /*print_unescaped((($_['cas_disable_logout'] === 'true' || $_['cas_disable_logout'] === 'on') ? 'checked="checked"' : ''));
+                                                        print_unescaped((($_['cas_force_login'] === 'false' || $_['cas_force_login'] === 'off') ? 'disabled="disabled"' : ''));*/ ?>>
                 <label class='checkbox'
                        for="cas_disable_logout"><?php p($l->t('Disable CAS logout (do only OwnCloud logout) [Only works when "Force user login using CAS?" is enabled]')); ?></label>
-            </p>
+            </p>-->
             <p><input type="checkbox" id="cas_autocreate"
                       name="cas_autocreate" <?php print_unescaped((($_['cas_autocreate'] === 'true' || $_['cas_autocreate'] === 'on') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'
                        for="cas_autocreate"><?php p($l->t('Autocreate user after CAS login?')); ?></label>
             </p>
             <!-- <p><input type="checkbox" id="cas_link_to_ldap_backend"
-                      name="cas_link_to_ldap_backend" <?php print_unescaped((($_['cas_link_to_ldap_backend'] === 'true' || $_['cas_link_to_ldap_backend'] === 'on') ? 'checked="checked"' : '')); ?>>
+                      name="cas_link_to_ldap_backend" <?php /*print_unescaped((($_['cas_link_to_ldap_backend'] === 'true' || $_['cas_link_to_ldap_backend'] === 'on') ? 'checked="checked"' : ''));*/ ?>>
                 <label class='checkbox'
                        for="cas_link_to_ldap_backend"><?php p($l->t('Link CAS authentication with LDAP users and groups backend')); ?></label>
             </p> -->
@@ -95,18 +95,18 @@
                                                                                         value="<?php p($_['cas_group_mapping']); ?>"/>
             </p>
         </fieldset>
-        <!-- <fieldset id="casSettings-4">
-            <p><label for="cas_php_cas_path"><?php p($l->t('PHP CAS path (CAS.php file)')); ?></label><input type="text"
+        <fieldset id="casSettings-4">
+            <!-- <p><label for="cas_php_cas_path"><?php p($l->t('PHP CAS path (CAS.php file)')); ?></label><input type="text"
                                                                                                              id="cas_php_cas_path"
                                                                                                              name="cas_php_cas_path"
-                                                                                                             value="<?php p($_['cas_php_cas_path']); ?>"/>
-            </p>
+                                                                                                             value="<?php /*p($_['cas_php_cas_path']);*/ ?>"/>
+            </p>-->
             <p><label for="cas_debug_file"><?php p($l->t('PHP CAS debug file')); ?></label><input type="text"
                                                                                                   id="cas_debug_file"
                                                                                                   name="cas_debug_file"
                                                                                                   value="<?php p($_['cas_debug_file']); ?>"/>
             </p>
-        </fieldset> -->
+        </fieldset>
         <input id="casSettingsSubmit" type="submit" value="<?php p($l->t('Save')); ?>"/>
     </div>
 

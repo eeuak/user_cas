@@ -247,6 +247,8 @@ class UserHooks
 
         if ($this->config->getAppValue($this->appName, 'cas_disable_logout') === 'false' && $this->appService->isEnforceAuthentication() && \phpCAS::isAuthenticated()) {
 
+            \OCP\Util::writeLog('cas', 'phpCAS logging out.', \OCP\Util::DEBUG);
+
             \phpCAS::logout(array("url" => $this->appService->getAbsoluteURL('/')));
 
         } else {
