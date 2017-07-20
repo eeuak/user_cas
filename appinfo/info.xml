@@ -27,10 +27,10 @@
     <repository type="git">https://github.com/felixrupp/user_cas.git</repository>
 
     <dependencies>
-        <php min-version="5.5" max-version="5.9"/>
+        <php min-version="5.5" max-version="5.9.99"/>
 
         <lib>curl</lib>
 
-        <owncloud min-version="9.1.0" max-version="9.1.99"/>
+        <owncloud min-version="9.1.0" max-version="10.0.99"/>
     </dependencies>
 </info>
