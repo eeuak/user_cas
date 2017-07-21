@@ -102,7 +102,14 @@ class AuthenticationController extends Controller
     public function casLogin()
     {
 
-        $location = $this->appService->getAbsoluteURL("/");
+        $redirectUrl = $this->request->getParam("redirect_url", '');
+
+        if (is_string($redirectUrl) && strlen($redirectUrl) > 0) {
+
+            $location = $this->appService->getAbsoluteURL($redirectUrl);
+        } else {
+            $location = $this->appService->getAbsoluteURL("/");
+        }
 
         if (!$this->userService->isLoggedIn()) {
 

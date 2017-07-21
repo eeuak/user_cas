@@ -57,5 +57,11 @@ if (\OCP\App::isEnabled($c->getAppName())) {
     \OCP\App::registerAdmin($c->getAppName(), 'admin');
 
     // Register alternative LogIn
-    \OC_App::registerLogIn(array('href' => $appService->linkToRoute($c->getAppName() . '.authentication.casLogin'), 'name' => 'CAS Login'));
+    $urlParams = "";
+    if (isset($_GET['redirect_url'])) {
+
+        $urlParams .= "?redirect_url=" . $_GET['redirect_url'];
+    }
+
+    \OC_App::registerLogIn(array('href' => $appService->linkToRoute($c->getAppName() . '.authentication.casLogin') . $urlParams, 'name' => 'CAS Login'));
 }
