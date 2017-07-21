@@ -248,7 +248,7 @@ class UserService
 
         if (!$justCreated) {
 
-            $oldGroups = $this->groupManager->getUserGroups($uid);
+            $oldGroups = $this->groupManager->getUserGroups($user);
 
             foreach ($oldGroups as $group) {
 
