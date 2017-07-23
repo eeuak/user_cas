@@ -23,6 +23,7 @@
 
 namespace OCA\UserCAS\Service;
 
+use OCA\UserCAS\User\Backend;
 use \OCP\IConfig;
 use \OCP\IUserManager;
 use \OCP\IGroupManager;
@@ -66,6 +67,16 @@ class UserService
      */
     private $groupManager;
 
+    /**
+     * @var AppService $appService
+     */
+    private $appService;
+
+    /**
+     * @var \OCA\UserCAS\User\Backend $backend
+     */
+    private $backend;
+
 
     /**
      * UserService constructor.
@@ -75,8 +86,10 @@ class UserService
      * @param IUserManager $userManager
      * @param IUserSession $userSession
      * @param IGroupManager $groupManager
+     * @param AppService $appService
+     * @param Backend $backend
      */
-    public function __construct($appName, IConfig $config, IUserManager $userManager, IUserSession $userSession, IGroupManager $groupManager)
+    public function __construct($appName, IConfig $config, IUserManager $userManager, IUserSession $userSession, IGroupManager $groupManager, AppService $appService, Backend $backend)
     {
 
         $this->appName = $appName;
@@ -84,6 +97,8 @@ class UserService
         $this->userManager = $userManager;
         $this->userSession = $userSession;
         $this->groupManager = $groupManager;
+        $this->appService = $appService;
+        $this->backend = $backend;
     }
 
     /**
@@ -97,13 +112,13 @@ class UserService
     public function login($request, $uid, $password = '')
     {
 
-         \OCP\Util::writeLog('cas', 'phpCAS login function step 1.', \OCP\Util::DEBUG);
+        \OCP\Util::writeLog('cas', 'phpCAS login function step 1.', \OCP\Util::DEBUG);
 
         try {
 
             $loginSuccessful = $this->userSession->login($uid, $password);
 
-            \OCP\Util::writeLog('cas', 'phpCAS login function result: '.$loginSuccessful, \OCP\Util::DEBUG);
+            \OCP\Util::writeLog('cas', 'phpCAS login function result: ' . $loginSuccessful, \OCP\Util::DEBUG);
 
             if ($loginSuccessful) {
 
@@ -199,7 +214,7 @@ class UserService
     private function updateMail($user, $email)
     {
 
-        if(is_array($email)) {
+        if (is_array($email)) {
 
             $email = $email[0];
         }
@@ -220,7 +235,7 @@ class UserService
     private function updateName($user, $name)
     {
 
-        if(is_array($name)) {
+        if (is_array($name)) {
 
             $name = $name[0];
         }
@@ -254,7 +269,7 @@ class UserService
 
             foreach ($oldGroups as $group) {
 
-                if($group instanceof \OCP\IGroup) {
+                if ($group instanceof \OCP\IGroup) {
 
                     $groupId = $group->getGID();
 
@@ -283,8 +298,7 @@ class UserService
 
                         $groupObject = $this->groupManager->createGroup($group);
                         \OCP\Util::writeLog('cas', 'New group created: ' . $group, \OCP\Util::DEBUG);
-                    }
-                    else {
+                    } else {
 
                         $groupObject = $this->groupManager->get($group);
                     }
@@ -294,5 +308,16 @@ class UserService
                 }
             }
         }
+    }
+
+    /**
+     * Register User Backend.
+     */
+    public function registerBackend()
+    {
+
+        if (!$this->appService->isCasInitialized()) $this->appService->init();
+
+        $this->userManager->registerBackend($this->backend);
     }
 }

@@ -28,8 +28,6 @@ use \OC\User\Session;
 use \OC\User\Manager;
 use \OCP\IURLGenerator;
 
-use OCA\UserCAS\User\Backend;
-
 /**
  * Class UserService
  *
@@ -67,11 +65,6 @@ class AppService
      * @var \OCP\IURLGenerator $urlGenerator
      */
     private $urlGenerator;
-
-    /**
-     * @var \OCA\UserCAS\User\Backend $backend
-     */
-    private $backend;
 
     /**
      * @var string
@@ -125,9 +118,8 @@ class AppService
      * @param \OC\User\Manager $userManager
      * @param \OC\User\Session $userSession
      * @param \OCP\IURLGenerator $urlGenerator
-     * @param \OCA\UserCAS\User\Backend $backend
      */
-    public function __construct($appName, IConfig $config, Manager $userManager, Session $userSession, IURLGenerator $urlGenerator, Backend $backend)
+    public function __construct($appName, IConfig $config, Manager $userManager, Session $userSession, IURLGenerator $urlGenerator)
     {
 
         $this->appName = $appName;
@@ -135,7 +127,6 @@ class AppService
         $this->userManager = $userManager;
         $this->userSession = $userSession;
         $this->urlGenerator = $urlGenerator;
-        $this->backend = $backend;
         $this->casInitialized = FALSE;
     }
 
@@ -219,15 +210,6 @@ class AppService
 
             \OCP\Util::writeLog('cas', "phpCAS has already been initialized.", \OCP\Util::DEBUG);
         }
-    }
-
-    /**
-     * Register User Backend.
-     */
-    public function registerBackend()
-    {
-
-        $this->userManager->registerBackend($this->backend);
     }
 
     /**

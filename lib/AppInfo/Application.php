@@ -81,19 +81,6 @@ class Application extends App
         });
 
         /**
-         * Register UserService with UserSession for login/logout and UserManager for create
-         */
-        $container->registerService('UserService', function (IContainer $c) {
-            return new UserService(
-                $c->query('AppName'),
-                $c->query('Config'),
-                $c->query('ServerContainer')->getUserManager(),
-                $c->query('ServerContainer')->getUserSession(),
-                $c->query('ServerContainer')->getGroupManager()
-            );
-        });
-
-        /**
          * Register AppService with config
          */
         $container->registerService('AppService', function ($c) {
@@ -102,7 +89,21 @@ class Application extends App
                 $c->query('Config'),
                 $c->query('ServerContainer')->getUserManager(),
                 $c->query('ServerContainer')->getUserSession(),
-                $c->query('ServerContainer')->getURLGenerator(),
+                $c->query('ServerContainer')->getURLGenerator()
+            );
+        });
+
+        /**
+         * Register UserService with UserSession for login/logout and UserManager for create
+         */
+        $container->registerService('UserService', function (IContainer $c) {
+            return new UserService(
+                $c->query('AppName'),
+                $c->query('Config'),
+                $c->query('ServerContainer')->getUserManager(),
+                $c->query('ServerContainer')->getUserSession(),
+                $c->query('ServerContainer')->getGroupManager(),
+                $c->query('AppService'),
                 $c->query('Backend')
             );
         });

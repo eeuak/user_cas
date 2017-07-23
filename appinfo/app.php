@@ -34,7 +34,7 @@ if (\OCP\App::isEnabled($c->getAppName())) {
     $userService = $c->query('UserService');
 
     // Register User Backend
-    $appService->registerBackend();
+    $userService->registerBackend();
 
     // Register UserHooks
     $c->query('UserHooks')->register();
@@ -66,7 +66,7 @@ if (\OCP\App::isEnabled($c->getAppName())) {
         \OCP\Util::writeLog('cas', 'Enforce Authentication was: ' . $appService->isEnforceAuthentication(), \OCP\Util::DEBUG);
 
         // Initialize app
-        $appService->init();
+        if (!$appService->isCasInitialized()) $appService->init();
 
         if (!\phpCAS::isAuthenticated()) {
 
