@@ -56,7 +56,7 @@
             <p><input type="checkbox" id="cas_autocreate"
                       name="cas_autocreate" <?php print_unescaped((($_['cas_autocreate'] === 'true' || $_['cas_autocreate'] === 'on' || $_['cas_autocreate'] === '1') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'
-                       for="cas_autocreate"><?php p($l->t('Autocreate user after CAS login?')); ?></label>
+                       for="cas_autocreate"><?php p($l->t('Autocreate user after first CAS login?')); ?></label>
             </p>
             <!-- <p><input type="checkbox" id="cas_link_to_ldap_backend"
                       name="cas_link_to_ldap_backend" <?php /*print_unescaped((($_['cas_link_to_ldap_backend'] === 'true' || $_['cas_link_to_ldap_backend'] === 'on' || $_['cas_link_to_ldap_backend'] === '1') ? 'checked="checked"' : ''));*/ ?>>
@@ -66,7 +66,7 @@
             <p><input type="checkbox" id="cas_update_user_data"
                       name="cas_update_user_data" <?php print_unescaped((($_['cas_update_user_data'] === 'true' || $_['cas_update_user_data'] === 'on' || $_['cas_update_user_data'] === '1') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'
-                       for="cas_update_user_data"><?php p($l->t('Update user data after login?')); ?></label></p>
+                       for="cas_update_user_data"><?php p($l->t('Update user data after each CAS login?')); ?></label></p>
             <p><label
                         for="cas_protected_groups"><?php p($l->t('Groups that will not be unlinked from the user when sync the CAS server and the owncloud')); ?></label><input
                         id="cas_protected_groups" name="cas_protected_groups"
