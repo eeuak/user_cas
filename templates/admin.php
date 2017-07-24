@@ -1,3 +1,8 @@
+<?php
+script('user_cas', 'settings');
+style('user_cas', 'settings');
+?>
+
 <form id="user_cas" class='section' method="post">
     <h2><?php p($l->t('CAS Authentication backend')); ?></h2>
 
@@ -45,7 +50,8 @@
         <fieldset id="casSettings-2">
             <p><input type="checkbox" id="cas_force_login"
                       name="cas_force_login" <?php print_unescaped((($_['cas_force_login'] === 'true' || $_['cas_force_login'] === 'on' || $_['cas_force_login'] === '1') ? 'checked="checked"' : '')); ?>>
-                <label class='checkbox' for="cas_force_login"><?php p($l->t('Force user login using CAS?')); ?></label>
+                <label class='checkbox'
+                       for="cas_force_login"><?php p($l->t('Force user login using CAS?')); ?></label>
             </p>
             <p><input type="checkbox" id="cas_disable_logout"
                       name="cas_disable_logout" <?php print_unescaped((($_['cas_disable_logout'] === 'true' || $_['cas_disable_logout'] === 'on' || $_['cas_disable_logout'] === '1') ? 'checked="checked"' : ''));
@@ -66,7 +72,8 @@
             <p><input type="checkbox" id="cas_update_user_data"
                       name="cas_update_user_data" <?php print_unescaped((($_['cas_update_user_data'] === 'true' || $_['cas_update_user_data'] === 'on' || $_['cas_update_user_data'] === '1') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'
-                       for="cas_update_user_data"><?php p($l->t('Update user data after each CAS login?')); ?></label></p>
+                       for="cas_update_user_data"><?php p($l->t('Update user data after each CAS login?')); ?></label>
+            </p>
             <p><label
                         for="cas_protected_groups"><?php p($l->t('Groups that will not be unlinked from the user when sync the CAS server and the owncloud')); ?></label><input
                         id="cas_protected_groups" name="cas_protected_groups"

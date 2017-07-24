@@ -39,10 +39,6 @@ if (\OCP\App::isEnabled($c->getAppName())) {
     // Register UserHooks
     $c->query('UserHooks')->register();
 
-    // Register Admin Panel
-    \OCP\App::registerAdmin($c->getAppName(), 'admin');
-
-
     // URL params
     $urlParams = "";
     if (isset($_GET['redirect_url'])) {

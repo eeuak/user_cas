@@ -41,15 +41,36 @@ use \OCP\IConfig;
  */
 class SettingsController extends Controller
 {
+    /**
+     * @var IL10N
+     */
     private $l10n;
+
+    /**
+     * @var IConfig
+     */
     private $config;
 
+    /**
+     * @var array
+     * @deprecated
+     */
     private $params = array('cas_server_version', 'cas_server_hostname', 'cas_server_port', 'cas_server_path', 'cas_force_login', 'cas_autocreate',
         'cas_update_user_data', 'cas_protected_groups', 'cas_default_group', 'cas_email_mapping', 'cas_displayName_mapping', 'cas_group_mapping',
         'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url');
 
+    /**
+     * @var string
+     */
     protected $appName;
 
+    /**
+     * SettingsController constructor.
+     * @param $appName
+     * @param IRequest $request
+     * @param IConfig $config
+     * @param IL10N $l10n
+     */
     public function __construct($appName, IRequest $request, IConfig $config, IL10N $l10n)
     {
         $this->config = $config;
@@ -129,6 +150,7 @@ class SettingsController extends Controller
      * @AdminRequired
      *
      * @return \OCP\AppFramework\Http\TemplateResponse
+     * @deprecated since > 1.4.6
      */
     public function displayPanel()
     {
