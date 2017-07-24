@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ownCloud Core 8.0.0\n"
+"Report-Msgid-Bugs-To: translations@owncloud.org\n"
+"POT-Creation-Date: 2017-07-24 12:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/admin.php:7
+msgid "CAS Authentication backend"
+msgstr ""
+
+#: templates/admin.php:11
+msgid "CAS Server"
+msgstr ""
+
+#: templates/admin.php:12
+msgid "Basic"
+msgstr ""
+
+#: templates/admin.php:13
+msgid "Mapping"
+msgstr ""
+
+#: templates/admin.php:14
+msgid "PHP-CAS Library"
+msgstr ""
+
+#: templates/admin.php:18
+msgid "CAS Server Version"
+msgstr ""
+
+#: templates/admin.php:26
+msgid "CAS Server Hostname"
+msgstr ""
+
+#: templates/admin.php:31
+msgid "CAS Server Port"
+msgstr ""
+
+#: templates/admin.php:36
+msgid "CAS Server Path"
+msgstr ""
+
+#: templates/admin.php:41
+msgid "Service URL"
+msgstr ""
+
+#: templates/admin.php:47
+msgid "Certification file path (.crt). Leave empty if dont want to validate"
+msgstr ""
+
+#: templates/admin.php:54
+msgid "Force user login using CAS?"
+msgstr ""
+
+#: templates/admin.php:60
+msgid "Disable CAS logout (do only OwnCloud logout)"
+msgstr ""
+
+#: templates/admin.php:65
+msgid "Autocreate user after first CAS login?"
+msgstr ""
+
+#: templates/admin.php:70
+msgid "Link CAS authentication with LDAP users and groups backend"
+msgstr ""
+
+#: templates/admin.php:75
+msgid "Update user data after each CAS login?"
+msgstr ""
+
+#: templates/admin.php:78
+msgid ""
+"Groups that will not be unlinked from the user when sync the CAS server and "
+"the owncloud"
+msgstr ""
+
+#: templates/admin.php:81
+msgid "Multivalued field, use comma to separate values"
+msgstr ""
+
+#: templates/admin.php:83
+msgid ""
+"Default group when autocreating users and no group data was found for the "
+"user"
+msgstr ""
+
+#: templates/admin.php:89
+msgid "Email"
+msgstr ""
+
+#: templates/admin.php:94
+msgid "Display Name"
+msgstr ""
+
+#: templates/admin.php:99
+msgid "Group"
+msgstr ""
+
+#: templates/admin.php:107
+msgid ""
+"Optional: Overwrite phpCAS path (CAS.php file) if you want to use your own "
+"version. Leave blank to use the shipped version."
+msgstr ""
+
+#: templates/admin.php:112
+msgid "PHP CAS debug file"
+msgstr ""
+
+#: templates/admin.php:118
+msgid "Save"
+msgstr ""
