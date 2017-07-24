@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+Version 1.4.6
+-------------
+* Hotfix for app initialization
+
 Version 1.4.5
 -------------
 * Fix for autocreate bug

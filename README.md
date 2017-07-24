@@ -10,7 +10,7 @@ INSTALLATION
 DEPENDENCIES
 -------------------
 
-* Owncloud >= 10.0
+* Owncloud >= 10.0 OR Nextcloud >= 12.0
 * PHP >= 5.6, PHP 7 if possible
 * [Composer Dependency Manager](https://getcomposer.org/)
 
@@ -24,7 +24,7 @@ STEPS
 2. Change directory inside `user_cas` folder after cloning/copying and perform a `composer update` command. The dependencies will be installed. Attention: You will need the [composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx) binary to be installed
 2. Access the Owncloud web interface with a locally created Owncloud user with admin privileges.
 3. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
-4. Access the administration panel => Additional and configure the app.
+4. Access the administration panel => General and configure the app.
 
 
 CONFIGURATION
