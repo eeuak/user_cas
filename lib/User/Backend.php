@@ -24,6 +24,7 @@
 namespace OCA\UserCAS\User;
 
 use \OC\User\Manager;
+use OCA\UserCAS\Service\LoggingService;
 
 
 /**
@@ -44,16 +45,22 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
      */
     private $userManager;
 
+    /**
+     * @var \OCA\UserCAS\Service\LoggingService $loggingService
+     */
+    private $loggingService;
+
 
     /**
      * Backend constructor.
-     *
-     * @param \OC\User\Manager $userManager
+     * @param Manager $userManager
+     * @param LoggingService $loggingService
      */
-    public function __construct(Manager $userManager)
+    public function __construct(Manager $userManager, LoggingService $loggingService)
     {
 
         $this->userManager = $userManager;
+        $this->loggingService = $loggingService;
     }
 
 
@@ -81,13 +88,15 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
 
             if (!\phpCAS::isAuthenticated()) {
 
-                \OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCP\Util::ERROR);
+                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user has not been authenticated.');
+                #\OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCP\Util::ERROR);
                 return FALSE;
             }
 
             if ($uid === FALSE) {
 
-                \OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCP\Util::ERROR);
+                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS returned no user.');
+                #\OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCP\Util::ERROR);
                 return FALSE;
             }
 
@@ -95,13 +104,15 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
 
             if ($casUid === $uid) {
 
-                \OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
+                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user password has been checked.');
+                #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
 
                 return $uid;
             }
         } else {
 
-            \OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCP\Util::ERROR);
+            $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS has not been initialized.');
+            #\OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCP\Util::ERROR);
             return FALSE;
         }
     }

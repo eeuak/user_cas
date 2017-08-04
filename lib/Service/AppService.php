@@ -27,6 +27,7 @@ use \OCP\IConfig;
 use \OC\User\Session;
 use \OC\User\Manager;
 use \OCP\IURLGenerator;
+use OCA\UserCAS\Service\LoggingService;
 
 /**
  * Class UserService
@@ -50,6 +51,11 @@ class AppService
      * @var \OCP\IConfig $appConfig
      */
     private $config;
+
+    /**
+     * @var OCA\UserCAS\Service\LoggingService
+     */
+    private $loggingService;
 
     /**
      * @var \OC\User\Manager $userManager
@@ -115,15 +121,17 @@ class AppService
      * UserService constructor.
      * @param $appName
      * @param \OCP\IConfig $config
+     * @param \OCA\UserCAS\Service\LoggingService $loggingService
      * @param \OC\User\Manager $userManager
      * @param \OC\User\Session $userSession
      * @param \OCP\IURLGenerator $urlGenerator
      */
-    public function __construct($appName, IConfig $config, Manager $userManager, Session $userSession, IURLGenerator $urlGenerator)
+    public function __construct($appName, IConfig $config, LoggingService $loggingService, Manager $userManager, Session $userSession, IURLGenerator $urlGenerator)
     {
 
         $this->appName = $appName;
         $this->config = $config;
+        $this->loggingService = $loggingService;
         $this->userManager = $userManager;
         $this->userSession = $userSession;
         $this->urlGenerator = $urlGenerator;
@@ -152,7 +160,8 @@ class AppService
 
         if (is_string($this->casPhpFile) && strlen($this->casPhpFile) > 0) {
 
-            \OCP\Util::writeLog('cas', 'Use custom phpCAS file:: ' . $this->casPhpFile, \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::DEBUG, 'Use custom phpCAS file:: ' . $this->casPhpFile);
+            #\OCP\Util::writeLog('cas', 'Use custom phpCAS file:: ' . $this->casPhpFile, \OCP\Util::DEBUG);
 
             require_once("$this->casPhpFile");
         } else {
@@ -162,7 +171,8 @@ class AppService
 
         if (!class_exists('\\phpCAS')) {
 
-            \OCP\Util::writeLog('cas', 'phpCAS library could not be loaded. The class was not found.', \OCP\Util::ERROR);
+            $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS library could not be loaded. The class was not found.');
+            #\OCP\Util::writeLog('cas', 'phpCAS library could not be loaded. The class was not found.', \OCP\Util::ERROR);
         }
 
         if (!\phpCAS::isInitialized()) {
@@ -196,19 +206,22 @@ class AppService
 
                 $this->casInitialized = TRUE;
 
-                \OCP\Util::writeLog('cas', "phpCAS has been successfully initialized.", \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS has been successfully initialized.");
+                #\OCP\Util::writeLog('cas', "phpCAS has been successfully initialized.", \OCP\Util::DEBUG);
 
             } catch (\CAS_Exception $e) {
 
                 $this->casInitialized = FALSE;
 
-                \OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
+                $this->loggingService->write(\OCP\Util::ERROR,"phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
+                #\OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
             }
         } else {
 
             $this->casInitialized = TRUE;
 
-            \OCP\Util::writeLog('cas', "phpCAS has already been initialized.", \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS has already been initialized.");
+            #\OCP\Util::writeLog('cas', "phpCAS has already been initialized.", \OCP\Util::DEBUG);
         }
     }
 

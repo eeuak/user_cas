@@ -27,6 +27,7 @@ use \OC\User\Manager;
 use \OC\User\Session;
 use \OCP\IConfig;
 
+use OCA\UserCAS\Service\LoggingService;
 use OCA\UserCAS\Service\UserService;
 use OCA\UserCAS\Service\AppService;
 
@@ -73,6 +74,11 @@ class UserHooks
      */
     private $appService;
 
+    /**
+     * @var \OCA\UserCAS\Service\LoggingService
+     */
+    private $loggingService;
+
 
     /**
      * UserHooks constructor.
@@ -83,8 +89,9 @@ class UserHooks
      * @param \OCP\IConfig $config
      * @param \OCA\UserCAS\Service\UserService $userService
      * @param \OCA\UserCAS\Service\AppService $appService
+     * @param \OCA\UserCAS\Service\LoggingService $loggingService
      */
-    public function __construct($appName, Manager $userManager, Session $userSession, IConfig $config, UserService $userService, AppService $appService)
+    public function __construct($appName, Manager $userManager, Session $userSession, IConfig $config, UserService $userService, AppService $appService, LoggingService $loggingService)
     {
         $this->appName = $appName;
         $this->userManager = $userManager;
@@ -92,6 +99,7 @@ class UserHooks
         $this->config = $config;
         $this->userService = $userService;
         $this->appService = $appService;
+        $this->loggingService = $loggingService;
     }
 
     /**
@@ -121,7 +129,8 @@ class UserHooks
 
             if (boolval($this->config->getAppValue($this->appName, 'cas_autocreate'))) {
 
-                \OCP\Util::writeLog('cas', 'phpCas pre login hook triggered. User: ' . $uid, \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas pre login hook triggered. User: ' . $uid);
+                #\OCP\Util::writeLog('cas', 'phpCas pre login hook triggered. User: ' . $uid, \OCP\Util::DEBUG);
 
                 $casUid = \phpCAS::getUser();
 
@@ -133,33 +142,39 @@ class UserHooks
                         // create users if they do not exist
                         if (preg_match('/[^a-zA-Z0-9 _\.@\-]/', $uid)) {
 
-                            \OCP\Util::writeLog('cas', 'Invalid username "' . $uid . '", allowed chars "a-zA-Z0-9" and "_.@-" ', \OCP\Util::DEBUG);
+                            $this->loggingService->write(\OCP\Util::DEBUG, 'Invalid username "' . $uid . '", allowed chars "a-zA-Z0-9" and "_.@-" ');
+                            #\OCP\Util::writeLog('cas', 'Invalid username "' . $uid . '", allowed chars "a-zA-Z0-9" and "_.@-" ', \OCP\Util::DEBUG);
 
                             return FALSE;
                         } else {
 
-                            \OCP\Util::writeLog('cas', 'phpCAS creating a new user with UID: ' . $uid, \OCP\Util::DEBUG);
+                            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS creating a new user with UID: ' . $uid);
+                            #\OCP\Util::writeLog('cas', 'phpCAS creating a new user with UID: ' . $uid, \OCP\Util::DEBUG);
 
                             /** @var bool|\OCP\IUser the created user or false $uid */
                             $user = $this->userService->create($uid);
 
                             if ($user instanceof \OCP\IUser) {
 
-                                \OCP\Util::writeLog('cas', 'phpCAS created new user with UID: ' . $uid, \OCP\Util::DEBUG);
+                                $this->loggingService->write(\OCP\Util::DEBUG,'phpCAS created new user with UID: ' . $uid);
+                                #\OCP\Util::writeLog('cas', 'phpCAS created new user with UID: ' . $uid, \OCP\Util::DEBUG);
                             }
                         }
                     } else {
 
-                        \OCP\Util::writeLog('cas', 'phpCAS no new user has been created.', \OCP\Util::DEBUG);
+                        $this->loggingService->write(\OCP\Util::DEBUG,'phpCAS no new user has been created.');
+                        #\OCP\Util::writeLog('cas', 'phpCAS no new user has been created.', \OCP\Util::DEBUG);
                     }
                 }
             } else {
 
-                \OCP\Util::writeLog('cas', 'phpCas pre login hook triggered, but cas_autocreate was false.', \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCP\Util::DEBUG,'phpCas pre login hook triggered, but cas_autocreate was false.');
+                #\OCP\Util::writeLog('cas', 'phpCas pre login hook triggered, but cas_autocreate was false.', \OCP\Util::DEBUG);
             }
         } else {
 
-            \OCP\Util::writeLog('cas', 'phpCas pre login hook NOT triggered. User: ' . $uid, \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::DEBUG,'phpCas pre login hook NOT triggered. User: ' . $uid);
+            #\OCP\Util::writeLog('cas', 'phpCas pre login hook NOT triggered. User: ' . $uid, \OCP\Util::DEBUG);
         }
 
         return TRUE;
@@ -183,7 +198,8 @@ class UserHooks
 
             if (boolval($this->config->getAppValue($this->appName, 'cas_update_user_data'))) {
 
-                \OCP\Util::writeLog('cas', 'phpCas post login hook triggered. User: ' . $uid, \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas post login hook triggered. User: ' . $uid);
+                #\OCP\Util::writeLog('cas', 'phpCas post login hook triggered. User: ' . $uid, \OCP\Util::DEBUG);
 
                 // $cas_attributes may vary in name, therefore attributes are fetched to $attributes
 
@@ -233,18 +249,22 @@ class UserHooks
                     } else if (is_string($defaultGroup) && strlen($defaultGroup) > 0) {
 
                         $attributes['cas_groups'] = array($defaultGroup);
-                        \OCP\Util::writeLog('cas', 'Using default group "' . $defaultGroup . '" for the user: ' . $uid, \OCP\Util::DEBUG);
+
+                        $this->loggingService->write(\OCP\Util::DEBUG,'Using default group "' . $defaultGroup . '" for the user: ' . $uid);
+                        #\OCP\Util::writeLog('cas', 'Using default group "' . $defaultGroup . '" for the user: ' . $uid, \OCP\Util::DEBUG);
                     }
 
                     // Try to update user attributes
                     $this->userService->updateUser($user, $attributes);
                 }
 
-                \OCP\Util::writeLog('cas', 'phpCas post login hook finished.', \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCP\Util::DEBUG,'phpCas post login hook finished.');
+                #\OCP\Util::writeLog('cas', 'phpCas post login hook finished.', \OCP\Util::DEBUG);
             }
         } else {
 
-            \OCP\Util::writeLog('cas', 'phpCas post login hook NOT triggered. User: ' . $uid, \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::DEBUG,'phpCas post login hook NOT triggered. User: ' . $uid);
+            #\OCP\Util::writeLog('cas', 'phpCas post login hook NOT triggered. User: ' . $uid, \OCP\Util::DEBUG);
         }
 
         return TRUE;
@@ -260,16 +280,19 @@ class UserHooks
 
         if (!$this->appService->isCasInitialized()) $this->appService->init();
 
-        \OCP\Util::writeLog('cas', 'Logout hook triggered.', \OCP\Util::DEBUG);
+        $this->loggingService->write(\OCP\Util::DEBUG,'Logout hook triggered.');
+        #\OCP\Util::writeLog('cas', 'Logout hook triggered.', \OCP\Util::DEBUG);
 
         if (!boolval($this->config->getAppValue($this->appName, 'cas_disable_logout'))) {
 
-            \OCP\Util::writeLog('cas', 'phpCAS logging out.', \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::DEBUG,'phpCAS logging out.');
+            #\OCP\Util::writeLog('cas', 'phpCAS logging out.', \OCP\Util::DEBUG);
 
             \phpCAS::logout(array("url" => $this->appService->getAbsoluteURL('/')));
         } else {
 
-            \OCP\Util::writeLog('cas', 'phpCAS not logging out.', \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::DEBUG,'phpCAS not logging out.');
+            #\OCP\Util::writeLog('cas', 'phpCAS not logging out.', \OCP\Util::DEBUG);
         }
 
         return TRUE;

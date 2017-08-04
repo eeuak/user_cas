@@ -77,6 +77,11 @@ class UserService
      */
     private $backend;
 
+    /**
+     * @var LoggingService $loggingService
+     */
+    private $loggingService;
+
 
     /**
      * UserService constructor.
@@ -88,8 +93,9 @@ class UserService
      * @param IGroupManager $groupManager
      * @param AppService $appService
      * @param Backend $backend
+     * @param LoggingService $loggingService
      */
-    public function __construct($appName, IConfig $config, IUserManager $userManager, IUserSession $userSession, IGroupManager $groupManager, AppService $appService, Backend $backend)
+    public function __construct($appName, IConfig $config, IUserManager $userManager, IUserSession $userSession, IGroupManager $groupManager, AppService $appService, Backend $backend, LoggingService $loggingService)
     {
 
         $this->appName = $appName;
@@ -99,6 +105,7 @@ class UserService
         $this->groupManager = $groupManager;
         $this->appService = $appService;
         $this->backend = $backend;
+        $this->loggingService = $loggingService;
     }
 
     /**
@@ -112,24 +119,28 @@ class UserService
     public function login($request, $uid, $password = '')
     {
 
-        \OCP\Util::writeLog('cas', 'phpCAS login function step 1.', \OCP\Util::DEBUG);
+        $this->loggingService->write(\OCP\Util::INFO,'phpCAS login function step 1.');
+        #\OCP\Util::writeLog('cas', 'phpCAS login function step 1.', \OCP\Util::DEBUG);
 
         try {
 
             $loginSuccessful = $this->userSession->login($uid, $password);
 
-            \OCP\Util::writeLog('cas', 'phpCAS login function result: ' . $loginSuccessful, \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::INFO,'phpCAS login function result: ' . $loginSuccessful);
+            #\OCP\Util::writeLog('cas', 'phpCAS login function result: ' . $loginSuccessful, \OCP\Util::DEBUG);
 
             if ($loginSuccessful) {
 
                 return $this->userSession->createSessionToken($request, $this->userSession->getUser()->getUID(), $uid, $password);
             }
 
-            \OCP\Util::writeLog('cas', 'phpCAS login function not successful.', \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::INFO,'phpCAS login function not successful.');
+            #\OCP\Util::writeLog('cas', 'phpCAS login function not successful.', \OCP\Util::DEBUG);
 
             return FALSE;
         } catch (\OC\User\LoginException $e) {
 
+            $this->loggingService->write(\OCP\Util::ERROR,'Owncloud could not log in the user with UID: ' . $uid . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.');
             \OCP\Util::writeLog('cas', 'Owncloud could not log in the user with UID: ' . $uid . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.', \OCP\Util::ERROR);
 
             return FALSE;
@@ -186,7 +197,8 @@ class UserService
             $attributesString .= $key . ': ' . $attribute . '; ';
         }*/
 
-        \OCP\Util::writeLog('cas', 'Updating data of the user: ' . $userId, \OCP\Util::DEBUG);
+        $this->loggingService->write(\OCP\Util::INFO,'Updating data of the user: ' . $userId);
+        #\OCP\Util::writeLog('cas', 'Updating data of the user: ' . $userId, \OCP\Util::DEBUG);
         #\OCP\Util::writeLog('cas', 'Attributes: ' . $attributesString, \OCP\Util::DEBUG);
 
         if (isset($attributes['cas_email']) && is_object($user)) {
@@ -202,7 +214,8 @@ class UserService
             $this->updateGroups($user, $attributes['cas_groups'], $this->config->getAppValue($this->appName, 'cas_protected_groups'));
         }
 
-        \OCP\Util::writeLog('cas', 'Updating data finished.', \OCP\Util::DEBUG);
+        $this->loggingService->write(\OCP\Util::INFO,'Updating data finished.');
+        #\OCP\Util::writeLog('cas', 'Updating data finished.', \OCP\Util::DEBUG);
     }
 
     /**
@@ -222,7 +235,8 @@ class UserService
         if ($email !== $user->getEMailAddress()) {
 
             $user->setEMailAddress($email);
-            \OCP\Util::writeLog('cas', 'Set email "' . $email . '" for the user: ' . $user->getUID(), \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::INFO,'Set email "' . $email . '" for the user: ' . $user->getUID());
+            #\OCP\Util::writeLog('cas', 'Set email "' . $email . '" for the user: ' . $user->getUID(), \OCP\Util::DEBUG);
         }
     }
 
@@ -243,7 +257,8 @@ class UserService
         if ($name !== $user->getDisplayName()) {
 
             $user->setDisplayName($name);
-            \OCP\Util::writeLog('cas', 'Set Name: ' . $name . ' for the user: ' . $user->getUID(), \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::INFO,'Set Name: ' . $name . ' for the user: ' . $user->getUID());
+            #\OCP\Util::writeLog('cas', 'Set Name: ' . $name . ' for the user: ' . $user->getUID(), \OCP\Util::DEBUG);
         }
     }
 
@@ -277,7 +292,8 @@ class UserService
 
                         $group->removeUser($user);
 
-                        \OCP\Util::writeLog('cas', 'Removed "' . $uid . '" from the group "' . $groupId . '"', \OCP\Util::DEBUG);
+                        $this->loggingService->write(\OCP\Util::INFO,'Removed "' . $uid . '" from the group "' . $groupId . '"');
+                        #\OCP\Util::writeLog('cas', 'Removed "' . $uid . '" from the group "' . $groupId . '"', \OCP\Util::DEBUG);
                     }
                 }
             }
@@ -289,7 +305,8 @@ class UserService
 
             if (preg_match('/[^a-zA-Z0-9 _\.@\-]/', $group)) {
 
-                \OCP\Util::writeLog('cas', 'Invalid group "' . $group . '", allowed chars "a-zA-Z0-9" and "_.@-" ', \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCP\Util::ERROR,'Invalid group "' . $group . '", allowed chars "a-zA-Z0-9" and "_.@-" ');
+                #\OCP\Util::writeLog('cas', 'Invalid group "' . $group . '", allowed chars "a-zA-Z0-9" and "_.@-" ', \OCP\Util::DEBUG);
             } else {
 
                 if (!$this->groupManager->isInGroup($uid, $group)) {
@@ -297,14 +314,18 @@ class UserService
                     if (!$this->groupManager->groupExists($group)) {
 
                         $groupObject = $this->groupManager->createGroup($group);
-                        \OCP\Util::writeLog('cas', 'New group created: ' . $group, \OCP\Util::DEBUG);
+
+                        $this->loggingService->write(\OCP\Util::DEBUG,'New group created: ' . $group);
+                        #\OCP\Util::writeLog('cas', 'New group created: ' . $group, \OCP\Util::DEBUG);
                     } else {
 
                         $groupObject = $this->groupManager->get($group);
                     }
 
                     $groupObject->addUser($user);
-                    \OCP\Util::writeLog('cas', 'Added "' . $uid . '" to the group "' . $group . '"', \OCP\Util::DEBUG);
+
+                    $this->loggingService->write(\OCP\Util::INFO,'Added "' . $uid . '" to the group "' . $group . '"');
+                    #\OCP\Util::writeLog('cas', 'Added "' . $uid . '" to the group "' . $group . '"', \OCP\Util::DEBUG);
                 }
             }
         }

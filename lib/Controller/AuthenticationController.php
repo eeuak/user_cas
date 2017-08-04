@@ -30,6 +30,7 @@ use \OC\User\Session;
 
 use OCA\UserCAS\Service\AppService;
 use OCA\UserCAS\Service\UserService;
+use OCA\UserCAS\Service\LoggingService;
 
 
 /**
@@ -70,6 +71,10 @@ class AuthenticationController extends Controller
      */
     private $userSession;
 
+    /**
+     * @var \OCA\UserCAS\Service\LoggingService $loggingService
+     */
+    private $loggingService;
 
     /**
      * AuthenticationController constructor.
@@ -79,14 +84,16 @@ class AuthenticationController extends Controller
      * @param UserService $userService
      * @param AppService $appService
      * @param Session $userSession
+     * @param LoggingService $loggingService
      */
-    public function __construct($appName, IRequest $request, IConfig $config, UserService $userService, AppService $appService, Session $userSession)
+    public function __construct($appName, IRequest $request, IConfig $config, UserService $userService, AppService $appService, Session $userSession, LoggingService $loggingService)
     {
         $this->appName = $appName;
         $this->config = $config;
         $this->userService = $userService;
         $this->appService = $appService;
         $this->userSession = $userSession;
+        $this->loggingService = $loggingService;
         parent::__construct($appName, $request);
     }
 
@@ -122,37 +129,43 @@ class AuthenticationController extends Controller
 
                     $userName = \phpCAS::getUser();
 
-                    \OCP\Util::writeLog('cas', "phpCAS user " . $userName . " has been authenticated.", \OCP\Util::DEBUG);
+                    $this->loggingService->write(\OCP\Util::INFO,"phpCAS user " . $userName . " has been authenticated.");
+                    #\OCP\Util::writeLog('cas', "phpCAS user " . $userName . " has been authenticated.", \OCP\Util::DEBUG);
 
                     $isLoggedIn = $this->userService->login($this->request, $userName, '');
 
                     //$isLoggedIn = TRUE;
                     if ($isLoggedIn) {
 
-                        \OCP\Util::writeLog('cas', "phpCAS user has been authenticated against owncloud.", \OCP\Util::DEBUG);
+                        $this->loggingService->write(\OCP\Util::DEBUG,"phpCAS user has been authenticated against owncloud.");
+                        #\OCP\Util::writeLog('cas', "phpCAS user has been authenticated against owncloud.", \OCP\Util::DEBUG);
 
                         return new RedirectResponse($location);
                     } else { # Not authenticated against owncloud
 
-                        \OCP\Util::writeLog('cas', "phpCAS user has not been authenticated against owncloud.", \OCP\Util::ERROR);
+                        $this->loggingService->write(\OCP\Util::ERROR,"phpCAS user has not been authenticated against owncloud.");
+                        #\OCP\Util::writeLog('cas', "phpCAS user has not been authenticated against owncloud.", \OCP\Util::ERROR);
 
                         return new RedirectResponse($this->appService->linkToRoute('core.login.showLoginForm'));
                     }
                 } else { # Not authenticated against CAS
 
-                    \OCP\Util::writeLog('cas', "phpCAS user is not authenticated, redirect to CAS server.", \OCP\Util::DEBUG);
+                    $this->loggingService->write(\OCP\Util::INFO,"phpCAS user is not authenticated, redirect to CAS server.");
+                    #\OCP\Util::writeLog('cas', "phpCAS user is not authenticated, redirect to CAS server.", \OCP\Util::DEBUG);
 
                     \phpCAS::forceAuthentication();
                 }
             } catch (\CAS_Exception $e) {
 
-                \OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
+                $this->loggingService->write(\OCP\Util::ERROR,"phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
+                #\OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
 
                 return new RedirectResponse($this->appService->linkToRoute('core.login.showLoginForm'));
             }
         } else {
 
-            \OCP\Util::writeLog('cas', "phpCAS user is already authenticated against owncloud.", \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCP\Util::INFO,"phpCAS user is already authenticated against owncloud.");
+            #\OCP\Util::writeLog('cas', "phpCAS user is already authenticated against owncloud.", \OCP\Util::DEBUG);
 
             return new RedirectResponse($location);
         }

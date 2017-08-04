@@ -25,7 +25,8 @@ namespace OCA\UserCas\Panels;
 use OC\Settings\Panels\Helper;
 use OCP\Settings\ISettings;
 use OCP\Template;
-use \OCP\IConfig;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IConfig;
 
 /**
  * Class Admin
@@ -71,6 +72,18 @@ class Admin implements ISettings
     }
 
     /**
+     * @see Nextcloud 12 support
+     *
+     * @return string
+     *
+     * @since 1.5.0
+     */
+    public function getSection()
+    {
+        return 'additional';
+    }
+
+    /**
      * @return int
      */
     public function getPriority()
@@ -99,5 +112,24 @@ class Admin implements ISettings
         }
 
         return $tmpl;
+    }
+
+    /**
+     * @see Nextcloud 12 support
+     *
+     * @return TemplateResponse
+     *
+     * @since 1.5.0
+     */
+    public function getForm() {
+
+        $parameters = array();
+
+        foreach ($this->params as $param) {
+
+            $parameters[$param] = htmlentities($this->config->getAppValue('user_cas', $param));
+        }
+
+        return new TemplateResponse('user_cas', 'admin', $parameters);
     }
 }
