@@ -20,7 +20,7 @@
  *
  */
 
-namespace OCA\UserCas\Panels;
+namespace OCA\UserCAS\Panels;
 
 use OC\Settings\Panels\Helper;
 use OCP\Settings\ISettings;
@@ -31,7 +31,7 @@ use OCP\IConfig;
 /**
  * Class Admin
  *
- * @package OCA\UserCas\Panels
+ * @package OCA\UserCAS\Panels
  *
  * @author Felix Rupp <kontakt@felixrupp.com>
  * @copyright Felix Rupp <kontakt@felixrupp.com>
@@ -88,7 +88,7 @@ class Admin implements ISettings
      */
     public function getPriority()
     {
-        return 0;
+        return 50;
     }
 
     /**
