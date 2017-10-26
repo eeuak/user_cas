@@ -57,7 +57,7 @@ class SettingsController extends Controller
      */
     private $params = array('cas_server_version', 'cas_server_hostname', 'cas_server_port', 'cas_server_path', 'cas_force_login', 'cas_autocreate',
         'cas_update_user_data', 'cas_protected_groups', 'cas_default_group', 'cas_email_mapping', 'cas_displayName_mapping', 'cas_group_mapping',
-        'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url');
+        'cas_cert_path', 'cas_debug_file', 'cas_php_cas_path', 'cas_link_to_ldap_backend', 'cas_disable_logout', 'cas_service_url', 'cas_handlelogout_servers');
 
     /**
      * @var string
@@ -96,6 +96,7 @@ class SettingsController extends Controller
      * @param $cas_debug_file
      * @param $cas_php_cas_path
      * @param $cas_service_url
+     * @param $cas_handlelogout_servers
      * @param null $cas_force_login
      * @param null $cas_autocreate
      * @param null $cas_update_user_data
@@ -104,7 +105,7 @@ class SettingsController extends Controller
      * @return mixed
      */
     public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group,
-                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url,
+                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url,$cas_handlelogout_servers,
                                  $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL, $cas_disable_logout = NULL)
     {
 
@@ -126,6 +127,8 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_php_cas_path', $cas_php_cas_path);
 
             $this->config->setAppValue($this->appName, 'cas_service_url', $cas_service_url);
+
+            $this->config->setAppValue($this->appName, 'cas_handlelogout_servers', $cas_handlelogout_servers);
 
             $this->config->setAppValue($this->appName, 'cas_force_login', ($cas_force_login !== NULL) ? '1' : '0');
             $this->config->setAppValue($this->appName, 'cas_autocreate', ($cas_autocreate !== NULL) ? '1' : '0');

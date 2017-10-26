@@ -59,6 +59,15 @@ style('user_cas', 'settings');
                 <label class='checkbox'
                        for="cas_disable_logout"><?php p($l->t('Disable CAS logout (do only OwnCloud logout)')); ?></label>
             </p>
+
+            <p><label for="cas_handlelogoutrequest_servers"><?php p($l->t('Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)')); ?></label><input
+                        id="cas_handlelogout_servers"
+                        name="cas_handlelogout_servers"
+                        value="<?php p($_['cas_handlelogout_servers']); ?>"
+                        <?php print_unescaped((($_['cas_disable_logout'] === 'true' || $_['cas_disable_logout'] === 'on' || $_['cas_disable_logout'] === '1') ? 'disabled="disabled"' : ''));?> />
+            </p>
+
+
             <p><input type="checkbox" id="cas_autocreate"
                       name="cas_autocreate" <?php print_unescaped((($_['cas_autocreate'] === 'true' || $_['cas_autocreate'] === 'on' || $_['cas_autocreate'] === '1') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'

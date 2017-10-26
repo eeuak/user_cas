@@ -14,6 +14,7 @@ OC.L10N.register(
     "Certification file path (.crt). Leave empty if dont want to validate" : "Pfad zur Zertifikatsdatei (.crt). Nicht ausfüllen, wenn Sie nicht validieren möchten",
     "Force user login using CAS?" : "CAS Login erzwingen?",
     "Disable CAS logout (do only OwnCloud logout)" : "CAS Logout deaktivieren (nur bei Owncloud ausloggen)",
+    "Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)": "Kommagetrennte Liste an Servern, die Logout-Requests an ihren CAS-Server senden dürfen (Nicht ausfüllen, wenn Sie Logouts nicht beschränken möchten)",
     "Autocreate user after first CAS login?" : "Benutzer nach erstem CAS Login automatisch erstellen?",
     "Link CAS authentication with LDAP users and groups backend" : "CAS Authentifizierung mit LDAP Backend verknüpfen",
     "Update user data after each CAS login?" : "Benutzerdaten nach jedem CAS Login aktualisieren?",

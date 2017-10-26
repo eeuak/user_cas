@@ -115,6 +115,16 @@ class AppService
     /**
      * @var boolean
      */
+    private $casDisableLogout;
+
+    /**
+     * @var array
+     */
+    private $casHandleLogoutServers;
+
+    /**
+     * @var boolean
+     */
     private $casInitialized;
 
     /**
@@ -155,6 +165,15 @@ class AppService
         $this->casServiceUrl = $this->config->getAppValue('user_cas', 'cas_service_url', '');
         $this->casCertPath = $this->config->getAppValue('user_cas', 'cas_cert_path', '');
 
+        $this->casDisableLogout = boolval($this->config->getAppValue($this->appName, 'cas_disable_logout', false));
+        $logoutServersArray = explode(",", $this->config->getAppValue('user_cas', 'cas_handlelogout_servers', ''));
+        $this->casHandleLogoutServers = array();
+
+        foreach($logoutServersArray as $casHandleLogoutServer) {
+
+            $this->casHandleLogoutServers[] = ltrim(trim($casHandleLogoutServer));
+        }
+
         $this->casDebugFile = $this->config->getAppValue('user_cas', 'cas_debug_file', '');
         $this->casPhpFile = $this->config->getAppValue('user_cas', 'cas_php_cas_path', '');
 
@@ -179,23 +198,31 @@ class AppService
 
             try {
 
-                \phpCAS::setVerbose(TRUE);
+                \phpCAS::setVerbose(FALSE);
 
                 if (!empty($this->casDebugFile)) {
 
                     \phpCAS::setDebug($this->casDebugFile);
+                    \phpCAS::setVerbose(TRUE);
                 }
 
 
                 # Initialize client
                 \phpCAS::client($this->casVersion, $this->casHostname, intval($this->casPort), $this->casPath);
 
+                # Handle logout servers
+                if (!$this->casDisableLogout && count($this->casHandleLogoutServers) > 0) {
 
+                    \phpCAS::handleLogoutRequests(true, $this->casHandleLogoutServers);
+                }
+
+                # Handle fixed service URL
                 if (!empty($this->casServiceUrl)) {
 
                     \phpCAS::setFixedServiceURL($this->casServiceUrl);
                 }
 
+                # Handle certificate
                 if (!empty($this->casCertPath)) {
 
                     \phpCAS::setCasServerCACert($this->casCertPath);
@@ -269,10 +296,12 @@ class AppService
 
         $loginAlreadyRegistered = FALSE;
 
-        foreach ($loginAlternatives as $loginAlternative) {
+        foreach ($loginAlternatives as $key => $loginAlternative) {
 
-            if (isset($loginAlternative['href']) && $loginAlternative['href'] === $this->linkToRoute($this->appName . '.authentication.casLogin') . $urlParams) {
+            if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
 
+                $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin') . $urlParams;
+                $this->config->setSystemValue('login.alternatives', $loginAlternatives);
                 $loginAlreadyRegistered = TRUE;
             }
         }
@@ -480,6 +509,22 @@ class AppService
     public function setCasPhpFile($casPhpFile)
     {
         $this->casPhpFile = $casPhpFile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCasHandleLogoutServers()
+    {
+        return $this->casHandleLogoutServers;
+    }
+
+    /**
+     * @param string $casHandleLogoutServers
+     */
+    public function setCasHandleLogoutServers($casHandleLogoutServers)
+    {
+        $this->casHandleLogoutServers = $casHandleLogoutServers;
     }
 
     /**

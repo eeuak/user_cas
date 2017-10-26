@@ -70,6 +70,10 @@ msgstr "CAS Login erzwingen?"
 msgid "Disable CAS logout (do only OwnCloud logout)"
 msgstr "CAS Logout deaktivieren (nur bei Owncloud ausloggen)"
 
+#: templates/admin.php63
+msgid "Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)"
+msgstr "Kommagetrennte Liste an Servern, die Logout-Requests an ihren CAS-Server senden dürfen (Nicht ausfüllen, wenn Sie Logouts nicht beschränken möchten)"
+
 #: templates/admin.php:65
 msgid "Autocreate user after first CAS login?"
 msgstr "Benutzer nach erstem CAS Login automatisch erstellen?"

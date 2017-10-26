@@ -16,6 +16,18 @@ $(document).ready(function () {
         }
     });
 
+    $("#user_cas #cas_disable_logout").on('change', function (event) {
+
+        if ($(this).is(':checked')) {
+
+            $("#user_cas #cas_handlelogout_servers").attr("disabled", true);
+        }
+        else {
+
+            $("#user_cas #cas_handlelogout_servers").attr("disabled", false);
+        }
+    });
+
     $("#user_cas #casSettingsSubmit").on('click', function (event) {
 
         event.preventDefault();

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Service URL" : "URL du service",
     "Certification file path (.crt). Leave empty if dont want to validate" : "Chemin du fichier de certification (.crt). Laisser vide si vous ne souhaitez pas de validation",
     "Disable CAS logout (do only OwnCloud logout)" : "Désactiver la déconnexion CAS (déconnexion d'Owncloud uniquement)",
+    "Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)": "Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)",
     "Autocreate user after first CAS login?" : "Créer l'utilisateur automatiquement après la connexion CAS?",
     "Link CAS authentication with LDAP users and groups backend" : "Lier l'authentification CAS avec les utilisateurs et groupe de l'authentification LDAP?",
     "Update user data after each CAS login?" : "Mettre à jour les données utilisateurs après la connexion?",

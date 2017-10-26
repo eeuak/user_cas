@@ -69,6 +69,10 @@ msgstr ""
 msgid "Disable CAS logout (do only OwnCloud logout)"
 msgstr ""
 
+#: templates/admin.php63
+msgid "Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)"
+msgstr ""
+
 #: templates/admin.php:65
 msgid "Autocreate user after first CAS login?"
 msgstr ""
