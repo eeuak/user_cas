@@ -35,7 +35,7 @@ if (in_array(basename($script), array('console.php', 'cron.php', 'public.php', '
     $enable = FALSE;
 }
 
-if (\OCP\App::isEnabled($c->getAppName()) && $enable) {
+if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enable) {
 
     $appService = $c->query('AppService');
     $userService = $c->query('UserService');
