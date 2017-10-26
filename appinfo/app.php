@@ -28,7 +28,14 @@
 $app = new \OCA\UserCAS\AppInfo\Application();
 $c = $app->getContainer();
 
-if (\OCP\App::isEnabled($c->getAppName())) {
+$enable = TRUE;
+
+$script = $_SERVER['SCRIPT_FILENAME'];
+if (in_array(basename($script), array('console.php', 'cron.php', 'public.php', 'remote.php', 'status.php', 'version.php')) || strpos($script, "/ocs")) {
+    $enable = FALSE;
+}
+
+if (\OCP\App::isEnabled($c->getAppName()) && $enable) {
 
     $appService = $c->query('AppService');
     $userService = $c->query('UserService');
