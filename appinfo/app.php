@@ -31,7 +31,9 @@ $c = $app->getContainer();
 $enable = TRUE;
 
 $script = $_SERVER['SCRIPT_FILENAME'];
-if (in_array(basename($script), array('console.php', 'cron.php', 'public.php', 'remote.php', 'status.php', 'version.php')) || strpos($script, "/ocs")) {
+$requestUri = $_SERVER['REQUEST_URI'];
+
+if (in_array(basename($script), array('console.php', 'cron.php', 'public.php', 'remote.php', 'status.php', 'version.php')) || strpos($script, "ocs") || strpos($requestUri, "oc.js")) {
     $enable = FALSE;
 }
 
