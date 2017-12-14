@@ -116,6 +116,13 @@ class UserService
 
         try {
 
+            if (!boolval($this->config->getAppValue($this->appName, 'cas_autocreate')) && !$this->userExists($uid)) {
+
+                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas autocreate disabled, and OC User does not exist, phpCas based login not possible. Bye.');
+
+                return FALSE;
+            }
+
             $loginSuccessful = $this->userSession->login($uid, $password);
 
             \OCP\Util::writeLog('cas', 'phpCAS login function result: ' . $loginSuccessful, \OCP\Util::DEBUG);

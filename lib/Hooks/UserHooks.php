@@ -153,10 +153,10 @@ class UserHooks
                         \OCP\Util::writeLog('cas', 'phpCAS no new user has been created.', \OCP\Util::DEBUG);
                     }
                 }
-            } else {
+            } /*else {
 
                 \OCP\Util::writeLog('cas', 'phpCas pre login hook triggered, but cas_autocreate was false.', \OCP\Util::DEBUG);
-            }
+            }*/
         } else {
 
             \OCP\Util::writeLog('cas', 'phpCas pre login hook NOT triggered. User: ' . $uid, \OCP\Util::DEBUG);

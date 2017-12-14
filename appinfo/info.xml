@@ -6,7 +6,7 @@
     <licence>AGPL</licence>
     <author>Felix Rupp, Leonis Holding, Sixto Martin</author>
     <namespace>UserCAS</namespace>
-    <version>1.4.8</version>
+    <version>1.4.9</version>
     <types>
         <prelogin/>
         <authentication/>
