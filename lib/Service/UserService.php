@@ -118,7 +118,7 @@ class UserService
 
             if (!boolval($this->config->getAppValue($this->appName, 'cas_autocreate')) && !$this->userExists($uid)) {
 
-                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas autocreate disabled, and OC User does not exist, phpCas based login not possible. Bye.');
+                \OCP\Util::writeLog('cas', 'phpCas autocreate disabled, and OC User does not exist, phpCas based login not possible. Bye.', \OCP\Util::DEBUG);
 
                 return FALSE;
             }
