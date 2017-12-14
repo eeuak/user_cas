@@ -259,9 +259,6 @@ class AppService
      */
     public function isEnforceAuthentication()
     {
-        if (\OC::$CLI) {
-            return FALSE;
-        }
 
         if ($this->config->getAppValue($this->appName, 'cas_force_login') !== '1') {
             return FALSE;
@@ -271,16 +268,7 @@ class AppService
             return FALSE;
         }
 
-        $script = basename($_SERVER['SCRIPT_FILENAME']);
-        return !in_array(
-            $script,
-            array(
-                'cron.php',
-                'public.php',
-                'remote.php',
-                'status.php',
-            )
-        );
+        return TRUE;
     }
 
     /**
