@@ -2,9 +2,9 @@
 <info>
     <id>user_cas</id>
     <name>CAS user and group backend</name>
-    <description>Authenticate Users against a jasig/apero CAS Server (https://github.com/apereo/cas)</description>
+    <description>Authenticate Users against a jasig/apero CAS Server (https://github.com/apereo/cas).</description>
     <licence>AGPL</licence>
-    <author>Felix Rupp, Leonis Holding, Sixto Martin</author>
+    <author>Felix Rupp</author>
     <namespace>UserCAS</namespace>
     <version>1.5.0</version>
     <types>
