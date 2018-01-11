@@ -11,7 +11,7 @@ style('user_cas', 'settings');
             <li><a href="#casSettings-1"><?php p($l->t('CAS Server')); ?></a></li>
             <li><a href="#casSettings-2"><?php p($l->t('Basic')); ?></a></li>
             <li><a href="#casSettings-3"><?php p($l->t('Mapping')); ?></a></li>
-            <li><a href="#casSettings-4"><?php p($l->t('PHP-CAS Library')); ?></a></li>
+            <li><a href="#casSettings-4"><?php p($l->t('phpCAS Library')); ?></a></li>
         </ul>
 
         <fieldset id="casSettings-1">
