@@ -55,7 +55,6 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enable) {
         $loggingService = $c->query("LoggingService");
 
         // Register User Backend
-        // CAS is initialized here, through registerBackend() call
         $userService->registerBackend();
 
         // Register UserHooks
