@@ -10,8 +10,8 @@ INSTALLATION
 DEPENDENCIES
 -------------------
 
-* Owncloud >= 10.0 OR Nextcloud >= 12.0
-* PHP >= 5.6, PHP 7 if possible
+* Owncloud 10.0.0 or higher
+* PHP >= 5.6, PHP 7.0 or 7.1 if possible
 * [Composer Dependency Manager](https://getcomposer.org/), if you want to install via GIT.
 
 This app does not require a standalone version of jasig’s/apereo’s phpcas any longer. The library is shipped within composer dependencies or in the archive file you downloaded. Although you can configure to use your own version of jasig’s/apereo’s phpcas library later on.
@@ -57,6 +57,8 @@ Basic
 
 **Disable CAS logout**: If checked, you will only be logged out from Owncloud and not from your CAS instance. Default: off
 
+**Comma separated list of servers which can send logout requests**: Provide a list of servers which can send logout requests for your CAS ticket (leave empty if you do not want to restrict logout to defined servers).
+
 **Autocreate user after first CAS login?**: Ich checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet, authenticate against CAS and the app will create and store them in the Owncloud database on their first login. Default: on
 
 **Update user data after each CAS login?**: If checked, the data provided by CAS is used to update Owncloud user attributes each time the user logs in. Default: on
@@ -64,6 +66,10 @@ Basic
 **Groups that will not be unlinked**: These groups are preserved, when updating a user after login and are not unlinked. Default: empty
 
 **Default group when autocreating users**: When auto creating users after authentication, these groups are set as default if the user has no CAS groups. Default: empty
+
+**Autocreate user after first CAS login?**: Ich checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet, authenticate against CAS and the app will create and store them in the Owncloud database on their first login. Default: on
+
+**Use ECAS Attribute Parser?**: Activate the ECAS attribute parser to enable the parsing of groups provided by the European Commission ECAS implementation (do NOT activate until you know what you are doing).
 
 <!-- **Link to LDAP backend**: Link CAS authentication with LDAP users and groups backend to use the same owncloud user as if the user was logged in via LDAP. -->
 
@@ -115,7 +121,7 @@ Also please provide basic information of your Owncloud instance:
 * Owncloud Version
 * PHP Version
 * CAS Version
-* phpcas library version
+* phpCAS library version
 * The part of the owncloud.log file, from -5min. before and +5min. after the bug happened
 
 ABOUT
@@ -124,7 +130,7 @@ ABOUT
 License
 -------
 
-AGPL - http://www.gnu.org/licenses/agpl-3.0.html
+AGPL 3.0 or later - http://www.gnu.org/licenses/agpl-3.0.html
 
 Authors
 -------
