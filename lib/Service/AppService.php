@@ -268,7 +268,7 @@ class AppService
                     }
 
                     # Register the parser
-                    \phpCAS::setCasAttributeParserCallback('\EcasPhpCASParser\EcasPhpCASParser::parse');
+                    \phpCAS::setCasAttributeParserCallback(array(new \EcasPhpCASParser\EcasPhpCASParser(), 'parse');
                     $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS EcasPhpCASParser has been successfully set.");
 
                 }
