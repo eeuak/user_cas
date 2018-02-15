@@ -297,6 +297,8 @@ class AppService
 
                     $newUrl = $this->buildQueryUrl($newUrl, 'acceptedStrengths=' . urlencode('BASIC'));
 
+                    $newUrl = $this->buildQueryUrl($newUrl, 'groups=' . urlencode('*'));
+
                     \phpCAS::setServerLoginURL($newUrl);
                     $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS strength attribute has been successfully set. New URL: " . $newUrl);
                 #}
