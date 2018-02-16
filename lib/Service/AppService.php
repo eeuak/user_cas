@@ -273,35 +273,74 @@ class AppService
 
                 }
 
-                # Add ECAS Querystring Parameters
+
+
+                #### Add ECAS Querystring Parameters
                 #if (is_string($this->ecasQueryStringStrength) && strlen($this->ecasQueryStringStrength) > 0) {
 
-                    # Register the new url
+                # Register the new login url
+                $newUrl = \phpCAS::getServerLoginURL();
 
-                    $newProtocol = 'http://';
+                $newUrl = $this->buildQueryUrl($newUrl, 'acceptedStrengths=' . urlencode('BASIC'));
 
-                    if(is_string($this->getCasPort()) && strlen($this->getCasPort())>0 && $this->getCasPort() === "443") {
+                \phpCAS::setServerLoginURL($newUrl);
 
-                        $newProtocol = 'https://';
-                    }
-
-                    $newUrl = $newProtocol.$this->getCasHostname() . $this->getCasPath() . "/login";
-
-                    if (!empty($this->casServiceUrl)) {
-
-                        $newUrl = $this->buildQueryUrl($newUrl, 'service=' . urlencode($this->casServiceUrl));
-                    } else {
-
-                        $newUrl = $this->buildQueryUrl($newUrl, 'service=' . urlencode(\phpCAS::getServiceURL()));
-                    }
-
-                    $newUrl = $this->buildQueryUrl($newUrl, 'acceptedStrengths=' . urlencode('BASIC'));
-
-                    $newUrl = $this->buildQueryUrl($newUrl, 'groups=' . urlencode('*'));
-
-                    \phpCAS::setServerLoginURL($newUrl);
-                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS strength attribute has been successfully set. New URL: " . $newUrl);
+                $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS strength attribute has been successfully set. New service login URL: " . $newUrl);
                 #}
+
+
+                # Register the new ticket validation url
+                $newProtocol = 'http://';
+                $newUrl = '';
+                $newSamlUrl = '';
+
+                if (!empty($this->getCasPort()) && $this->getCasPort() == "443") {
+
+                    $newProtocol = 'https://';
+                }
+
+                if ($this->getCasVersion() === "1.0") {
+
+                    $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/validate';
+                } else if ($this->getCasVersion() === "2.0") {
+
+                    $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/serviceValidate';
+                } else if ($this->getCasVersion() === "3.0") {
+
+                    $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/p3/serviceValidate';
+                }
+                else if ($this->getCasVersion() === "S1") {
+
+                    $newSamlUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/samlValidate';
+                }
+
+                if (!empty($this->casServiceUrl)) {
+
+                    $newUrl = $this->buildQueryUrl($newUrl, 'service=' . urlencode($this->casServiceUrl));
+                    $newSamlUrl = $this->buildQueryUrl($newSamlUrl, 'TARGET=' . urlencode($this->casServiceUrl));
+                } else {
+
+                    $newUrl = $this->buildQueryUrl($newUrl, 'service=' . urlencode(\phpCAS::getServiceURL()));
+                    $newSamlUrl = $this->buildQueryUrl($newSamlUrl, 'TARGET=' . urlencode(\phpCAS::getServiceURL()));
+                }
+
+                $newUrl = $this->buildQueryUrl($newUrl, 'groups=' . urlencode('*'));
+                $newSamlUrl = $this->buildQueryUrl($newSamlUrl, 'groups=' . urlencode('*'));
+
+                # Set the new URLs
+                if($this->getCasVersion() != "S1") {
+
+                    \phpCAS::setServerServiceValidateURL($newUrl);
+                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS groups attribute has been successfully set. New CAS ".$this->getCasVersion()." service validate URL: " . $newUrl);
+
+                }
+                elseif ($this->getCasVersion() === "S1") {
+
+                     \phpCAS::setServerSamlValidateURL($newSamlUrl);
+                     $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS groups attribute has been successfully set. New SAML 1.0 service validate URL: " . $newSamlUrl);
+
+                }
+
 
                 $this->casInitialized = TRUE;
 
