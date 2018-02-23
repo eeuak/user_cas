@@ -24,7 +24,7 @@
     "Use ECAS Attribute Parser?": "ECAS Attribute Parser verwenden?",
     "Email" : "E-Mail",
     "Display Name" : "Anzeigename",
-    "Group" : "Gruppen",
+    "Groups" : "Gruppen",
     "Optional: Overwrite phpCAS path (CAS.php file) if you want to use your own version. Leave blank to use the shipped version." : "Optional: Überschreiben Sie den phpCAS Pfad (CAS.php Datei), wenn Sie eine eigene Version verwenden möchten. Nicht ausfüllen, wenn Sie die Standardversion verwenden möchten",
     "PHP CAS debug file" : "PHP CAS debug Datei",
     "Save" : "Speichern",
