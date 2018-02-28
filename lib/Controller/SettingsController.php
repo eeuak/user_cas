@@ -102,7 +102,7 @@ class SettingsController extends Controller
      */
     public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group,
                                  $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url, $cas_handlelogout_servers,
-                                 $cas_access_allow_groups, $cas_ecas_accepted_strengths, $cas_ecas_retrieve_groups,
+                                 $cas_access_allow_groups, $cas_ecas_accepted_strengths, $cas_ecas_retrieve_groups, $cas_access_group_quotas,
                                  $cas_ecas_attributeparserenabled = NULL, $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL, $cas_disable_logout = NULL)
     {
 
@@ -116,6 +116,7 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_protected_groups', $cas_protected_groups);
             $this->config->setAppValue($this->appName, 'cas_default_group', $cas_default_group);
             $this->config->setAppValue($this->appName, 'cas_access_allow_groups', $cas_access_allow_groups);
+            $this->config->setAppValue($this->appName, 'cas_access_group_quotas', $cas_access_group_quotas);
 
             $this->config->setAppValue($this->appName, 'cas_email_mapping', $cas_email_mapping);
             $this->config->setAppValue($this->appName, 'cas_displayName_mapping', $cas_displayName_mapping);

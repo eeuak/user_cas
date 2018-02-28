@@ -264,6 +264,10 @@ class UserService
 
             $this->updateGroups($user, $attributes['cas_groups'], $this->config->getAppValue($this->appName, 'cas_protected_groups'));
         }
+        if (isset($attributes['cas_group_quota']) && is_object($user)) {
+
+            $this->updateQuota($user, $attributes['cas_group_quota']);
+        }
 
         $this->loggingService->write(\OCP\Util::INFO, 'Updating data finished.');
         #\OCP\Util::writeLog('cas', 'Updating data finished.', \OCP\Util::DEBUG);
@@ -380,6 +384,38 @@ class UserService
                 }
             }
         }
+    }
+
+    /**
+     * @param \OCP\IUser $user
+     * @param array $groupQuotas
+     */
+    private function updateQuota($user, $groupQuotas)
+    {
+
+        $uid = $user->getUID();
+        $collectedQuotas = array();
+
+        foreach ($groupQuotas as $groupName => $groupQuota) {
+
+            if ($this->groupManager->isInGroup($uid, $groupName)) {
+
+                if ($groupQuota === 'none') {
+
+                    $collectedQuotas[PHP_INT_MAX] = $groupQuota;
+                }
+                else {
+
+                    $groupQuotaComputerFilesize = \OCP\Util::computerFileSize($groupQuota);
+                    $collectedQuotas[$groupQuotaComputerFilesize] = $groupQuota;
+                }
+            }
+        }
+
+        # Sort descending by key
+        krsort($collectedQuotas);
+
+        $user->setQuota(array_shift($collectedQuotas));
     }
 
     /**

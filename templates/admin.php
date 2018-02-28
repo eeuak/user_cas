@@ -16,7 +16,7 @@ style('user_cas', 'settings');
             <li><a href="#casSettings-5"><?php p($l->t('ECAS Settings')); ?></a></li>
             <li><a href="#casSettings-6"><?php p($l->t('phpCAS Library')); ?></a></li>
         </ul>
-
+        <!-- CAS Server Settings -->
         <fieldset id="casSettings-1">
             <p><label for="cas_server_version"><?php p($l->t('CAS Server Version')); ?></label>
                 <select id="cas_server_version" name="cas_server_version">
@@ -52,6 +52,7 @@ style('user_cas', 'settings');
                         class="csh"><?php p($l->t('Leave empty if you don’t want to validate your CAS server instance')); ?></span>
             </p>
         </fieldset>
+        <!-- Basic Settings -->
         <fieldset id="casSettings-2">
             <p><input type="checkbox" id="cas_force_login"
                       name="cas_force_login" <?php print_unescaped((($_['cas_force_login'] === 'true' || $_['cas_force_login'] === 'on' || $_['cas_force_login'] === '1') ? 'checked="checked"' : '')); ?>>
@@ -91,6 +92,7 @@ style('user_cas', 'settings');
             </p> -->
 
         </fieldset>
+        <!-- Mapping Settings -->
         <fieldset id="casSettings-3">
             <p><label for="cas_email_mapping"><?php p($l->t('Email')); ?></label><input
                         id="cas_email_mapping"
@@ -108,22 +110,29 @@ style('user_cas', 'settings');
                         value="<?php p($_['cas_group_mapping']); ?>"/>
             </p>
         </fieldset>
+        <!-- Groups -->
         <fieldset id="casSettings-4">
             <p><label
-                        for="cas_protected_groups"><?php p($l->t('Groups that will not be unlinked from the user when sync the CAS server and the owncloud')); ?></label><input
+                        for="cas_protected_groups"><?php p($l->t('Locked Groups')); ?></label><input
                         id="cas_protected_groups" name="cas_protected_groups"
                         value="<?php p($_['cas_protected_groups']); ?>"
-                        title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/></p>
+                        title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/> <span class="csh"><?php p($l->t('Groups that will not be unlinked from the user when sync the CAS server and the owncloud')); ?></span></p>
             <p><label
-                        for="cas_default_group"><?php p($l->t('Default group when autocreating users and no group data was found for the user')); ?></label><input
+                        for="cas_default_group"><?php p($l->t('Default Group')); ?></label><input
                         id="cas_default_group" name="cas_default_group"
-                        value="<?php p($_['cas_default_group']); ?>"></p>
+                        value="<?php p($_['cas_default_group']); ?>"> <span class="csh"><?php p($l->t('Default group when autocreating users and no group data was found for the user')); ?></span></p>
             <p><label
-                        for="cas_access_allow_groups"><?php p($l->t('Users in the following groups will be able to log into owncloud, users not in one of the groups will be logged out immediately')); ?></label><input
+                        for="cas_access_allow_groups"><?php p($l->t('Authorized Groups')); ?></label><input
                         id="cas_access_allow_groups" name="cas_access_allow_groups"
                         value="<?php p($_['cas_access_allow_groups']); ?>"
+                        title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/> <span class="csh"><?php p($l->t('Users in the following groups will be able to log into owncloud, users not in one of the groups will be logged out immediately')); ?></span></p>
+            <p><label
+                        for="cas_access_group_quotas"><?php p($l->t('Group Quotas')); ?></label><input
+                        id="cas_access_group_quotas" name="cas_access_group_quotas"
+                        value="<?php p($_['cas_access_group_quotas']); ?>"
                         title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/></p>
         </fieldset>
+        <!-- ECAS Settings -->
         <fieldset id="casSettings-5">
             <p><input type="checkbox" id="cas_ecas_attributeparserenabled"
                       name="cas_ecas_attributeparserenabled" <?php print_unescaped((($_['cas_ecas_attributeparserenabled'] === 'true' || $_['cas_ecas_attributeparserenabled'] === 'on' || $_['cas_ecas_attributeparserenabled'] === '1') ? 'checked="checked"' : '')); ?>>
@@ -145,6 +154,7 @@ style('user_cas', 'settings');
                         id="cas_ecas_retrieve_groups" name="cas_ecas_retrieve_groups"
                         value="<?php p($_['cas_ecas_retrieve_groups']); ?>"></p>
         </fieldset>
+        <!-- phpCAS Settings -->
         <fieldset id="casSettings-6">
             <p>
                 <label for="cas_php_cas_path"><?php p($l->t('Optional: Overwrite phpCAS path (CAS.php file) if you want to use your own version. Leave blank to use the shipped version.')); ?></label><input

@@ -287,6 +287,18 @@ class UserHooks
                         #\OCP\Util::writeLog('cas', 'Using default group "' . $defaultGroup . '" for the user: ' . $uid, \OCP\Util::DEBUG);
                     }
 
+                    // Group Quota handling
+                    $groupQuotas = $this->config->getAppValue($this->appName, 'cas_access_group_quotas');
+                    $groupQuotas = explode(",", $groupQuotas);
+
+                    foreach($groupQuotas as $groupQuota) {
+
+                        $groupQuota = explode(":", $groupQuota);
+
+                        $attributes['cas_group_quota'][$groupQuota[0]] = $groupQuota[1];
+
+                    }
+
                     // Try to update user attributes
                     $this->userService->updateUser($user, $attributes); //TODO: Add quota based on groups!
                 }
