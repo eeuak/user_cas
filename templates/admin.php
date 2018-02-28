@@ -34,11 +34,13 @@ style('user_cas', 'settings');
             <p><label for="cas_server_port"><?php p($l->t('CAS Server Port')); ?></label><input
                         id="cas_server_port"
                         name="cas_server_port"
+                        placeholder="443"
                         value="<?php p($_['cas_server_port']); ?>">
             </p>
             <p><label for="cas_server_path"><?php p($l->t('CAS Server Path')); ?></label><input
                         id="cas_server_path"
                         name="cas_server_path"
+                        placeholder="/cas"
                         value="<?php p($_['cas_server_path']); ?>">
             </p>
             <p><label for="cas_service_url"><?php p($l->t('Service URL')); ?></label><input
@@ -116,20 +118,24 @@ style('user_cas', 'settings');
                         for="cas_protected_groups"><?php p($l->t('Locked Groups')); ?></label><input
                         id="cas_protected_groups" name="cas_protected_groups"
                         value="<?php p($_['cas_protected_groups']); ?>"
+                        placeholder="group1,group2,group3"
                         title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/> <span class="csh"><?php p($l->t('Groups that will not be unlinked from the user when sync the CAS server and the owncloud')); ?></span></p>
             <p><label
                         for="cas_default_group"><?php p($l->t('Default Group')); ?></label><input
                         id="cas_default_group" name="cas_default_group"
+                        placeholder="defaultGroup"
                         value="<?php p($_['cas_default_group']); ?>"> <span class="csh"><?php p($l->t('Default group when autocreating users and no group data was found for the user')); ?></span></p>
             <p><label
-                        for="cas_access_allow_groups"><?php p($l->t('Authorized Groups')); ?></label><input
+                        for="cas_access_allow_groups"><?php p($l->t('Authorized CAS Groups')); ?></label><input
                         id="cas_access_allow_groups" name="cas_access_allow_groups"
                         value="<?php p($_['cas_access_allow_groups']); ?>"
-                        title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/> <span class="csh"><?php p($l->t('Users in the following groups will be able to log into owncloud, users not in one of the groups will be logged out immediately')); ?></span></p>
+                        placeholder="group1,group2,group3"
+                        title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/> <span class="csh"><?php p($l->t('Users in the following groups will be able to log into ownCloud, users not in one of the groups will be logged out immediately')); ?></span></p>
             <p><label
                         for="cas_access_group_quotas"><?php p($l->t('Group Quotas')); ?></label><input
                         id="cas_access_group_quotas" name="cas_access_group_quotas"
                         value="<?php p($_['cas_access_group_quotas']); ?>"
+                        placeholder="group1:5GB,group2:20GB,group3:none"
                         title="<?php p($l->t('Multivalued field, use comma to separate values')); ?>"/></p>
         </fieldset>
         <!-- ECAS Settings -->
@@ -150,17 +156,17 @@ style('user_cas', 'settings');
             </p>
             <p>
                 <label for="cas_ecas_retrieve_groups"
-                       title="<?php p($l->t('Users in groups not mentioned here will not be able to log in')); ?>"><?php p($l->t('Query ECAS groups')); ?></label><input
-                        id="cas_ecas_retrieve_groups" name="cas_ecas_retrieve_groups"
-                        value="<?php p($_['cas_ecas_retrieve_groups']); ?>"></p>
+                       title=""><?php p($l->t('Query ECAS groups')); ?></label><input
+                        id="cas_ecas_retrieve_groups" name="cas_ecas_retrieve_groups" placeholder="*"
+                        value="<?php p($_['cas_ecas_retrieve_groups']); ?>"> <span class="csh"><?php p($l->t('Note down all groups which you want to receive from your ECAS instance, * returns all groups')); ?></span></p>
         </fieldset>
         <!-- phpCAS Settings -->
         <fieldset id="casSettings-6">
             <p>
-                <label for="cas_php_cas_path"><?php p($l->t('Optional: Overwrite phpCAS path (CAS.php file) if you want to use your own version. Leave blank to use the shipped version.')); ?></label><input
+                <label for="cas_php_cas_path"><?php p($l->t('Overwrite phpCAS path (CAS.php file)')); ?></label><input
                         id="cas_php_cas_path"
                         name="cas_php_cas_path"
-                        value="<?php p($_['cas_php_cas_path']); ?>"/>
+                        value="<?php p($_['cas_php_cas_path']); ?>"/> <span class="csh"><?php p($l->t('Optional: Overwrite phpCAS path (CAS.php file) if you want to use your own version. Leave blank to use the shipped version.')); ?></span>
             </p>
             <p><label for="cas_debug_file"><?php p($l->t('PHP CAS debug file')); ?></label><input
                         id="cas_debug_file"

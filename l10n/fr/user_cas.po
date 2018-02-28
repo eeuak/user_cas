@@ -95,6 +95,10 @@ msgid "Update user data after each CAS login?"
 msgstr "Mettre à jour les données utilisateurs après la connexion?"
 
 #: templates/admin.php:78
+msgid "Locked Groups"
+msgstr "Groupes protégés"
+
+#: templates/admin.php:78
 msgid ""
 "Groups that will not be unlinked from the user when sync the CAS server and "
 "the owncloud"
@@ -107,6 +111,10 @@ msgid "Multivalued field, use comma to separate values"
 msgstr "Champ multivalué, utilisez des virgules pour séparer les valeurs"
 
 #: templates/admin.php:83
+msgid "Default Group"
+msgstr "Groupe par défaut"
+
+#: templates/admin.php:83
 msgid ""
 "Default group when autocreating users and no group data was found for the "
 "user"
@@ -114,9 +122,33 @@ msgstr ""
 "Groupe par défaut lors de la création automatique des utilisateurs quand "
 "aucun groupe n'est trouvé pour l'utilisateur"
 
+#: templates/admin.php:84
+msgid "Authorized CAS Groups"
+msgstr "Groupes autorisés CAS"
+
+#: templates/admin.php:85
+msgid "Users in the following groups will be able to log into ownCloud, users not in one of the groups will be logged out immediately"
+msgstr "Les utilisateurs des groupes suivants pourront se connecter à ownCloud, les utilisateurs ne faisant pas partie d'un groupe seront déconnectés immédiatement"
+
+#: templates/admin.php:85
+msgid "Group Quotas"
+msgstr "Quotas de groupe"
+
 #: templates/admin.php:85
 msgid "Use ECAS Attribute Parser?"
 msgstr "Utiliser ECAS Attribute Parser?"
+
+#: templates/admin.php:86
+msgid "ECAS Strength"
+msgstr "ECAS Strength"
+
+#: templates/admin.php:87
+msgid "Query ECAS groups"
+msgstr "ECAS groupes de requêtes"
+
+#: templates/admin.php:87
+msgid "Note down all groups which you want to receive from your ECAS instance, * returns all groups"
+msgstr "Notez tous les groupes que vous souhaitez recevoir de votre instance ECAS, * renvoie tous les groupes"
 
 #: templates/admin.php:89
 msgid "Email"
@@ -129,6 +161,10 @@ msgstr "Nom affiché"
 #: templates/admin.php:99
 msgid "Groups"
 msgstr "Groupes"
+
+#: templates/admin.php:107
+msgid "Overwrite phpCAS path (CAS.php file)"
+msgstr "Chemin PHP CAS (fichier CAS.php)"
 
 #: templates/admin.php:107
 msgid ""

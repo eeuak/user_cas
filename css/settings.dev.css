@@ -19,3 +19,7 @@
     display: inline;
     width: auto;
 }
+
+#casSettings .csh {
+    font-size: 90%;
+}

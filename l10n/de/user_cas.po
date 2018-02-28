@@ -93,27 +93,59 @@ msgid "Update user data after each CAS login?"
 msgstr "Benutzerdaten nach jedem CAS Login aktualisieren?"
 
 #: templates/admin.php:78
+msgid "Locked Groups"
+msgstr "Geschützte Gruppen"
+
+#: templates/admin.php:78
 msgid ""
 "Groups that will not be unlinked from the user when sync the CAS server and "
 "the owncloud"
 msgstr ""
-"Gruppen, die beim Synchronisieren mit dem CAS Server nicht entfernt werden"
+"Gruppen, die beim Synchronisieren mit dem CAS Server nicht vom ownCloud Benutzer entfernt werden"
 
 #: templates/admin.php:81
 msgid "Multivalued field, use comma to separate values"
 msgstr "Mehrzeiliges Feld, nutzen Sie komma separierte Werte"
 
 #: templates/admin.php:83
+msgid "Default Group"
+msgstr "Standardgruppe"
+
+#: templates/admin.php:83
 msgid ""
 "Default group when autocreating users and no group data was found for the "
 "user"
 msgstr ""
-"Standardgruppe, die beim automatischen Neuerstellen von Benutzern vergeben "
+"Standardgruppe, die beim automatischen Neuerstellen von ownCloud Benutzern vergeben "
 "wird"
+
+#: templates/admin.php:84
+msgid "Authorized CAS Groups"
+msgstr "Authorisierte CAS Gruppen"
+
+#: templates/admin.php:85
+msgid "Users in the following groups will be able to log into ownCloud, users not in one of the groups will be logged out immediately"
+msgstr "Benutzer in den folgenden Gruppen können sich in ownCloud anmelden, Benutzer, die nicht in einer der Gruppen sind, werden sofort ausgeloggt"
+
+#: templates/admin.php:85
+msgid "Group Quotas"
+msgstr "Gruppenquotas"
 
 #: templates/admin.php:85
 msgid "Use ECAS Attribute Parser?"
 msgstr "ECAS Attribute Parser verwenden?"
+
+#: templates/admin.php:86
+msgid "ECAS Strength"
+msgstr "ECAS Strength"
+
+#: templates/admin.php:87
+msgid "Query ECAS groups"
+msgstr "Gruppen in ECAS-Abfrage"
+
+#: templates/admin.php:87
+msgid "Note down all groups which you want to receive from your ECAS instance, * returns all groups"
+msgstr "Setzen Sie alle Gruppen, die Sie von Ihrer ECAS-Instanz zurück erhalten möchten, * gibt alle Gruppen zurück"
 
 #: templates/admin.php:89
 msgid "Email"
@@ -126,6 +158,10 @@ msgstr "Anzeigename"
 #: templates/admin.php:99
 msgid "Groups"
 msgstr "Gruppen"
+
+#: templates/admin.php:107
+msgid "Overwrite phpCAS path (CAS.php file)"
+msgstr "phpCAS Pfad überschreiben (CAS.php Datei)"
 
 #: templates/admin.php:107
 msgid ""
