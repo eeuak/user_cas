@@ -92,6 +92,16 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
     public function checkPassword($uid, $password)
     {
 
+        $script = $_SERVER['SCRIPT_FILENAME'];
+        $requestUri = $_SERVER['REQUEST_URI'];
+
+        // Let all OCS API Users pass
+        if(strpos($script, "ocs") || strpos($requestUri, "oc.js")) {
+
+            $this->loggingService->write(\OCP\Util::DEBUG, 'Access through OCS. Let it pass.');
+            return TRUE;
+        }
+
         if (!$this->appService->isCasInitialized()) {
 
             try {
@@ -112,25 +122,28 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
 
                 $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user has not been authenticated.');
                 #\OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCP\Util::ERROR);
-                return FALSE;
             }
 
             if ($uid === FALSE) {
 
                 $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS returned no user.');
                 #\OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCP\Util::ERROR);
-                return FALSE;
             }
 
-            $casUid = \phpCAS::getUser();
+            if(\phpCAS::checkAuthentication()) {
 
-            if ($casUid === $uid) {
+                $casUid = \phpCAS::getUser();
 
-                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user password has been checked.');
-                #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
+                if ($casUid === $uid) {
 
-                return $uid;
+                    $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user password has been checked.');
+                    #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
+
+                    return $uid;
+                }
             }
+
+            return FALSE;
         } else {
 
             $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS has not been initialized.');

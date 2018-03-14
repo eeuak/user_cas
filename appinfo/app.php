@@ -33,7 +33,7 @@ $enabled = TRUE;
 $script = $_SERVER['SCRIPT_FILENAME'];
 $requestUri = $_SERVER['REQUEST_URI'];
 
-if (in_array(basename($script), array('console.php', 'cron.php', 'public.php', 'remote.php', 'status.php', 'version.php')) || strpos($script, "ocs") || strpos($requestUri, "oc.js")) {
+if (in_array(basename($script), array('console.php', 'cron.php', 'public.php', 'remote.php', 'status.php', 'version.php'))) {
     $enabled = FALSE;
 }
 
@@ -46,51 +46,54 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
     // Register User Backend
     $userService->registerBackend();
 
-    // Register UserHooks
-    $c->query('UserHooks')->register();
+    if(!strpos($script, "ocs") && !strpos($requestUri, "oc.js")) {
 
-    // URL params
-    $urlParams = "";
-    if (isset($_GET['redirect_url'])) {
+        // Register UserHooks
+        $c->query('UserHooks')->register();
 
-        $urlParams .= "?redirect_url=" . $_GET['redirect_url'];
-    }
+        // URL params
+        $urlParams = "";
+        if (isset($_GET['redirect_url'])) {
 
-    // Register alternative LogIn
-    $appService->registerLogIn($urlParams);
-
-    // Check for enforced authentication
-    if ($appService->isEnforceAuthentication() && (!isset($_GET["cas_enforce_authentication"]) || (isset($_GET["cas_enforce_authentication"]) && $_GET["cas_enforce_authentication"] === '0'))) {
-
-        if (is_string($urlParams) && strlen($urlParams) > 0) {
-
-            $urlParams .= "&cas_enforce_authentication=1";
-        } else {
-            $urlParams .= "?cas_enforce_authentication=1";
+            $urlParams .= "?redirect_url=" . $_GET['redirect_url'];
         }
 
-        $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was: ' . $appService->isEnforceAuthentication());
+        // Register alternative LogIn
+        $appService->registerLogIn($urlParams);
 
-        // Initialize app
-        if (!$appService->isCasInitialized()) {
+        // Check for enforced authentication
+        if ($appService->isEnforceAuthentication() && (!isset($_GET["cas_enforce_authentication"]) || (isset($_GET["cas_enforce_authentication"]) && $_GET["cas_enforce_authentication"] === '0'))) {
 
-            try {
-                $appService->init();
-            } catch (\OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException $e) {
+            if (is_string($urlParams) && strlen($urlParams) > 0) {
 
-                $loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $urlParams .= "&cas_enforce_authentication=1";
+            } else {
+                $urlParams .= "?cas_enforce_authentication=1";
+            }
 
-                header("Location: " . $appService->getAbsoluteURL('/'));
+            $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was: ' . $appService->isEnforceAuthentication());
+
+            // Initialize app
+            if (!$appService->isCasInitialized()) {
+
+                try {
+                    $appService->init();
+                } catch (\OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException $e) {
+
+                    $loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+
+                    header("Location: " . $appService->getAbsoluteURL('/'));
+                    die();
+                }
+            }
+
+            if (!\phpCAS::isAuthenticated()) {
+
+                $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
+
+                header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin') . $urlParams);
                 die();
             }
-        }
-
-        if (!\phpCAS::isAuthenticated()) {
-
-            $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
-
-            header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin') . $urlParams);
-            die();
         }
     }
 }
