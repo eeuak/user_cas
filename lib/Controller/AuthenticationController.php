@@ -127,6 +127,21 @@ class AuthenticationController extends Controller
 
         $redirectUrl = $this->request->getParam("redirect_url", '');
 
+        if (strlen($redirectUrl) < 1) {
+
+            $sessionObject = $this->userSession->getSession();
+            $redirectUrl = $sessionObject->offsetGet('user_cas_redirect_url');
+
+            var_dump($sessionObject);
+            exit;
+
+            if (strlen($redirectUrl) > 0) {
+                $redirectResponse = new RedirectResponse($this->appService->linkToRoute($this->appName . '.authentication.casLogin', array("redirect_url" => $redirectUrl)));
+
+                return $redirectResponse;
+            }
+        }
+
         if (is_string($redirectUrl) && strlen($redirectUrl) > 0) {
 
             $location = $this->appService->getAbsoluteURL($redirectUrl);

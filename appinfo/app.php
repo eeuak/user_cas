@@ -47,14 +47,14 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
     $userService->registerBackend();
 
     // URL params
-    $urlParams = "";
+    $redirectUrl = "";
     if (isset($_GET['redirect_url'])) {
 
-        $urlParams .= "?redirect_url=" . $_GET['redirect_url'];
+        $redirectUrl = $_GET['redirect_url'];
     }
 
     // Register alternative LogIn
-    $appService->registerLogIn($urlParams);
+    $appService->registerLogIn($redirectUrl);
 
 
     #if(!strpos($script, "ocs") && !strpos($requestUri, "oc.js") && !in_array(basename($script), array('public.php', 'remote.php'))) {
@@ -92,7 +92,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
 
                 $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
 
-                header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin') . $urlParams);
+                header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin'));
                 die();
             }
         }

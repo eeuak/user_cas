@@ -397,9 +397,9 @@ class AppService
     /**
      * Register Login
      *
-     * @param string $urlParams
+     * @param $redirectUrl
      */
-    public function registerLogIn($urlParams)
+    public function registerLogIn($redirectUrl)
     {
 
         /** @var array $loginAlternatives */
@@ -411,7 +411,7 @@ class AppService
 
             if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
 
-                $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin') . $urlParams;
+                $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin');
                 $this->config->setSystemValue('login.alternatives', $loginAlternatives);
                 $loginAlreadyRegistered = TRUE;
             }
@@ -425,14 +425,21 @@ class AppService
             if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && strpos(implode('.', \OCP\Util::getVersion()), '12.0.0') !== FALSE) {
 
                 $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud detected.");
-                \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin') . $urlParams, 'name' => 'CAS Login'));
+                \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
             } else {
 
-                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin') . $urlParams, 'name' => 'CAS Login', 'img' => '/apps/user_cas/img/cas-logo.png'];
+                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => '/apps/user_cas/img/cas-logo.png'];
 
                 $this->config->setSystemValue('login.alternatives', $loginAlternatives);
             }
         }
+
+        $sessionObject = $this->userSession->getSession();
+        $sessionObject->offsetSet('user_cas_redirect_url', $redirectUrl);
+
+        //TODO: Persist the session data!
+        #var_dump($sessionObject);
+        #exit;
     }
 
     /**
