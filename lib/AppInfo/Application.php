@@ -105,7 +105,6 @@ class Application extends App
          */
         $container->registerService('Backend', function (IContainer $c) {
             return new Backend(
-                $c->query('ServerContainer')->getUserManager(),
                 $c->query('LoggingService'),
                 $c->query('AppService')
             );

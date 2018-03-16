@@ -33,7 +33,7 @@ $enabled = TRUE;
 $script = $_SERVER['SCRIPT_FILENAME'];
 $requestUri = $_SERVER['REQUEST_URI'];
 
-if (in_array(basename($script), array('console.php', 'cron.php', 'status.php', 'version.php'))) {
+if (in_array(basename($script), array('console.php', 'cron.php', 'status.php', 'version.php')) /*|| strpos($requestUri, "index.php/apps/oauth2")*/) {
     $enabled = FALSE;
 }
 
@@ -46,20 +46,21 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
     // Register User Backend
     $userService->registerBackend();
 
-    if(!strpos($script, "ocs") && !strpos($requestUri, "oc.js") && !in_array(basename($script), array('public.php', 'remote.php'))) {
+    // URL params
+    $urlParams = "";
+    if (isset($_GET['redirect_url'])) {
+
+        $urlParams .= "?redirect_url=" . $_GET['redirect_url'];
+    }
+
+    // Register alternative LogIn
+    $appService->registerLogIn($urlParams);
+
+
+    #if(!strpos($script, "ocs") && !strpos($requestUri, "oc.js") && !in_array(basename($script), array('public.php', 'remote.php'))) {
 
         // Register UserHooks
         $c->query('UserHooks')->register();
-
-        // URL params
-        $urlParams = "";
-        if (isset($_GET['redirect_url'])) {
-
-            $urlParams .= "?redirect_url=" . $_GET['redirect_url'];
-        }
-
-        // Register alternative LogIn
-        $appService->registerLogIn($urlParams);
 
         // Check for enforced authentication
         if ($appService->isEnforceAuthentication() && (!isset($_GET["cas_enforce_authentication"]) || (isset($_GET["cas_enforce_authentication"]) && $_GET["cas_enforce_authentication"] === '0'))) {
@@ -95,5 +96,5 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
                 die();
             }
         }
-    }
+    #}
 }

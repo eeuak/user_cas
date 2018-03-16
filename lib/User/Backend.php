@@ -23,6 +23,7 @@
 
 namespace OCA\UserCAS\User;
 
+use OC\User\Database;
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
 use OCA\UserCAS\Service\AppService;
 use \OCP\IUserManager;
@@ -39,13 +40,8 @@ use OCA\UserCAS\Service\LoggingService;
  *
  * @since 1.4.0
  */
-class Backend extends \OC\User\Backend implements \OCP\IUserBackend
+class Backend extends Database
 {
-
-    /**
-     * @var \OCP\IUserManager $userManager
-     */
-    private $userManager;
 
     /**
      * @var \OCA\UserCAS\Service\LoggingService $loggingService
@@ -59,14 +55,13 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
 
     /**
      * Backend constructor.
-     * @param IUserManager $userManager
      * @param LoggingService $loggingService
      * @param AppService $appService
      */
-    public function __construct(IUserManager $userManager, LoggingService $loggingService, AppService $appService)
+    public function __construct(LoggingService $loggingService, AppService $appService)
     {
 
-        $this->userManager = $userManager;
+        parent::__construct();
         $this->loggingService = $loggingService;
         $this->appService = $appService;
     }
@@ -75,7 +70,6 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
     /**
      * Backend name to be shown in user management
      * @return string the name of the backend to be shown
-     * @since 8.0.0
      */
     public function getBackendName()
     {
@@ -87,7 +81,7 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
     /**
      * @param string $uid
      * @param string $password
-     * @return bool
+     * @return string|bool The users UID or false
      */
     public function checkPassword($uid, $password)
     {
@@ -96,11 +90,11 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
         $requestUri = $_SERVER['REQUEST_URI'];
 
         // Let all OCS API Users pass
-        if(strpos($script, "ocs") || strpos($requestUri, "oc.js") || in_array(basename($script), array('public.php', 'remote.php'))) {
+        /*if(strpos($script, "ocs") || strpos($requestUri, "oc.js") || in_array(basename($script), array('public.php', 'remote.php'))) {
 
             $this->loggingService->write(\OCP\Util::DEBUG, 'Access through OCS, remote or public API. Let it pass.');
-            return TRUE;
-        }
+            return $uid;
+        }*/
 
         if (!$this->appService->isCasInitialized()) {
 
@@ -121,6 +115,9 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
             if (!\phpCAS::isAuthenticated()) {
 
                 $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user has not been authenticated.');
+
+                return parent::checkPassword($uid, $password);
+
                 #\OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCP\Util::ERROR);
             }
 
@@ -150,59 +147,5 @@ class Backend extends \OC\User\Backend implements \OCP\IUserBackend
             #\OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCP\Util::ERROR);
             return FALSE;
         }
-    }
-
-    /**
-     * @param string $uid
-     * @return NULL|string
-     */
-    public function getDisplayName($uid)
-    {
-        $user = $this->userManager->get($uid);
-
-        if (!is_null($user)) return $user->getDisplayName();
-
-        return NULL;
-    }
-
-    /**
-     * @param string $uid
-     * @param string $displayName
-     */
-    public function setDisplayName($uid, $displayName)
-    {
-        $user = $this->userManager->get($uid);
-
-        if (!is_null($user)) $user->setDisplayName($displayName);
-    }
-
-    /**
-     * Delete a user.
-     *
-     * @param string $uid The username of the user to delete
-     * @return bool
-     *
-     * Deletes a user
-     */
-    public function deleteUser($uid)
-    {
-        $user = $this->userManager->get($uid);
-
-        return $user->delete();
-    }
-
-    /**
-     * Get the user's home directory.
-     *
-     * @param string $uid the username
-     * @return boolean|string
-     */
-    public function getHome($uid)
-    {
-        $user = $this->userManager->get($uid);
-
-        if (!is_null($user)) return $user->getHome();
-
-        return FALSE;
     }
 }
