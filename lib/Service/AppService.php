@@ -397,9 +397,8 @@ class AppService
     /**
      * Register Login
      *
-     * @param $redirectUrl
      */
-    public function registerLogIn($redirectUrl)
+    public function registerLogIn()
     {
 
         /** @var array $loginAlternatives */
@@ -433,13 +432,6 @@ class AppService
                 $this->config->setSystemValue('login.alternatives', $loginAlternatives);
             }
         }
-
-        $sessionObject = $this->userSession->getSession();
-        $sessionObject->offsetSet('user_cas_redirect_url', $redirectUrl);
-
-        //TODO: Persist the session data!
-        #var_dump($sessionObject);
-        #exit;
     }
 
     /**

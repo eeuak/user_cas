@@ -125,26 +125,10 @@ class AuthenticationController extends Controller
             }
         }
 
-        $redirectUrl = $this->request->getParam("redirect_url", '');
+        # Handle redirect based on cookie value
+        if (isset($_COOKIE['user_cas_redirect_url'])) {
 
-        if (strlen($redirectUrl) < 1) {
-
-            $sessionObject = $this->userSession->getSession();
-            $redirectUrl = $sessionObject->offsetGet('user_cas_redirect_url');
-
-            var_dump($sessionObject);
-            exit;
-
-            if (strlen($redirectUrl) > 0) {
-                $redirectResponse = new RedirectResponse($this->appService->linkToRoute($this->appName . '.authentication.casLogin', array("redirect_url" => $redirectUrl)));
-
-                return $redirectResponse;
-            }
-        }
-
-        if (is_string($redirectUrl) && strlen($redirectUrl) > 0) {
-
-            $location = $this->appService->getAbsoluteURL($redirectUrl);
+            $location = $this->appService->getAbsoluteURL(urldecode($_COOKIE['user_cas_redirect_url']));
         } else {
 
             $location = $this->appService->getAbsoluteURL("/");
@@ -159,21 +143,17 @@ class AuthenticationController extends Controller
                     $userName = \phpCAS::getUser();
 
                     $this->loggingService->write(\OCP\Util::INFO, "phpCAS user " . $userName . " has been authenticated.");
-                    #\OCP\Util::writeLog('cas', "phpCAS user " . $userName . " has been authenticated.", \OCP\Util::DEBUG);
 
                     $isLoggedIn = $this->userService->login($this->request, $userName, '');
 
-                    //$isLoggedIn = TRUE;
                     if ($isLoggedIn) {
 
                         $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS user has been authenticated against owncloud.");
-                        #\OCP\Util::writeLog('cas', "phpCAS user has been authenticated against owncloud.", \OCP\Util::DEBUG);
 
                         return new RedirectResponse($location);
                     } else { # Not authenticated against owncloud
 
                         $this->loggingService->write(\OCP\Util::ERROR, "phpCAS user has not been authenticated against owncloud.");
-                        #\OCP\Util::writeLog('cas', "phpCAS user has not been authenticated against owncloud.", \OCP\Util::ERROR);
 
                         $redirectResponse = new RedirectResponse($this->appService->linkToRoute('core.login.showLoginForm'));
                         $redirectResponse->setStatus(\OCP\AppFramework\Http::STATUS_FORBIDDEN);
@@ -183,14 +163,12 @@ class AuthenticationController extends Controller
                 } else { # Not authenticated against CAS
 
                     $this->loggingService->write(\OCP\Util::INFO, "phpCAS user is not authenticated, redirect to CAS server.");
-                    #\OCP\Util::writeLog('cas', "phpCAS user is not authenticated, redirect to CAS server.", \OCP\Util::DEBUG);
 
                     \phpCAS::forceAuthentication();
                 }
             } catch (\CAS_Exception $e) {
 
                 $this->loggingService->write(\OCP\Util::ERROR, "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
-                #\OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
 
                 $redirectResponse = new RedirectResponse($this->appService->linkToRoute('core.login.showLoginForm'));
                 $redirectResponse->setStatus(\OCP\AppFramework\Http::STATUS_INTERNAL_SERVER_ERROR);
@@ -200,7 +178,6 @@ class AuthenticationController extends Controller
         } else {
 
             $this->loggingService->write(\OCP\Util::INFO, "phpCAS user is already authenticated against owncloud.");
-            #\OCP\Util::writeLog('cas', "phpCAS user is already authenticated against owncloud.", \OCP\Util::DEBUG);
 
             return new RedirectResponse($location);
         }
