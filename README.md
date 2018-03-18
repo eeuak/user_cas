@@ -9,7 +9,7 @@ INSTALLATION
 DEPENDENCIES
 -------------------
 
-* Owncloud 10.0.0 or higher
+* ownCloud 10.0.0 or higher
 * PHP >= 5.6, PHP 7.0 or 7.1 if possible
 * [Composer Dependency Manager](https://getcomposer.org/), if you want to install via GIT.
 
@@ -19,18 +19,18 @@ This app does not require a standalone version of jasig’s/apereo’s phpcas an
 STEPS
 -----
 
-1. Git clone/copy the downloaded `user_cas` folder into the Owncloud's apps folder and make sure to set correct permissions for your Webserver.
+1. Git clone/copy the downloaded `user_cas` folder into the ownCloud's apps folder and make sure to set correct permissions for your Webserver.
 2. Change directory inside `user_cas` folder after cloning and perform a `composer update` command if you installed via GIT. The dependencies will be installed. Attention: You will need the [composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx) binary to be installed.
 3. Adjust the settings for the `user_cas` folder according to your webserver setup.
-4. Access the Owncloud web interface with a locally created Owncloud user with admin privileges.
+4. Access the ownCloud web interface with a locally created ownCloud user with admin privileges.
 5. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
-6. Access the administration panel => General and configure the app.
+6. Access the administration panel => Authentication and configure the app.
 
 
 CONFIGURATION
 =============
 
-The app is configured by using the administration panel. Please make sure to configure with an admin user, authenticated locally against your Owncloud instance (and not against CAS). Make sure to fill in all the fields provided.
+The app is configured by using the administration panel. Please make sure to configure with an admin user, authenticated locally against your ownCloud instance (and not against CAS). Make sure to fill in all the fields provided.
 
 
 CAS Server
@@ -40,11 +40,11 @@ CAS Server
 
 **CAS Server Hostname**: The host name of the webserver hosting your CAS, lookup /etc/hosts or your DNS configuration or ask your IT-Department.
 
-**CAS Server Port**: The port CAS is listening to. Default for HTTPS is `443`.
+**CAS Server Port**: The port CAS is listening to. Default for HTTPS should be `443`.
 
 **CAS Server Path**: The directory of your CAS. In common setups this path is `/cas`. 
 
-**Service URL**: Service URL used to CAS authentication and redirection. Useful when behind a reverse proxy.
+**Service URL**: Service URL used for CAS authentication and redirection. Useful when behind a reverse proxy. This url must end in `/apps/user_cas/login`.
 
 **Certification file path (.crt)**: If you don't want to validate the certificate (i.e. self-signed certificates) then leave this blank. Otherwise enter the path to the certificate (.crt) on your server, beginning at root level.
 
@@ -52,25 +52,15 @@ CAS Server
 Basic
 -----
 
-**Force user login using CAS?**: If checked, users will immediately be redirected to CAS’ login page, after visiting the Owncloud URL. If checked, **Disable CAS logout** is automatically disabled. Default: off
+**Force user login using CAS?**: If checked, users will immediately be redirected to CAS login page, after visiting the ownCloud URL. If checked, **Disable CAS logout** is automatically disabled. Default: off
 
-**Disable CAS logout**: If checked, you will only be logged out from Owncloud and not from your CAS instance. Default: off
+**Disable CAS logout**: If checked, you will only be logged out from ownCloud and not from your CAS instance. Default: off
+
+**Autocreate user after first CAS login?**: Ich checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet, authenticate against CAS and the app will create and store them in the ownCloud database on their first login. Default: off
+
+**Update user data after each CAS login?**: If checked, the data provided by CAS is used to update ownCloud user attributes each time the user logs in. Default: off
 
 **Comma separated list of servers which can send logout requests**: Provide a list of servers which can send logout requests for your CAS ticket (leave empty if you do not want to restrict logout to defined servers).
-
-**Autocreate user after first CAS login?**: Ich checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet, authenticate against CAS and the app will create and store them in the Owncloud database on their first login. Default: on
-
-**Update user data after each CAS login?**: If checked, the data provided by CAS is used to update Owncloud user attributes each time the user logs in. Default: on
-
-**Groups that will not be unlinked**: These groups are preserved, when updating a user after login and are not unlinked. Default: empty
-
-**Default group when autocreating users**: When auto creating users after authentication, these groups are set as default if the user has no CAS groups. Default: empty
-
-**Autocreate user after first CAS login?**: Ich checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet, authenticate against CAS and the app will create and store them in the Owncloud database on their first login. Default: on
-
-**Use ECAS Attribute Parser?**: Activate the ECAS attribute parser to enable the parsing of groups provided by the European Commission ECAS implementation (do NOT activate until you know what you are doing).
-
-<!-- **Link to LDAP backend**: Link CAS authentication with LDAP users and groups backend to use the same owncloud user as if the user was logged in via LDAP. -->
 
 
 <a name="mapping"></a>
@@ -78,7 +68,7 @@ Basic
 Mapping
 -------
 
-If CAS provides extra attributes, `user_cas` can retrieve the values of them. Since their name differs in various setups it is necessary to map owncloud-attribute-names to CAS-attribute-names.
+If CAS provides extra attributes, `user_cas` can retrieve the values of them. Since their name differs in various setups it is necessary to map ownCloud-attribute-names to CAS-attribute-names.
 
 **Email**: Name of email attribute in CAS. Default: empty
 
@@ -87,21 +77,55 @@ If CAS provides extra attributes, `user_cas` can retrieve the values of them. Si
 **Group**: Name of group attribute in CAS. Default: empty
 
 
+Groups
+------
+
+**Groups that will not be unlinked**: These groups are preserved, when updating a user after login and are not unlinked. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
+
+**Default group when autocreating users**: When auto creating users after authentication, these groups are set as default if the user has no CAS groups. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
+
+**Authorized CAS Groups**: Members of these groups are authorized to use the ownCloud instance. This setting is helpful, when your CAS instance is not handling authorization. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
+
+**Group Quotas**: Define quotas for groups of the users authenticated via CAS. Please provide a comma separated list without blanks and with : between (eg.: group1:10GB,group2:500MB). Default: empty
+
+
+ECAS Settings:
+--------------
+
+user_cas since Version 1.5 provides support for using a European Commission ECAS-Server implementation.
+
+**Use ECAS Attribute Parser?**: Activate the ECAS attribute parser to enable the parsing of groups provided by the European Commission ECAS implementation (do NOT activate until you know what you are doing).
+
+**ECAS Strength**: Set the authentication strength, used by the ECAS instance (do NOT select until you know what you are doing).
+
+**Query ECAS groups**: Define which ECAS groups should be queried, when validating a user’s ticket. Please provide a comma separated list without blanks (eg.: GROUP1,GROUP2 or use * for all groups). (Do NOT select until you know what you are doing).
+
+
+<!-- 
+LDAP-Backend:
+-------------
+
+**Link to LDAP backend**: Link CAS authentication with LDAP users and groups backend to use the same ownCloud user as if the user was logged in via LDAP. 
+
+-->
+
+
 PHP-CAS Library
 ---------------
 
 Setting up the PHP-CAS library options :
 
-**PHP CAS path (CAS.php file)**: Set a custom path to a CAS.php file of the jasig/phpcas library version you want to use. Beginning at rootlevel of your server. Default: empty, meaning it uses the composer installed dependency in the `user_cas` folder.
+**Overwrite phpCAS path (CAS.php file)**: Set a custom path to a CAS.php file of the jasig/phpcas library version you want to use. Beginning at rootlevel of your server. Default: empty, meaning it uses the composer installed dependency in the `user_cas` folder.
 
 **PHP CAS debug file**: Set path to a custom phpcas debug file. Beginning at rootlevel of your server. Default: empty
+
 
 EXTRA INFO
 ==========
 
-* If you enable the "Autocreate user after CAS login" option, a user will be created if he does not exist. If this option is disabled and the user does not exist, then the user will be not allowed to log into Owncloud. <!-- You might not want this if you check "Link to LDAP backend" -->
+* If you enable the "Autocreate user after CAS login" option, a user will be created if he does not exist. If this option is disabled and the user does not exist, then the user will be not allowed to log into ownCloud. <!-- You might not want this if you check "Link to LDAP backend" -->
 
-* If you enable the "Update user data" option, the app updates the user's Display Name, Email and Group Membership and overwrites manually changed data in the Owncloud users table.
+* If you enable the "Update user data" option, the app updates the user's Display Name, Email and Group Membership and overwrites manually changed data in the ownCloud users table.
 
 By default the CAS App will unlink all the groups from a user and will provide the groups defined at the [**Mapping**](#mapping) attributes. If this mapping is not defined, the value of the **Default group when autocreating users** field will be used instead. If both are undefined, then the user will be set with no groups.
 If you set the "protected groups" field, those groups will not be unlinked from the user.
@@ -116,8 +140,8 @@ If you are observing undesired behaviour, think it is a bug and want to tell me 
 * What was the outcome of this action?
 * What outcome did you expect instead?
 
-Also please provide basic information of your Owncloud instance:
-* Owncloud Version
+Also please provide basic information of your ownCloud instance:
+* ownCloud Version
 * PHP Version
 * CAS Version
 * phpCAS library version
@@ -145,5 +169,5 @@ Older Versions:
 
 Links
 -------
-* Owncloud - [owncloud.org](http://www.owncloud.org)
-* Owncloud @ GitHub - [github.com/owncloud](https://github.com/owncloud)
+* ownCloud - [owncloud.org](http://www.owncloud.org)
+* ownCloud @ GitHub - [github.com/owncloud](https://github.com/owncloud)

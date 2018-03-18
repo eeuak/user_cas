@@ -3,10 +3,12 @@ CHANGELOG
 
 Version 1.5.0
 -------------
-* Drop OC 9 support
-* Major source code optimizations
+* Drop onwCloud 9 support
+* Major source code optimizations, fix several Errors associated with redirection after login
 * Add ECAS support
 * Add authorization feature via groups
+* Add error views for when not authorized or when the CAS-Client throws errors
+* Support for ownCloud oauth2 App, it’s now possible to authenticate a desktop or mobile phone client with CAS via oauth2 provider
 
 Version 1.4.9
 -------------
