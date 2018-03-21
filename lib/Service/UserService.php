@@ -436,9 +436,13 @@ class UserService
         krsort($collectedQuotas);
 
         $newQuota = array_shift($collectedQuotas);
-        $user->setQuota($newQuota);
 
-        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' has new Quota: '" . $newQuota . "'");
+        if(\OCP\Util::computerFileSize($user->getQuota()) < \OCP\Util::computerFileSize($newQuota)) {
+
+            $user->setQuota($newQuota);
+
+            $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' has new Quota: '" . $newQuota . "'");
+        }
     }
 
     /**
