@@ -427,7 +427,7 @@ class AppService
                 \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
             } else {
 
-                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => '/apps/user_cas/img/cas-logo.png'];
+                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => dirname(substr($_SERVER['REQUEST_URI'],0, strpos($_SERVER['REQUEST_URI'],"/index.php/"))).'/apps/user_cas/img/cas-logo.png'];
 
                 $this->config->setSystemValue('login.alternatives', $loginAlternatives);
             }
