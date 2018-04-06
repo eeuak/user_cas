@@ -28,7 +28,7 @@ $enabled = TRUE;
 $script = $_SERVER['SCRIPT_FILENAME'];
 $requestUri = $_SERVER['REQUEST_URI'];
 
-if (in_array(basename($script), array('console.php', 'cron.php', 'status.php', 'version.php'))) {
+if (in_array(basename($script), array('console.php', 'cron.php', 'status.php', 'version.php')) || strpos($requestUri, "/oauth2/")) {
     $enabled = FALSE;
 }
 
@@ -44,7 +44,6 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
     if(!strpos($script, "ocs") && !strpos($requestUri, "oc.js") && !in_array(basename($script), array('public.php', 'remote.php'))) {
 
         // URL params and redirect_url cookie
-        setcookie("user_cas_redirect_url", '', time() - 3600);
         setcookie("user_cas_enforce_authentication", "0", null, '/');
         $urlParams = '';
 
@@ -53,12 +52,11 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
             $urlParams = $_REQUEST['redirect_url'];
             // Save the redirect_rul to a cookie
             $cookie = setcookie("user_cas_redirect_url", "$urlParams", null, '/');
-        } else if (isset($_REQUEST['redirect_uri'])) {
+        }/*
+        else {
 
-            $urlParams = $_REQUEST['redirect_url'];
-            // Save the redirect_rul to a cookie
-            $cookie = setcookie("user_cas_redirect_url", "$urlParams", null, '/');
-        }
+            setcookie("user_cas_redirect_url", '/', null, '/');
+        }*/
 
         // Register alternative LogIn
         $appService->registerLogIn();
@@ -89,6 +87,8 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI && $enabled) {
             if (!\phpCAS::isAuthenticated()) {
 
                 $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
+
+                $cookie = setcookie("user_cas_redirect_url", urlencode($requestUri), null, '/');
 
                 header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin'));
                 die();

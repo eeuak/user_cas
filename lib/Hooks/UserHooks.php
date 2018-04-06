@@ -296,8 +296,10 @@ class UserHooks
 
                         $groupQuota = explode(":", $groupQuota);
 
-                        $attributes['cas_group_quota'][$groupQuota[0]] = $groupQuota[1];
+                        if (is_array($groupQuota) && count($groupQuota) === 2) {
 
+                            $attributes['cas_group_quota'][$groupQuota[0]] = $groupQuota[1];
+                        }
                     }
 
                     // Try to update user attributes
@@ -341,6 +343,9 @@ class UserHooks
         if (!boolval($this->config->getAppValue($this->appName, 'cas_disable_logout'))) {
 
             $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS logging out.');
+
+            # Reset cookie
+            setcookie("user_cas_redirect_url", '/', null, '/');
 
             \phpCAS::logout(array("url" => $this->appService->getAbsoluteURL('/')));
 
