@@ -432,38 +432,41 @@ class AppService
      */
     public function registerLogIn()
     {
+		
+		/** @var \OCP\Defaults $defaults */
+		$defaults = new \OCP\Defaults();
+		if(strpos(strtolower($defaults->getName()), 'next') !== FALSE) {
 
-        /** @var array $loginAlternatives */
-        $loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
+			// Workaround for Nextcloud 12 or newer, as it does not support alternate logins via config.php
+			if (\OCP\Util::getVersion()[0] >= 12) {
 
-        $loginAlreadyRegistered = FALSE;
+				$this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud detected.");
+				\OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
+			} else {
 
-        foreach ($loginAlternatives as $key => $loginAlternative) {
+				$loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "/index.php/")) . '/apps/user_cas/img/cas-logo.png'];
 
-            if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
+				$this->config->setSystemValue('login.alternatives', $loginAlternatives);
+			}
+			
+		}else{
+			
+			/** @var array $loginAlternatives */
+			$loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
 
-                $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin');
-                $this->config->setSystemValue('login.alternatives', $loginAlternatives);
-                $loginAlreadyRegistered = TRUE;
-            }
-        }
+			$loginAlreadyRegistered = FALSE;
 
-        if (!$loginAlreadyRegistered) {
+			foreach ($loginAlternatives as $key => $loginAlternative) {
 
-            // Workaround for Nextcloud 12.0.0, as it does not support alternate logins via config.php
-            /** @var \OCP\Defaults $defaults */
-            $defaults = new \OCP\Defaults();
-            if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && strpos(implode('.', \OCP\Util::getVersion()), '12.0.0') !== FALSE) {
+				if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
 
-                $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud detected.");
-                \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
-            } else {
+					$loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin');
+					$this->config->setSystemValue('login.alternatives', $loginAlternatives);
+					$loginAlreadyRegistered = TRUE;
+				}
+			}
 
-                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "/index.php/")) . '/apps/user_cas/img/cas-logo.png'];
-
-                $this->config->setSystemValue('login.alternatives', $loginAlternatives);
-            }
-        }
+		}
     }
 
     /**
