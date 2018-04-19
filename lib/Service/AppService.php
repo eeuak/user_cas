@@ -349,16 +349,13 @@ class AppService
                     if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'LOW') {
 
                         $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/laxValidate';
-                    }
-                    else if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'MEDIUM') {
+                    } else if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'MEDIUM') {
 
                         $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/sponsorValidate';
-                    }
-                    else if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'HIGH') {
+                    } else if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'HIGH') {
 
                         $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/interinstitutionalValidate';
-                    }
-                    else if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'TOP') {
+                    } else if (is_string($this->cas_ecas_assurance_level) && $this->cas_ecas_assurance_level === 'TOP') {
 
                         $newUrl = $newProtocol . $this->getCasHostname() . $this->getCasPath() . '/strictValidate';
                     }
@@ -448,31 +445,33 @@ class AppService
     public function registerLogIn()
     {
 
-        /** @var array $loginAlternatives */
-        $loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
+        // Workaround for Nextcloud >= 12.0.0, as it does not support alternate logins via config.php
+        /** @var \OCP\Defaults $defaults */
+        $defaults = new \OCP\Defaults();
+        $version = \OCP\Util::getVersion();
 
-        $loginAlreadyRegistered = FALSE;
+        if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && $version[0] >= 12) {
 
-        foreach ($loginAlternatives as $key => $loginAlternative) {
+            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud ".$version[0].".".$version[1].".".$version[2]."."." detected.");
+            \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
+        } else {
 
-            if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
+            /** @var array $loginAlternatives */
+            $loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
 
-                $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin');
-                $this->config->setSystemValue('login.alternatives', $loginAlternatives);
-                $loginAlreadyRegistered = TRUE;
+            $loginAlreadyRegistered = FALSE;
+
+            foreach ($loginAlternatives as $key => $loginAlternative) {
+
+                if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
+
+                    $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin');
+                    $this->config->setSystemValue('login.alternatives', $loginAlternatives);
+                    $loginAlreadyRegistered = TRUE;
+                }
             }
-        }
 
-        if (!$loginAlreadyRegistered) {
-
-            // Workaround for Nextcloud 12.0.0, as it does not support alternate logins via config.php
-            /** @var \OCP\Defaults $defaults */
-            $defaults = new \OCP\Defaults();
-            if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && strpos(implode('.', \OCP\Util::getVersion()), '12.0.0') !== FALSE) {
-
-                $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud detected.");
-                \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
-            } else {
+            if (!$loginAlreadyRegistered) {
 
                 $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "/index.php/")) . '/apps/user_cas/img/cas-logo.png'];
 
