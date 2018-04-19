@@ -388,7 +388,7 @@ class AppService
                     }
 
                     # Set the new URLs
-                    if ($this->getCasVersion() != "S1" && !empty($newUrl)) {
+                    if ($this->getCasVersion() !== "S1" && !empty($newUrl)) {
 
                         \phpCAS::setServerServiceValidateURL($newUrl);
                         $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS additional attributes have been successfully set. New CAS " . $this->getCasVersion() . " service validate URL: " . $newUrl);

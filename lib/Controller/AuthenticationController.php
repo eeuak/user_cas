@@ -206,7 +206,7 @@ class AuthenticationController extends Controller
     {
         $params = [];
 
-        if ($additionalErrorCode != 0) {
+        if ($additionalErrorCode !== 0) {
 
             if ($additionalErrorCode === \OCP\AppFramework\Http::STATUS_FORBIDDEN) {
 
