@@ -158,11 +158,11 @@ class UserService
                 # Test for mapped attribute from settings
                 if (array_key_exists($groupMapping, $casAttributes)) {
 
-                    $casGroups = $casAttributes[$groupMapping];
+                    $casGroups = (array)$casAttributes[$groupMapping];
                 } # Test for standard 'groups' attribute
                 else if (array_key_exists('groups', $casAttributes)) {
 
-                    $casGroups = $casAttributes['groups'];
+                    $casGroups = (array)$casAttributes['groups'];
                 }
 
                 foreach ($casGroups as $casGroup) {
