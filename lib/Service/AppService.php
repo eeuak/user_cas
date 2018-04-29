@@ -444,7 +444,7 @@ class AppService
      */
     public function registerLogIn()
     {
-
+		
         // Workaround for Nextcloud >= 12.0.0, as it does not support alternate logins via config.php
         /** @var \OCP\Defaults $defaults */
         $defaults = new \OCP\Defaults();
