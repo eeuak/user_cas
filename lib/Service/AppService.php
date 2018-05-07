@@ -384,6 +384,12 @@ class AppService
                         $newSamlUrl = $this->buildQueryUrl($newSamlUrl, 'userDetails=' . urlencode('true'));
                     }
 
+                    # Set the user agent to mimic an ecas client
+                    $userAgent = sprintf("ECAS PHP Client (%s, %s)",
+                        '2.0.0-BETA-0004',
+                        $_SERVER['SERVER_SOFTWARE']);
+                    \phpCAS::setExtraCurlOption('CURLOPT_USERAGENT', $userAgent);
+
                     # Set the new URLs
                     if ($this->getCasVersion() !== "S1" && !empty($newUrl)) {
 
