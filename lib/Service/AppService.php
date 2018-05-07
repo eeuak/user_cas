@@ -388,7 +388,7 @@ class AppService
                     $userAgent = sprintf("ECAS PHP Client (%s, %s)",
                         '2.0.0-BETA-0004',
                         $_SERVER['SERVER_SOFTWARE']);
-                    \phpCAS::setExtraCurlOption('CURLOPT_USERAGENT', $userAgent);
+                    \phpCAS::setExtraCurlOption(CURLOPT_USERAGENT, $userAgent);
 
                     # Set the new URLs
                     if ($this->getCasVersion() !== "S1" && !empty($newUrl)) {
