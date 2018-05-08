@@ -414,6 +414,8 @@ class UserService
     private function updateQuota($user, $groupQuotas)
     {
 
+        $defaultQuota = $this->config->getAppValue('files', 'default_quota');
+
         $uid = $user->getUID();
         $collectedQuotas = array();
 
@@ -424,6 +426,11 @@ class UserService
                 if ($groupQuota === 'none') {
 
                     $collectedQuotas[PHP_INT_MAX] = $groupQuota;
+                } elseif ($groupQuota === 'default') {
+
+                    $defaultQuotaFilesize = \OCP\Util::computerFileSize($defaultQuota);
+
+                    $collectedQuotas[$defaultQuotaFilesize] = $groupQuota;
                 } else {
 
                     $groupQuotaComputerFilesize = \OCP\Util::computerFileSize($groupQuota);
@@ -437,7 +444,24 @@ class UserService
 
         $newQuota = array_shift($collectedQuotas);
 
-        if(\OCP\Util::computerFileSize($user->getQuota()) < \OCP\Util::computerFileSize($newQuota)) {
+        $usersOldQuota = $user->getQuota();
+
+        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' old Quota was: '" . $usersOldQuota . "'");
+        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' new Quota will be: '" . $newQuota . "'");
+
+        if ($usersOldQuota === 'none') {
+
+            $usersOldQuota = PHP_INT_MAX;
+        } elseif ($usersOldQuota === 'default') {
+
+            $usersOldQuota = \OCP\Util::computerFileSize($defaultQuota);
+        }
+        else {
+
+            $usersOldQuota = \OCP\Util::computerFileSize($usersOldQuota);
+        }
+
+        if ($usersOldQuota < \OCP\Util::computerFileSize($newQuota)) {
 
             $user->setQuota($newQuota);
 
