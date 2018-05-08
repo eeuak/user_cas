@@ -414,7 +414,7 @@ class UserService
     private function updateQuota($user, $groupQuotas)
     {
 
-        $defaultQuota = $this->config->getAppValue('files', 'default_quota');
+        $defaultQuota = $this->config->getAppValue('files', 'default_quota', '0 B');
 
         $uid = $user->getUID();
         $collectedQuotas = array();
@@ -442,17 +442,15 @@ class UserService
         # Sort descending by key
         krsort($collectedQuotas);
 
-        $newQuota = array_shift($collectedQuotas);
+        $newQuota = \OCP\Util::computerFileSize(array_shift($collectedQuotas));
 
         $usersOldQuota = $user->getQuota();
-
-        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' old Quota was: '" . $usersOldQuota . "'");
-        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' new Quota will be: '" . $newQuota . "'");
 
         if ($usersOldQuota === 'none') {
 
             $usersOldQuota = PHP_INT_MAX;
-        } elseif ($usersOldQuota === 'default') {
+        }
+        elseif ($usersOldQuota === 'default') {
 
             $usersOldQuota = \OCP\Util::computerFileSize($defaultQuota);
         }
@@ -461,7 +459,11 @@ class UserService
             $usersOldQuota = \OCP\Util::computerFileSize($usersOldQuota);
         }
 
-        if ($usersOldQuota < \OCP\Util::computerFileSize($newQuota)) {
+        $this->loggingService->write(\OCP\Util::INFO, "Default System Quota is: '" . $defaultQuota . "'");
+        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' old computerized Quota is: '" . $usersOldQuota . "'");
+        $this->loggingService->write(\OCP\Util::INFO, "User '" . $uid . "' new computerized Quota would be: '" . $newQuota . "'");
+
+        if ($usersOldQuota < $newQuota) {
 
             $user->setQuota($newQuota);
 
