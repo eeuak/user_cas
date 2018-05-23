@@ -28,7 +28,7 @@ $enabled = TRUE;
 $script = (isset($_SERVER['SCRIPT_FILENAME']) ? $_SERVER['SCRIPT_FILENAME'] : '');
 $requestUri = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 
-if (in_array(basename($script), array('console.php', 'cron.php', 'status.php', 'version.php')) || strpos($requestUri, "/oauth2/")) {
+if (in_array(basename($script), array('console.php', 'cron.php', 'status.php', 'version.php')) || strpos($requestUri, "/oauth2/") || strpos($requestUri, "/s/")) {
     $enabled = FALSE;
 }
 
