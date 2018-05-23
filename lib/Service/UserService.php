@@ -239,7 +239,7 @@ class UserService
 
         $randomPassword = $this->getNewPassword();
 
-        return $this->userManager->createUserFromBackend($userId, $randomPassword, $this->backend);
+        return $this->userManager->createUser($userId, $randomPassword);
     }
 
     /**
