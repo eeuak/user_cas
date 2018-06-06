@@ -487,15 +487,16 @@ class UserService
     /**
      * Generate a random PW with special char symbol characters
      *
-     * @param int $newPasswordLength
      * @return string New Password
      */
-    protected function getNewPassword($newPasswordLength = 20)
+    protected function getNewPassword()
     {
 
-        $newPasswordChars = \OC::$server->getSecureRandom()->generate($newPasswordLength / 2, \OCP\Security\ISecureRandom::CHAR_DIGITS . \OCP\Security\ISecureRandom::CHAR_UPPER . \OCP\Security\ISecureRandom::CHAR_LOWER);
-        $newPasswordSymbols = \OC::$server->getSecureRandom()->generate($newPasswordLength / 2, \OCP\Security\ISecureRandom::CHAR_SYMBOLS);
+        $newPasswordCharsLower = \OC::$server->getSecureRandom()->generate(8, \OCP\Security\ISecureRandom::CHAR_LOWER);
+        $newPasswordCharsUpper = \OC::$server->getSecureRandom()->generate(4, \OCP\Security\ISecureRandom::CHAR_UPPER);
+        $newPasswordNumbers = \OC::$server->getSecureRandom()->generate(4, \OCP\Security\ISecureRandom::CHAR_DIGITS);
+        $newPasswordSymbols = \OC::$server->getSecureRandom()->generate(4, \OCP\Security\ISecureRandom::CHAR_SYMBOLS);
 
-        return str_shuffle($newPasswordChars . $newPasswordSymbols);
+        return str_shuffle($newPasswordCharsLower . $newPasswordCharsUpper . $newPasswordNumbers . $newPasswordSymbols);
     }
 }
