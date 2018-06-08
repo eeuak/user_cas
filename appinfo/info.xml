@@ -3,7 +3,7 @@
     <id>user_cas</id>
     <name>CAS user and group backend</name>
     <description>This app provides in-depth features to authenticate and authorize users against a [jasig/apereo Central Authentication Server (CAS)](https://www.apereo.org/projects/cas). The app provides all necessary options needed to connect to your CAS instance and also advanced features to manage the groups accessible by your CAS infrastructure to implement an authorization feature. Additionally this version supports ECAS instances used by the European Commission. Commercial support for user_cas is available through ownCloud GmbH and myself personally.</description>
-    <summary>Authenticate against and manage users with a jasig/apereo CAS Server (https://github.com/apereo/cas)</summary>
+    <summary>Authenticate users against an jasig/apereo CAS Server (https://github.com/apereo/cas)</summary>
     <licence>AGPL</licence>
     <screenshot>http://stuff.felixrupp.com/user_cas/1.5/splashscreen.png</screenshot>
     <screenshot>http://stuff.felixrupp.com/user_cas/1.4/user_cas-1.png</screenshot>

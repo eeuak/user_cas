@@ -3,8 +3,8 @@ CHANGELOG
 
 Version 1.5.0
 -------------
-* Drop onwCloud 9 support
-* Major source code optimizations, fix several Errors associated with redirection after login
+* Drop ownCloud 9 support
+* Major source code optimizations, fix several errors associated with redirection after login
 * Add ECAS support
 * Add authorization feature via groups
 * Add error views for when not authorized or when the CAS-Client throws errors
