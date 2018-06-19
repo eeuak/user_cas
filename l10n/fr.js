@@ -44,6 +44,7 @@ OC.L10N.register(
         "Your CAS settings have been updated.": "Vos paramètres CAS ont été mis à jour.",
         "Your CAS settings could not be updated. Please try again.": "Vos paramètres CAS n'ont pas pu être mis à jour. Veuillez réessayer.",
         "Forbidden. You do not have access to this application. Please refer to your administrator if something feels wrong to you.": "Interdit. Vous n'avez pas accès à cette application. Veuillez vous adresser à votre administrateur si quelque chose vous semble incorrect.",
+        "You do not have access to the JRCbox application. Please contact the JRCbox administrator if something feels wrong to you.": "Vous n'avez pas accès à cette application JRCbox. Veuillez vous adresser à votre administrateur JRCbox si quelque chose vous semble incorrect.",
         "Internal Server Error. The server encountered an error. Please try again.": "Erreur Interne du Serveur. Le serveur a rencontré une erreur. Veuillez réessayer.",
         "Go back to the login page": "Retourner à la page d'accueil"
     },

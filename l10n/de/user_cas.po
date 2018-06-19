@@ -213,6 +213,10 @@ msgid "Forbidden. You do not have access to this application. Please refer to yo
 msgstr "Verboten. Sie haben keinen Zugriff auf diese Anwendung. Bitte wenden Sie sich an Ihren Administrator, wenn Sie denken, dass etwas nicht stimmt."
 
 #: templates/cas-error.php:24
+msgid "You do not have access to the JRCbox application. Please contact the JRCbox administrator if something feels wrong to you."
+msgstr "Sie haben keinen Zugriff auf diese JRCbox Anwendung. Bitte wenden Sie sich an den JRCbox Administrator, wenn Sie denken, dass etwas nicht stimmt."
+
+#: templates/cas-error.php:24
 msgid "Internal Server Error. The server encountered an error. Please try again."
 msgstr "Interner Serverfehler. Die Serveranfrage war fehlerhaft, bitte versuchen Sie es erneut."
 

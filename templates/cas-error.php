@@ -22,7 +22,7 @@ style('user_cas', 'casError');
 
 <span class="error casError">
     <p>
-        <b><?php p($l->t($_['errorCode']));?>: <?php p($l->t($_['errorMessage'])); ?></b>
+        <b><?php if($_['errorCode']) { p($l->t($_['errorCode']));?>: <?php } ?><?php p($l->t($_['errorMessage'])); ?></b>
     </p>
     <p>
         <a href="<?php p($_['backUrl']); ?>">
