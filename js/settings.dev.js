@@ -9,10 +9,13 @@ $(document).ready(function () {
 
             $("#user_cas #cas_disable_logout").attr("disabled", true);
             $("#user_cas #cas_disable_logout").prop('checked', false);
+
+            $("#user_cas #cas_force_login_exceptions").attr("disabled", false);
         }
         else {
 
             $("#user_cas #cas_disable_logout").attr("disabled", false);
+            $("#user_cas #cas_force_login_exceptions").attr("disabled", true);
         }
     });
 

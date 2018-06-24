@@ -66,7 +66,15 @@ msgstr "Laissez vide si vous ne voulez pas valider votre instance de serveur CAS
 
 #: templates/admin.php:54
 msgid "Force user login using CAS?"
-msgstr ""
+msgstr "Forcer la connexion de l'utilisateur en utilisant CAS?"
+
+#: templates/admin.php:58
+msgid "Don’t use force login on these client-IPs"
+msgstr "N'utilisez pas la connexion forcée sur ces adresses IP client"
+
+#: templates/admin.php:58
+msgid "Comma separated list of client IP addresses (or address ranges), which won’t be forced to login if \"Force user login\" is enabled (e.g. 192.168.1.1/254,192.168.2.5)"
+msgstr "Liste des adresses IP (ou plages d'adresses) séparées par des virgules, qui ne sera pas obligée de se connecter si \"Forcer la connexion utilisateur\" est activé (par exemple 192.168.1.1/254, 192.168.2.5)"
 
 #: templates/admin.php:60
 msgid "Disable CAS logout (do only OwnCloud logout)"

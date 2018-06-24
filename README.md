@@ -10,7 +10,7 @@ DEPENDENCIES
 -------------------
 
 * ownCloud 10.0.0 to 10.0.7 and Nextcloud 13.0.0 to 13.0.4
-* PHP >= 5.6, PHP 7.0 or 7.1 if possible
+* PHP >= 5.6, PHP 7.0 if possible
 * Optional: [Composer Dependency Manager](https://getcomposer.org/), if you want to install via GIT.
 
 This app does not require a standalone version of jasig’s/apereo’s phpCAS any longer. The library is shipped within composer dependencies, in the archive file you downloaded or the Market/App-Store version if used. Although you can configure to use your own version of jasig’s/apereo’s phpCAS library later on.
@@ -24,7 +24,7 @@ GIT: STEPS
 3. Adjust the settings for the `user_cas` folder according to your webserver setup.
 4. Access the ownCloud web interface with a locally created ownCloud user with admin privileges.
 5. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
-6. Access the administration panel => Authentication (Additional on Nextcloud) and configure the app.
+6. Access the administration panel => Authentication (Security on Nextcloud) and configure the app.
 
 
 CONFIGURATION
@@ -53,6 +53,8 @@ Basic
 -----
 
 **Force user login using CAS?**: If checked, users will immediately be redirected to CAS login page, after visiting the ownCloud URL. If checked, **Disable CAS logout** is automatically disabled. Default: off
+
+**Don’t use force login on these client-IPs**: Comma separated list of client IP addresses (or address ranges), which won’t be forced to login if "Force user login" is enabled (e.g. 192.168.1.1/254,192.168.2.5). Default: empty
 
 **Disable CAS logout**: If checked, you will only be logged out from ownCloud and not from your CAS instance. Default: off
 

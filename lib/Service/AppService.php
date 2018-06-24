@@ -428,20 +428,60 @@ class AppService
     /**
      * Check if login should be enforced using user_cas.
      *
+     * @param $remoteAddress
      * @return bool TRUE|FALSE
      */
-    public function isEnforceAuthentication()
+    public function isEnforceAuthentication($remoteAddress)
     {
 
+        $isEnforced = TRUE;
+
+        $forceLoginExceptions = $this->config->getAppValue($this->appName, 'cas_force_login_exceptions', '');
+        $forceLoginExceptionsArray = explode(',', $forceLoginExceptions);
+
+        # Enforce off
         if ($this->config->getAppValue($this->appName, 'cas_force_login') !== '1') {
-            return FALSE;
+
+            $isEnforced = FALSE;
+        } else {
+
+            # Check enforce IP ranges
+            foreach ($forceLoginExceptionsArray as $forceLoginException) {
+
+                $forceLoginExceptionRanges = explode('/', $forceLoginException);
+
+                if (isset($forceLoginExceptionRanges[0])) {
+
+                    $baseIp = substr($forceLoginExceptionRanges[0], 0, strrpos($forceLoginExceptionRanges[0], "."));
+
+                    $startingIp = intval(substr($forceLoginExceptionRanges[0], strrpos($forceLoginExceptionRanges[0], ".")+1, strlen($forceLoginExceptionRanges[0])));
+                    $endingIp = $startingIp;
+
+                    if (isset($forceLoginExceptionRanges[1])) {
+
+                        $endingIp = intval($forceLoginExceptionRanges[1]);
+                    }
+
+                    for ($ip = $startingIp; $ip <= $endingIp; $ip++) {
+
+                        if ($remoteAddress === $baseIp . "." . $ip) {
+
+                            $isEnforced = FALSE;
+
+                            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Enforce Login NOT triggered. Base Address: " . $baseIp . " | Starting IP: " . $startingIp . " | Ending IP: " . $endingIp . " | Remote Address: " . $remoteAddress);
+                        }
+                    }
+                }
+            }
         }
 
+        # User already logged in
         if ($this->userSession->isLoggedIn()) {
-            return FALSE;
+
+            $isEnforced = FALSE;
         }
 
-        return TRUE;
+        return $isEnforced;
     }
 
     /**

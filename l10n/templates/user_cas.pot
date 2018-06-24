@@ -69,6 +69,14 @@ msgstr ""
 msgid "Force user login using CAS?"
 msgstr ""
 
+#: templates/admin.php:58
+msgid "Don’t use force login on these client-IPs"
+msgstr ""
+
+#: templates/admin.php:58
+msgid "Comma separated list of client IP addresses (or address ranges), which won’t be forced to login if \"Force user login\" is enabled (e.g. 192.168.1.1/254,192.168.2.5)"
+msgstr ""
+
 #: templates/admin.php:60
 msgid "Disable CAS logout (do only OwnCloud logout)"
 msgstr ""

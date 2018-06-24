@@ -14,6 +14,8 @@ OC.L10N.register(
         "Certification file path (.crt).": "Pfad zur Zertifikatsdatei (.crt).",
         "Leave empty if you don’t want to validate your CAS server instance": "Nicht ausfüllen, wenn Sie ihren CAS-Server nicht validieren möchten",
         "Force user login using CAS?": "CAS Login erzwingen?",
+        "Don’t use force login on these client-IPs": "Login bei diesen Client-IPs nicht erzwingen",
+        "Comma separated list of client IP addresses (or address ranges), which won’t be forced to login if \"Force user login\" is enabled (e.g. 192.168.1.1/254,192.168.2.5)": "Kommagetrennte Liste an Client-IP-Adressen (oder Adressräumen), die nicht zum Login gezwungen werden, wenn \"CAS Login erzwingen\" aktiviert ist (z.B: 192.168.1.1/254,192.168.2.5)",
         "Disable CAS logout (do only OwnCloud logout)": "CAS Logout deaktivieren (nur bei Owncloud ausloggen)",
         "Logout Servers": "Logout Server",
         "Comma separated list of servers which can send logout requests (leave empty if you do not want to restrict logout to defined servers)": "Kommagetrennte Liste an Servern, die Logout-Requests an ihren CAS-Server senden dürfen (Nicht ausfüllen, wenn Sie Logouts nicht beschränken möchten)",

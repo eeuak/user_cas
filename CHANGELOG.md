@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Version 1.5.2
+-------------
+* Add settings field to exclude specific Ips and/or IP-ranges from force login
+* Nextclouod: Move settings panel to section "Security" (was in "Additional" before)
+* Remove the signature from repo (if you need a signed version, please use one of the release packages or download from ownCloud Market/Nextcloud AppStore)
+
 Version 1.5.1
 -------------
 * Hotfixes wrong links in 403 error page if enforce authentication was on
