@@ -9,7 +9,7 @@ INSTALLATION
 DEPENDENCIES
 -------------------
 
-* ownCloud 10.0.0 to 10.0.7 and Nextcloud 13.0.0 to 13.0.4
+* ownCloud 10.0.0 to 10.0.8 and Nextcloud 13.0.0 to 13.0.4
 * PHP >= 5.6, PHP 7.0 if possible
 * Optional: [Composer Dependency Manager](https://getcomposer.org/), if you want to install via GIT.
 
