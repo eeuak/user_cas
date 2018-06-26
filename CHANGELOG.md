@@ -4,6 +4,7 @@ CHANGELOG
 Version 1.5.3
 -------------
 * Hotfixes the IP address range separator in the exclude specific IPs field and changes it from "/" to "-"
+* Fixes ownCloud 10.0.8 bug and raises compatibility to 10.0.8
 
 Version 1.5.2
 -------------
