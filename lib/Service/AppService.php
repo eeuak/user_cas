@@ -544,7 +544,7 @@ class AppService
 
         if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && $version[0] >= 13) {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
+            #$this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
             \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
         } else {
 
