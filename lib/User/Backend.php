@@ -42,7 +42,7 @@ use OCP\User\IProvidesHomeBackend;
  *
  * @since 1.4.0
  */
-class Backend extends Database implements IUserBackend, IProvidesHomeBackend, IProvidesDisplayNameBackend
+class Backend extends Database
 {
 
     /**
