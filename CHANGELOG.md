@@ -6,6 +6,7 @@ Version 1.5.4
 * Hotfixes Nextcloud log flood bug
 * Removes hardcoded PHP version requirements
 * Fixes documentation links in info.xml
+* Fixes ownCloud/Nextcloud Session Token-Password bug
 
 Version 1.5.3
 -------------
