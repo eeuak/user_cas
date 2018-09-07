@@ -182,15 +182,20 @@ class UserHooks
                         $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS no new user has been created.');
                     }
 
+                    // Don’t do that for Cextcloud
+                    /** @var \OCP\Defaults $defaults */
+                    $defaults = new \OCP\Defaults();
 
-                    if (!is_null($oldUserObject) && ($oldUserObject->getBackendClassName() === "OC\\User\\Database" || $oldUserObject->getBackendClassName() === "Database")) {
+                    if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
 
-                        $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
-                        $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+                        if (!is_null($oldUserObject) && ($oldUserObject->getBackendClassName() === "OC\\User\\Database" || $oldUserObject->getBackendClassName() === "Database")) {
 
-                        $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
+                            $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
+                            $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+
+                            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
+                        }
                     }
-
                 }
             }
         } else {
