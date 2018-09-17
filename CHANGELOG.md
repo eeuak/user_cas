@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+Version 1.5.5
+-------------
+* Add Support for ownCloud 10.0.10 and Nextcloud 14.0.0
+
+
 Version 1.5.4
 -------------
 * Fixes Nextcloud log flood bug
