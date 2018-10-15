@@ -106,7 +106,7 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
 
             if (!\phpCAS::isAuthenticated()) {
 
-                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user has not been authenticated.');
+                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user has not been authenticated.');
 
                 return parent::checkPassword($loginName, $password);
 
@@ -125,7 +125,7 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
 
                 if ($casUid === $loginName) {
 
-                    $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user password has been checked.');
+                    $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user password has been checked.');
                     #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
 
                     return $loginName;
