@@ -106,7 +106,7 @@ class Backend extends Database implements UserCasBackendInterface
 
             if (!\phpCAS::isAuthenticated()) {
 
-                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user has not been authenticated.');
+                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user has not been authenticated.');
 
                 return parent::checkPassword($uid, $password);
 
@@ -125,7 +125,7 @@ class Backend extends Database implements UserCasBackendInterface
 
                 if ($casUid === $uid) {
 
-                    $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS user password has been checked.');
+                    $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user password has been checked.');
                     #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
 
                     return $uid;
