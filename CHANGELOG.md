@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+Version 1.6.0
+-------------
+* Add compatibility for ownCloud 10.1 and Nextcloud 15
+* Fix app initialization to minimize incompatibilities with other apps
+* Remove hard app stopping when no phpCAS library is found
+* Update jasig/phpcas to 1.3.6
+
+
 Version 1.5.6
 -------------
 * Change most of the INFO log writes to DEBUG

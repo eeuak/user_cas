@@ -95,10 +95,9 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
                 $this->appService->init();
             } catch (PhpUserCasLibraryNotFoundException $e) {
 
-                $this->loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $this->loggingService->write(\OCP\Util::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
 
-                header("Location: " . $this->appService->getAbsoluteURL('/'));
-                die();
+                return FALSE;
             }
         }
 
