@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+Version 1.6.1
+-------------
+* Fix 5min logout bug on Nextcloud
+
+
 Version 1.6.0
 -------------
 * Add compatibility for ownCloud 10.1 and Nextcloud 15
