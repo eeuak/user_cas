@@ -119,10 +119,10 @@ class UserService
      *
      * @param $request
      * @param string $uid
-     * @param string|null $password
+     * @param string $password
      * @return bool
      */
-    public function login($request, $uid, $password = NULL)
+    public function login($request, $uid, $password = '')
     {
 
         $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS login function step 1.');
@@ -197,17 +197,6 @@ class UserService
                 }
             }
 
-
-            # Log in the user
-            // Workaround for Nextcloud >= 14.0.0
-            /** @var \OCP\Defaults $defaults */
-            $defaults = new \OCP\Defaults();
-            $version = \OCP\Util::getVersion();
-            if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && $version[0] >= 14) {
-
-                $password = '';
-            }
-
             $loginSuccessful = $this->userSession->login($uid, $password);
 
             $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS login function result: ' . $loginSuccessful);
@@ -215,7 +204,7 @@ class UserService
 
             if ($loginSuccessful) {
 
-                return $this->userSession->createSessionToken($request, $this->userSession->getUser()->getUID(), $uid, $password);
+                return $this->userSession->createSessionToken($request, $this->userSession->getUser()->getUID(), $uid, NULL);
             }
 
             $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS login function not successful.');
