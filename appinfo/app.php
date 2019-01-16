@@ -32,7 +32,10 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
     // Register User Backend
     $userService->registerBackend();
 
-    if (strpos($requestUri, '/login') !== FALSE || strpos($requestUri, '/logout') !== FALSE) {
+    // Register UserHooks
+    $c->query('UserHooks')->register();
+
+    if (strpos($requestUri, '/login') !== FALSE) {
 
         // URL params and redirect_url cookie
         setcookie("user_cas_enforce_authentication", "0", null, '/');
@@ -53,9 +56,6 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
         $appService = $c->query('AppService');
 
         $appService->registerLogIn();
-
-        // Register UserHooks
-        $c->query('UserHooks')->register();
 
         // Check for enforced authentication
         if ($appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']) && (!isset($_COOKIE['user_cas_enforce_authentication']) || (isset($_COOKIE['user_cas_enforce_authentication']) && $_COOKIE['user_cas_enforce_authentication'] === '0'))) {
