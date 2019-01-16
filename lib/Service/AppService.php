@@ -224,8 +224,8 @@ class AppService
 
         if (is_string($this->casPhpFile) && strlen($this->casPhpFile) > 0) {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, 'Use custom phpCAS file:: ' . $this->casPhpFile);
-            #\OCP\Util::writeLog('cas', 'Use custom phpCAS file:: ' . $this->casPhpFile, \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Use custom phpCAS file:: ' . $this->casPhpFile);
+            #\OCP\Util::writeLog('cas', 'Use custom phpCAS file:: ' . $this->casPhpFile, \OCA\UserCas\Service\LoggingService::DEBUG);
 
             if (is_file($this->casPhpFile)) {
 
@@ -248,7 +248,7 @@ class AppService
 
         if (!class_exists('\\phpCAS')) {
 
-            $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS library could not be loaded. The class was not found.');
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS library could not be loaded. The class was not found.');
 
             throw new PhpUserCasLibraryNotFoundException('phpCAS library could not be loaded. The class was not found.', 500);
         }
@@ -304,14 +304,14 @@ class AppService
                         require_once(__DIR__ . '/../../vendor/ec-europa/ecas-phpcas-parser/src/EcasPhpCASParser.php');
                     } else {
 
-                        $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS EcasPhpCASParser library could not be loaded. The class was not found.');
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS EcasPhpCASParser library could not be loaded. The class was not found.');
 
                         throw new PhpUserCasLibraryNotFoundException('phpCAS EcasPhpCASParser could not be loaded. The class was not found.', 500);
                     }
 
                     # Register the parser
                     \phpCAS::setCasAttributeParserCallback(array(new \EcasPhpCASParser\EcasPhpCASParser(), 'parse'));
-                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS EcasPhpCASParser has been successfully set.");
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS EcasPhpCASParser has been successfully set.");
                 }
 
 
@@ -325,7 +325,7 @@ class AppService
 
                     \phpCAS::setServerLoginURL($newUrl);
 
-                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS strength attribute has been successfully set. New service login URL: " . $newUrl);
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS ECAS strength attribute has been successfully set. New service login URL: " . $newUrl);
                 }
 
 
@@ -406,34 +406,34 @@ class AppService
                     if ($this->getCasVersion() !== "S1" && !empty($newUrl)) {
 
                         \phpCAS::setServerServiceValidateURL($newUrl);
-                        $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS additional attributes have been successfully set. New CAS " . $this->getCasVersion() . " service validate URL: " . $newUrl);
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS ECAS additional attributes have been successfully set. New CAS " . $this->getCasVersion() . " service validate URL: " . $newUrl);
 
                     } elseif ($this->getCasVersion() === "S1" && !empty($newSamlUrl)) {
 
                         \phpCAS::setServerSamlValidateURL($newSamlUrl);
-                        $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS ECAS additional attributes have been successfully set. New SAML 1.0 service validate URL: " . $newSamlUrl);
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS ECAS additional attributes have been successfully set. New SAML 1.0 service validate URL: " . $newSamlUrl);
                     }
                 }
 
 
                 $this->casInitialized = TRUE;
 
-                $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS has been successfully initialized.");
-                #\OCP\Util::writeLog('cas', "phpCAS has been successfully initialized.", \OCP\Util::DEBUG);
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS has been successfully initialized.");
+                #\OCP\Util::writeLog('cas', "phpCAS has been successfully initialized.", \OCA\UserCas\Service\LoggingService::DEBUG);
 
             } catch (\CAS_Exception $e) {
 
                 $this->casInitialized = FALSE;
 
-                $this->loggingService->write(\OCP\Util::ERROR, "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
-                #\OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCP\Util::ERROR);
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
+                #\OCP\Util::writeLog('cas', "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".", \OCA\UserCas\Service\LoggingService::ERROR);
             }
         } else {
 
             $this->casInitialized = TRUE;
 
-            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS has already been initialized.");
-            #\OCP\Util::writeLog('cas', "phpCAS has already been initialized.", \OCP\Util::DEBUG);
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS has already been initialized.");
+            #\OCP\Util::writeLog('cas', "phpCAS has already been initialized.", \OCA\UserCas\Service\LoggingService::DEBUG);
         }
     }
 
@@ -490,13 +490,13 @@ class AppService
 
                                     $endIp = $baseIp . $ipThirdPart . '.' . $ipFourthPart;
 
-                                    #$this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Enforce Login IP checked: " . $endIp);
+                                    #$this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Enforce Login IP checked: " . $endIp);
 
                                     if ($remoteAddress === $endIp) {
 
                                         $isEnforced = FALSE;
 
-                                        $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Enforce Login NOT triggered. Test Address: " . $endIp . " | Users Remote Address: " . $remoteAddress);
+                                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Enforce Login NOT triggered. Test Address: " . $endIp . " | Users Remote Address: " . $remoteAddress);
                                     }
                                 }
                             }
@@ -515,7 +515,7 @@ class AppService
 
                                     $isEnforced = FALSE;
 
-                                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Enforce Login NOT triggered. Test Address: " . $endIp . " | Users Remote Address: " . $remoteAddress);
+                                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Enforce Login NOT triggered. Test Address: " . $endIp . " | Users Remote Address: " . $remoteAddress);
                                 }
                             }
                         }
@@ -526,7 +526,7 @@ class AppService
 
                             $isEnforced = FALSE;
 
-                            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Enforce Login NOT triggered. Test Address: " . $forceLoginExceptionRanges[0] . " | Users Remote Address: " . $remoteAddress);
+                            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Enforce Login NOT triggered. Test Address: " . $forceLoginExceptionRanges[0] . " | Users Remote Address: " . $remoteAddress);
                         }
                     }
                 }
@@ -556,7 +556,7 @@ class AppService
 
         if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && $version[0] >= 13) {
 
-            #$this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
+            #$this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
             \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
         } else {
 

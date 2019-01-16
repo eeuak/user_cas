@@ -109,7 +109,7 @@ class Application extends App
 
         if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && $version[0] >= 14) {
 
-            #$this->loggingService->write(\OCP\Util::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
+            #$this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
             /**
              * Register Nextcloud 14 Backend
              */

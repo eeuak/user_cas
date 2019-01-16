@@ -121,7 +121,7 @@ class AuthenticationController extends Controller
                 $this->appService->init();
             } catch (PhpUserCasLibraryNotFoundException $e) {
 
-                $this->loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
 
                 header("Location: " . $this->appService->getAbsoluteURL('/'));
                 die();
@@ -145,7 +145,7 @@ class AuthenticationController extends Controller
             $location = $this->appService->getAbsoluteURL("/");
         }
 
-        $this->loggingService->write(\OCP\Util::DEBUG, 'The Redirect URL Parameter in Login Action was: ' . $location);
+        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'The Redirect URL Parameter in Login Action was: ' . $location);
 
         if (!$this->userService->isLoggedIn()) {
 
@@ -155,13 +155,13 @@ class AuthenticationController extends Controller
 
                     $userName = \phpCAS::getUser();
 
-                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS user " . $userName . " has been authenticated.");
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS user " . $userName . " has been authenticated.");
 
                     $isLoggedIn = $this->userService->login($this->request, $userName);
 
                     if ($isLoggedIn) {
 
-                        $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS user has been authenticated against owncloud.");
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS user has been authenticated against owncloud.");
 
                         # Reset cookie
                         setcookie("user_cas_redirect_url", '/', null, '/');
@@ -169,25 +169,25 @@ class AuthenticationController extends Controller
                         return new RedirectResponse($location);
                     } else { # Not authenticated against owncloud
 
-                        $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS user has not been authenticated against owncloud.");
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS user has not been authenticated against owncloud.");
 
                         return $this->casError(null, \OCP\AppFramework\Http::STATUS_FORBIDDEN);
                     }
                 } else { # Not authenticated against CAS
 
-                    $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS user is not authenticated, redirect to CAS server.");
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS user is not authenticated, redirect to CAS server.");
 
                     \phpCAS::forceAuthentication();
                 }
             } catch (\CAS_Exception $e) {
 
-                $this->loggingService->write(\OCP\Util::ERROR, "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, "phpCAS has thrown an exception with code: " . $e->getCode() . " and message: " . $e->getMessage() . ".");
 
                 return $this->casError(null, \OCP\AppFramework\Http::STATUS_INTERNAL_SERVER_ERROR);
             }
         } else {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, "phpCAS user is already authenticated against owncloud.");
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS user is already authenticated against owncloud.");
 
             # Reset cookie
             setcookie("user_cas_redirect_url", '/', null, '/');

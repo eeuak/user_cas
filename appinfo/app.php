@@ -62,7 +62,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
             $loggingService = $c->query("LoggingService");
 
-            $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was: ' . $appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']));
+            $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was: ' . $appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']));
             setcookie("user_cas_enforce_authentication", '1', null, '/');
 
             // Initialize app
@@ -74,7 +74,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
                     if (!\phpCAS::isAuthenticated()) {
 
-                        $loggingService->write(\OCP\Util::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
+                        $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
 
                         $cookie = setcookie("user_cas_redirect_url", urlencode($requestUri), null, '/');
 
@@ -84,7 +84,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
                 } catch (\OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException $e) {
 
-                    $loggingService->write(\OCP\Util::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                    $loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
                 }
             }
         }

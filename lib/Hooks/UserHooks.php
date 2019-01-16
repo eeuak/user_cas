@@ -132,7 +132,7 @@ class UserHooks
                 $this->appService->init();
             } catch (PhpUserCasLibraryNotFoundException $e) {
 
-                $this->loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
 
                 return FALSE;
             }
@@ -147,7 +147,7 @@ class UserHooks
 
             if (boolval($this->config->getAppValue($this->appName, 'cas_autocreate'))) {
 
-                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas pre login hook triggered. User: ' . $uid);
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas pre login hook triggered. User: ' . $uid);
 
                 $casUid = \phpCAS::getUser();
 
@@ -161,24 +161,24 @@ class UserHooks
                         // create users if they do not exist
                         if (preg_match('/[^a-zA-Z0-9 _\.@\-]/', $uid)) {
 
-                            $this->loggingService->write(\OCP\Util::DEBUG, 'Invalid username "' . $uid . '", allowed chars "a-zA-Z0-9" and "_.@-" ');
+                            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Invalid username "' . $uid . '", allowed chars "a-zA-Z0-9" and "_.@-" ');
 
                             return FALSE;
                         } else {
 
-                            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS creating a new user with UID: ' . $uid);
+                            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS creating a new user with UID: ' . $uid);
 
                             /** @var bool|\OCP\IUser the created user or false $uid */
                             $oldUserObject = $this->userService->create($uid);
 
                             if ($oldUserObject instanceof \OCP\IUser) {
 
-                                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS created new user with UID: ' . $uid);
+                                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS created new user with UID: ' . $uid);
                             }
                         }
                     } else {
 
-                        $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS no new user has been created.');
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS no new user has been created.');
                     }
 
                     // Don’t do that for Cextcloud
@@ -192,14 +192,14 @@ class UserHooks
                             $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
                             $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
 
-                            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
+                            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
                         }
                     }
                 }
             }
         } else {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas pre login hook NOT triggered. User: ' . $uid);
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas pre login hook NOT triggered. User: ' . $uid);
         }
 
         return TRUE;
@@ -222,7 +222,7 @@ class UserHooks
                 $this->appService->init();
             } catch (PhpUserCasLibraryNotFoundException $e) {
 
-                $this->loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
 
                 return FALSE;
             }
@@ -234,7 +234,7 @@ class UserHooks
 
             if (boolval($this->config->getAppValue($this->appName, 'cas_update_user_data'))) {
 
-                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas post login hook triggered. User: ' . $uid);
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas post login hook triggered. User: ' . $uid);
 
                 // $cas_attributes may vary in name, therefore attributes are fetched to $attributes
 
@@ -264,7 +264,7 @@ class UserHooks
 
                     // parameters
                     $attributes = array();
-                    $this->loggingService->write(\OCP\Util::DEBUG, 'Attributes for the user: ' . $uid . ' => ' . $casAttributesString);
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Attributes for the user: ' . $uid . ' => ' . $casAttributesString);
 
 
                     // DisplayName
@@ -316,7 +316,7 @@ class UserHooks
 
                         $attributes['cas_groups'] = array($defaultGroup);
 
-                        $this->loggingService->write(\OCP\Util::DEBUG, 'Using default group "' . $defaultGroup . '" for the user: ' . $uid);
+                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Using default group "' . $defaultGroup . '" for the user: ' . $uid);
                     }
 
                     // Group Quota handling
@@ -337,11 +337,11 @@ class UserHooks
                     $this->userService->updateUser($user, $attributes);
                 }
 
-                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas post login hook finished.');
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas post login hook finished.');
             }
         } else {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCas post login hook NOT triggered. User: ' . $uid);
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas post login hook NOT triggered. User: ' . $uid);
         }
 
         return TRUE;
@@ -362,17 +362,17 @@ class UserHooks
                 $this->appService->init();
             } catch (PhpUserCasLibraryNotFoundException $e) {
 
-                $this->loggingService->write(\OCP\Util::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
 
                 return FALSE;
             }
         };
 
-        $this->loggingService->write(\OCP\Util::DEBUG, 'Logout hook triggered.');
+        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Logout hook triggered.');
 
         if (!boolval($this->config->getAppValue($this->appName, 'cas_disable_logout'))) {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS logging out.');
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS logging out.');
 
             # Reset cookie
             setcookie("user_cas_redirect_url", '/', null, '/');
@@ -381,7 +381,7 @@ class UserHooks
 
         } else {
 
-            $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS not logging out, because CAS logout was disabled.');
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS not logging out, because CAS logout was disabled.');
         }
 
         return TRUE;

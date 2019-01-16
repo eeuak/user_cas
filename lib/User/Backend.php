@@ -95,7 +95,7 @@ class Backend extends Database implements UserCasBackendInterface
                 $this->appService->init();
             } catch (PhpUserCasLibraryNotFoundException $e) {
 
-                $this->loggingService->write(\OCP\Util::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
 
                 return FALSE;
             }
@@ -105,17 +105,17 @@ class Backend extends Database implements UserCasBackendInterface
 
             if (!\phpCAS::isAuthenticated()) {
 
-                $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user has not been authenticated.');
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user has not been authenticated.');
 
                 return parent::checkPassword($uid, $password);
 
-                #\OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCP\Util::ERROR);
+                #\OCP\Util::writeLog('cas', 'phpCAS user has not been authenticated.', \OCA\UserCas\Service\LoggingService::ERROR);
             }
 
             if ($uid === FALSE) {
 
-                $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS returned no user.');
-                #\OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCP\Util::ERROR);
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS returned no user.');
+                #\OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCA\UserCas\Service\LoggingService::ERROR);
             }
 
             if (\phpCAS::checkAuthentication()) {
@@ -124,8 +124,8 @@ class Backend extends Database implements UserCasBackendInterface
 
                 if ($casUid === $uid) {
 
-                    $this->loggingService->write(\OCP\Util::DEBUG, 'phpCAS user password has been checked.');
-                    #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCP\Util::ERROR);
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user password has been checked.');
+                    #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCA\UserCas\Service\LoggingService::ERROR);
 
                     return $uid;
                 }
@@ -134,8 +134,8 @@ class Backend extends Database implements UserCasBackendInterface
             return FALSE;
         } else {
 
-            $this->loggingService->write(\OCP\Util::ERROR, 'phpCAS has not been initialized.');
-            #\OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCP\Util::ERROR);
+            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS has not been initialized.');
+            #\OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCA\UserCas\Service\LoggingService::ERROR);
             return FALSE;
         }
     }

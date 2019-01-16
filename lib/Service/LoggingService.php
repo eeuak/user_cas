@@ -40,6 +40,27 @@ class LoggingService
 {
 
     /**
+     * @since 1.6.1
+     */
+    const DEBUG = 0;
+    /**
+     * @since 1.6.1
+     */
+    const INFO = 1;
+    /**
+     * @since 1.6.1
+     */
+    const WARN = 2;
+    /**
+     * @since 1.6.1
+     */
+    const ERROR = 3;
+    /**
+     * @since 1.6.1
+     */
+    const FATAL = 4;
+
+    /**
      * @var string $appName
      */
     private $appName;
@@ -72,7 +93,8 @@ class LoggingService
      * @param mixed $level
      * @param string $message
      */
-    public function write($level, $message) {
+    public function write($level, $message)
+    {
 
         $this->logger->log($level, $message, ['app' => $this->appName]);
     }
