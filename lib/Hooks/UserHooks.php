@@ -117,8 +117,8 @@ class UserHooks
     /**
      * postLogin method to update user data.
      *
-     * @param $uid
-     * @param $password
+     * @param mixed $uid
+     * @param string $password
      * @return bool
      * @throws \Exception
      */
@@ -209,8 +209,8 @@ class UserHooks
     /**
      * postLogin method to update user data.
      *
-     * @param $uid
-     * @param $password
+     * @param mixed $uid
+     * @param string $password
      * @return bool
      */
     public function postLogin($uid, $password)
