@@ -4,6 +4,7 @@ CHANGELOG
 Version 1.7.0
 -------------
 
+* Adds user quota mapping input in Settings Panel - user quota overwrites group quotas
 * Adds a filter to disable multi-factor-authentication for internal IP addresses on ECAS instances
 * Raises the ECAS client-version to 2.1.3
 * Fixes postLogin signals signature

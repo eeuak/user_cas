@@ -342,6 +342,20 @@ class UserHooks
                         }
                     }
 
+                    // User Quota handling
+                    // Overwrites group quota
+                    $userQuotaMapping = $this->config->getAppValue($this->appName, 'cas_quota_mapping');
+
+                    #$this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas quota-mapping-contents: '.$userQuotaMapping);
+
+                    if (array_key_exists($userQuotaMapping, $casAttributes)) {
+
+                        $attributes['cas_quota'] = $casAttributes[$userQuotaMapping];
+                    } else if (array_key_exists('quota', $casAttributes)) {
+
+                        $attributes['cas_quota'] = $casAttributes['quota'];
+                    }
+
                     // Try to update user attributes
                     $this->userService->updateUser($user, $attributes);
                 }

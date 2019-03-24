@@ -103,6 +103,8 @@ If CAS provides extra attributes, `user_cas` can retrieve the values of them. Si
 
 **Group**: Name of group attribute in CAS. Default: empty
 
+**Quota**: Name of quota attribute in CAS. Default: empty
+
 
 Groups
 ------

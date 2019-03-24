@@ -132,17 +132,22 @@ style('user_cas', 'settings');
             <p><label for="cas_email_mapping"><?php p($l->t('Email')); ?></label><input
                         id="cas_email_mapping"
                         name="cas_email_mapping"
-                        value="<?php p($_['cas_email_mapping']); ?>"/>
+                        value="<?php p($_['cas_email_mapping']); ?>" placeholder="email"/>
             </p>
             <p><label for="cas_displayName_mapping"><?php p($l->t('Display Name')); ?></label><input
                         id="cas_displayName_mapping"
                         name="cas_displayName_mapping"
-                        value="<?php p($_['cas_displayName_mapping']); ?>"/>
+                        value="<?php p($_['cas_displayName_mapping']); ?>" placeholder="displayName"/>
             </p>
             <p><label for="cas_group_mapping"><?php p($l->t('Groups')); ?></label><input
                         id="cas_group_mapping"
                         name="cas_group_mapping"
-                        value="<?php p($_['cas_group_mapping']); ?>"/>
+                        value="<?php p($_['cas_group_mapping']); ?>" placeholder="groups"/>
+            </p>
+            <p><label for="cas_quota_mapping"><?php p($l->t('Quota')); ?></label><input
+                        id="cas_quota_mapping"
+                        name="cas_quota_mapping"
+                        value="<?php p($_['cas_quota_mapping']); ?>" placeholder="quota"/>
             </p>
         </fieldset>
         <!-- Groups -->

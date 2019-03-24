@@ -84,6 +84,7 @@ class SettingsController extends Controller
      * @param string $cas_email_mapping
      * @param string $cas_displayName_mapping
      * @param string $cas_group_mapping
+     * @param string $cas_quota_mapping
      * @param string $cas_cert_path
      * @param string $cas_debug_file
      * @param string $cas_php_cas_path
@@ -107,7 +108,7 @@ class SettingsController extends Controller
      * @return mixed
      */
     public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group,
-                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url, $cas_handlelogout_servers,
+                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_quota_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url, $cas_handlelogout_servers,
                                  $cas_access_allow_groups, $cas_ecas_accepted_strengths, $cas_ecas_retrieve_groups, $cas_ecas_assurance_level, $cas_access_group_quotas, $cas_force_login_exceptions, $cas_ecas_internal_ip_range,
                                  $cas_ecas_attributeparserenabled = NULL, $cas_ecas_request_full_userdetails = NULL, $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL, $cas_disable_logout = NULL, $cas_use_proxy = NULL)
     {
@@ -128,6 +129,7 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_email_mapping', $cas_email_mapping);
             $this->config->setAppValue($this->appName, 'cas_displayName_mapping', $cas_displayName_mapping);
             $this->config->setAppValue($this->appName, 'cas_group_mapping', $cas_group_mapping);
+            $this->config->setAppValue($this->appName, 'cas_quota_mapping', $cas_quota_mapping);
 
             $this->config->setAppValue($this->appName, 'cas_cert_path', $cas_cert_path);
             $this->config->setAppValue($this->appName, 'cas_debug_file', $cas_debug_file);

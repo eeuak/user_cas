@@ -24,6 +24,7 @@
 namespace OCA\UserCAS\Service;
 
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
+use OCA\UserCas\Service\LoggingService;
 use OCA\UserCAS\User\UserCasBackendInterface;
 use \OCP\IConfig;
 use \OCP\IUserManager;
@@ -81,7 +82,7 @@ class UserService
     private $backend;
 
     /**
-     * @var \OCA\UserCAS\Service\LoggingService $loggingService
+     * @var LoggingService $loggingService
      */
     private $loggingService;
 
@@ -125,14 +126,14 @@ class UserService
     public function login($request, $uid, $password = '')
     {
 
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS login function step 1.');
+        $this->loggingService->write(LoggingService::DEBUG, 'phpCAS login function step 1.');
         #\OCP\Util::writeLog('cas', 'phpCAS login function step 1.', \OCA\UserCas\Service\LoggingService::DEBUG);
 
         try {
 
             if (!boolval($this->config->getAppValue($this->appName, 'cas_autocreate')) && !$this->userExists($uid)) {
 
-                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas autocreate disabled, and OC User does not exist, phpCas based login not possible. Bye.');
+                $this->loggingService->write(LoggingService::DEBUG, 'phpCas autocreate disabled, and OC User does not exist, phpCas based login not possible. Bye.');
 
                 return FALSE;
             }
@@ -173,25 +174,25 @@ class UserService
 
                     if (in_array($casGroup, $cas_access_allow_groups)) {
 
-                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas CAS users login has been authorized with group: ' . $casGroup);
+                        $this->loggingService->write(LoggingService::DEBUG, 'phpCas CAS users login has been authorized with group: ' . $casGroup);
 
                         $isAuthorized = TRUE;
                     } else {
 
-                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas CAS users login has not been authorized with group: ' . $casGroup . ', because the group was not in allowedGroups: ' . implode(", ", $cas_access_allow_groups));
+                        $this->loggingService->write(LoggingService::DEBUG, 'phpCas CAS users login has not been authorized with group: ' . $casGroup . ', because the group was not in allowedGroups: ' . implode(", ", $cas_access_allow_groups));
                     }
                 }
 
                 if ($this->groupManager->isInGroup($uid, 'admin')) {
 
-                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas CAS users login has been authorized with group: admin');
+                    $this->loggingService->write(LoggingService::DEBUG, 'phpCas CAS users login has been authorized with group: admin');
 
                     $isAuthorized = TRUE;
                 }
 
                 if (!$isAuthorized) {
 
-                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas CAS user is not authorized to log into ownCloud. Bye.');
+                    $this->loggingService->write(LoggingService::DEBUG, 'phpCas CAS user is not authorized to log into ownCloud. Bye.');
 
                     return FALSE;
                 }
@@ -199,7 +200,7 @@ class UserService
 
             $loginSuccessful = $this->userSession->login($uid, $password);
 
-            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS login function result: ' . $loginSuccessful);
+            $this->loggingService->write(LoggingService::DEBUG, 'phpCAS login function result: ' . $loginSuccessful);
             #\OCP\Util::writeLog('cas', 'phpCAS login function result: ' . $loginSuccessful, \OCA\UserCas\Service\LoggingService::DEBUG);
 
             if ($loginSuccessful) {
@@ -207,13 +208,13 @@ class UserService
                 return $this->userSession->createSessionToken($request, $this->userSession->getUser()->getUID(), $uid, NULL);
             }
 
-            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS login function not successful.');
+            $this->loggingService->write(LoggingService::DEBUG, 'phpCAS login function not successful.');
             #\OCP\Util::writeLog('cas', 'phpCAS login function not successful.', \OCA\UserCas\Service\LoggingService::DEBUG);
 
             return FALSE;
         } catch (\OC\User\LoginException $e) {
 
-            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'Owncloud could not log in the user with UID: ' . $uid . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.');
+            $this->loggingService->write(LoggingService::ERROR, 'Owncloud could not log in the user with UID: ' . $uid . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.');
             #\OCP\Util::writeLog('cas', 'Owncloud could not log in the user with UID: ' . $uid . '. Exception thrown with code: ' . $e->getCode() . ' and message: ' . $e->getMessage() . '.', \OCA\UserCas\Service\LoggingService::ERROR);
 
             return FALSE;
@@ -271,7 +272,9 @@ class UserService
             $attributesString .= $key . ': ' . $attribute . '; ';
         }*/
 
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Updating data of the user: ' . $userId);
+        $newGroupQuota = NULL;
+
+        $this->loggingService->write(LoggingService::DEBUG, 'Updating data of the user: ' . $userId);
         #\OCP\Util::writeLog('cas', 'Updating data of the user: ' . $userId, \OCA\UserCas\Service\LoggingService::DEBUG);
         #\OCP\Util::writeLog('cas', 'Attributes: ' . $attributesString, \OCA\UserCas\Service\LoggingService::DEBUG);
 
@@ -289,10 +292,14 @@ class UserService
         }
         if (isset($attributes['cas_group_quota']) && is_object($user)) {
 
-            $this->updateQuota($user, $attributes['cas_group_quota']);
+            $newGroupQuota = $this->updateGroupQuota($user, $attributes['cas_group_quota']);
+        }
+        if (isset($attributes['cas_quota']) && is_object($user)) {
+
+            $this->updateQuota($user, $newGroupQuota, $attributes['cas_quota']);
         }
 
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Updating data finished.');
+        $this->loggingService->write(LoggingService::DEBUG, 'Updating data finished.');
         #\OCP\Util::writeLog('cas', 'Updating data finished.', \OCA\UserCas\Service\LoggingService::DEBUG);
     }
 
@@ -313,7 +320,7 @@ class UserService
         if ($email !== $user->getEMailAddress()) {
 
             $user->setEMailAddress($email);
-            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Set email "' . $email . '" for the user: ' . $user->getUID());
+            $this->loggingService->write(LoggingService::DEBUG, 'Set email "' . $email . '" for the user: ' . $user->getUID());
             #\OCP\Util::writeLog('cas', 'Set email "' . $email . '" for the user: ' . $user->getUID(), \OCA\UserCas\Service\LoggingService::DEBUG);
         }
     }
@@ -332,10 +339,10 @@ class UserService
             $name = $name[0];
         }
 
-        if ($name !== $user->getDisplayName()) {
+        if ($name !== $user->getDisplayName() && strlen($name) > 0) {
 
             $user->setDisplayName($name);
-            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Set Name: ' . $name . ' for the user: ' . $user->getUID());
+            $this->loggingService->write(LoggingService::DEBUG, 'Set Name: ' . $name . ' for the user: ' . $user->getUID());
             #\OCP\Util::writeLog('cas', 'Set Name: ' . $name . ' for the user: ' . $user->getUID(), \OCA\UserCas\Service\LoggingService::DEBUG);
         }
     }
@@ -370,7 +377,7 @@ class UserService
 
                         $group->removeUser($user);
 
-                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "Removed '" . $uid . "' from the group '" . $groupId . "'");
+                        $this->loggingService->write(LoggingService::DEBUG, "Removed '" . $uid . "' from the group '" . $groupId . "'");
                         #\OCP\Util::writeLog('cas', 'Removed "' . $uid . '" from the group "' . $groupId . '"', \OCA\UserCas\Service\LoggingService::DEBUG);
                     }
                 }
@@ -383,7 +390,7 @@ class UserService
 
             if (preg_match('/[^a-zA-Z0-9 _\.@\-]/', $group)) {
 
-                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, "Invalid group '" . $group . "', allowed chars 'a-zA-Z0-9' and '_.@-' ");
+                $this->loggingService->write(LoggingService::ERROR, "Invalid group '" . $group . "', allowed chars 'a-zA-Z0-9' and '_.@-' ");
                 #\OCP\Util::writeLog('cas', 'Invalid group "' . $group . '", allowed chars "a-zA-Z0-9" and "_.@-" ', \OCA\UserCas\Service\LoggingService::DEBUG);
             } else {
 
@@ -393,7 +400,7 @@ class UserService
 
                         $groupObject = $this->groupManager->createGroup($group);
 
-                        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'New group created: ' . $group);
+                        $this->loggingService->write(LoggingService::DEBUG, 'New group created: ' . $group);
                         #\OCP\Util::writeLog('cas', 'New group created: ' . $group, \OCA\UserCas\Service\LoggingService::DEBUG);
                     } else {
 
@@ -402,18 +409,75 @@ class UserService
 
                     $groupObject->addUser($user);
 
-                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "Added '" . $uid . "' to the group '" . $group . "'");
+                    $this->loggingService->write(LoggingService::DEBUG, "Added '" . $uid . "' to the group '" . $group . "'");
                     #\OCP\Util::writeLog('cas', 'Added "' . $uid . '" to the group "' . $group . '"', \OCA\UserCas\Service\LoggingService::DEBUG);
                 }
             }
         }
     }
 
+
+    /**
+     * @param \OCP\IUser $user
+     * @param int|boolean $newGroupQuota
+     * @param string $quota
+     */
+    private function updateQuota($user, $newGroupQuota, $quota = 'default')
+    {
+
+        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas new UserQuota contents: '.$quota.' | New GroupQuota was: '.$newGroupQuota);
+
+        $defaultQuota = $this->config->getAppValue('files', 'default_quota');
+
+        if ($defaultQuota === '' || $defaultQuota === 'none') {
+
+            $defaultQuota = '0 B';
+        }
+
+        $uid = $user->getUID();
+
+        if ($quota === 'none') {
+
+            $newQuota = PHP_INT_MAX;
+        } elseif ($quota === 'default') {
+
+            $newQuota = \OCP\Util::computerFileSize($defaultQuota);
+        } else {
+
+            $newQuota = \OCP\Util::computerFileSize($quota);
+        }
+
+        $usersOldQuota = $user->getQuota();
+
+        if ($usersOldQuota === 'none') {
+
+            $usersOldQuota = PHP_INT_MAX;
+        } elseif ($usersOldQuota === 'default') {
+
+            $usersOldQuota = \OCP\Util::computerFileSize($defaultQuota);
+        } else {
+
+            $usersOldQuota = \OCP\Util::computerFileSize($usersOldQuota);
+        }
+
+        $this->loggingService->write(LoggingService::DEBUG, "Default System Quota is: '" . $defaultQuota . "'");
+        $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' old computerized Quota is: '" . $usersOldQuota . "'");
+        $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' new computerized User Quota would be: '" . $newQuota . "'");
+
+        if ($usersOldQuota < $newQuota || ($usersOldQuota > $newQuota) && !is_null($newGroupQuota)) {
+
+            $user->setQuota($newQuota);
+
+            $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' has new Quota: '" . $newQuota . "'");
+        }
+    }
+
     /**
      * @param \OCP\IUser $user
      * @param array $groupQuotas
+     * @return int New Quota
      */
-    private function updateQuota($user, $groupQuotas)
+    private function updateGroupQuota($user, $groupQuotas)
     {
 
         $defaultQuota = $this->config->getAppValue('files', 'default_quota');
@@ -464,16 +528,18 @@ class UserService
             $usersOldQuota = \OCP\Util::computerFileSize($usersOldQuota);
         }
 
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "Default System Quota is: '" . $defaultQuota . "'");
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "User '" . $uid . "' old computerized Quota is: '" . $usersOldQuota . "'");
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "User '" . $uid . "' new computerized Quota would be: '" . $newQuota . "'");
+        $this->loggingService->write(LoggingService::DEBUG, "Default System Quota is: '" . $defaultQuota . "'");
+        $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' old computerized Quota is: '" . $usersOldQuota . "'");
+        $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' new computerized Group Quota would be: '" . $newQuota . "'");
 
         if ($usersOldQuota < $newQuota) {
 
             $user->setQuota($newQuota);
 
-            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "User '" . $uid . "' has new Quota: '" . $newQuota . "'");
+            $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' has new Quota: '" . $newQuota . "'");
         }
+
+        return $newQuota;
     }
 
     /**
