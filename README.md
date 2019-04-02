@@ -83,7 +83,7 @@ Basic
 
 **Disable CAS logout**: If checked, you will only be logged out from ownCloud and not from your CAS instance. Default: off
 
-**Autocreate user after first CAS login?**: If checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet who authenticate against CAS will be created and stored in the ownCloud database on their first login. Default: off
+**Autocreate user after first CAS login?**: If checked, users authenticated against CAS are automatically created. This means, users which did not exist in the database yet who authenticate against CAS will be created and stored in the ownCloud database on their first login. Default: on
 
 **Update user data after each CAS login?**: If checked, the data provided by CAS is used to update ownCloud user attributes each time the user logs in. Default: off
 
