@@ -422,7 +422,7 @@ class UserService
      * @param int|boolean $newGroupQuota
      * @param string $quota
      */
-    private function updateQuota($user, $newGroupQuota, $quota = 'default')
+    public function updateQuota($user, $newGroupQuota, $quota = 'default')
     {
 
         $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas new UserQuota contents: '.$quota.' | New GroupQuota was: '.$newGroupQuota);
@@ -464,7 +464,7 @@ class UserService
         $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' old computerized Quota is: '" . $usersOldQuota . "'");
         $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' new computerized User Quota would be: '" . $newQuota . "'");
 
-        if ($usersOldQuota < $newQuota || ($usersOldQuota > $newQuota) && !is_null($newGroupQuota)) {
+        if ($usersOldQuota < $newQuota || ($usersOldQuota > $newQuota && $newGroupQuota != FALSE)) {
 
             $user->setQuota($newQuota);
 
@@ -537,9 +537,11 @@ class UserService
             $user->setQuota($newQuota);
 
             $this->loggingService->write(LoggingService::DEBUG, "User '" . $uid . "' has new Quota: '" . $newQuota . "'");
+
+            return $newQuota;
         }
 
-        return $newQuota;
+        return $usersOldQuota;
     }
 
     /**
