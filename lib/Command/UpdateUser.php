@@ -229,9 +229,11 @@ class UpdateUser extends Command
         # Set Groups
         $groups = (array)$input->getOption('group');
 
-        $this->userService->updateGroups($user, $groups, $this->config->getAppValue('user_cas', 'cas_protected_groups'));
+        if(count($groups) > 0) {
 
-        $output->writeln('Groups have been updated.');
+            $this->userService->updateGroups($user, $groups, $this->config->getAppValue('user_cas', 'cas_protected_groups'));
+            $output->writeln('Groups have been updated.');
+        }
 
         # Set Quota
         $quota = $input->getOption('quota');
