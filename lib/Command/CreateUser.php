@@ -2,9 +2,12 @@
 
 namespace OCA\UserCAS\Command;
 
+use OCA\UserCAS\Service\AppService;
 use OCA\UserCAS\Service\LoggingService;
 use OCA\UserCAS\Service\UserService;
 
+use OCA\UserCAS\User\Backend;
+use OCA\UserCAS\User\NextBackend;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -50,22 +53,64 @@ class CreateUser extends Command
      */
     protected $mailer;
 
+    /**
+     * @var LoggingService
+     */
+    protected $loggingService;
+
 
     /**
-     * @param UserService $userService
-     * @param LoggingService $loggingService
-     * @param IUserManager $userManager
-     * @param IGroupManager $groupManager
-     * @param IMailer $mailer
+     *
      */
-    public function __construct(UserService $userService, IUserManager $userManager, IGroupManager $groupManager, IMailer $mailer)
+    public function __construct()
     {
         parent::__construct();
+
+        $userManager = \OC::$server->getUserManager();
+        $groupManager = \OC::$server->getGroupManager();
+        $mailer = \OC::$server->getMailer();
+        $config = \OC::$server->getConfig();
+        $userSession = \OC::$server->getUserSession();
+        $logger = \OC::$server->getLogger();
+        $urlGenerator = \OC::$server->getURLGenerator();
+
+        $loggingService = new LoggingService('user_cas', $config, $logger);
+        $appService = new AppService('user_cas', $config, $loggingService, $userManager, $userSession, $urlGenerator);
+
+        /** @var \OCP\Defaults $defaults */
+        $defaults = new \OCP\Defaults();
+        $version = \OCP\Util::getVersion();
+
+        if (strpos(strtolower($defaults->getName()), 'next') !== FALSE && $version[0] >= 14) {
+
+            $backend = new NextBackend(
+                $loggingService,
+                $appService
+            );
+        } else {
+
+            $backend = new Backend(
+                $loggingService,
+                $appService
+            );
+        }
+
+        $userService = new UserService(
+            'user_cas',
+            $config,
+            $userManager,
+            $userSession,
+            $groupManager,
+            $appService,
+            $backend,
+            $loggingService
+        );
 
         $this->userService = $userService;
         $this->userManager = $userManager;
         $this->groupManager = $groupManager;
         $this->mailer = $mailer;
+        $this->loggingService = $loggingService;
     }
 
 
@@ -76,7 +121,7 @@ class CreateUser extends Command
     {
         $this
             ->setName('usercas:create-user')
-            ->setDescription('adds a user')
+            ->setDescription('adds a user_cas user')
             ->addArgument(
                 'uid',
                 InputArgument::REQUIRED,
@@ -102,9 +147,9 @@ class CreateUser extends Command
             )
             ->addOption(
                 'quota',
-                'q',
+                'o',
                 InputOption::VALUE_OPTIONAL,
-                'The quota the user should get either as numeric value in bytes or as a human readable string (e.g. 1G for 1 Gigabyte)'
+                'The quota the user should get either as numeric value in bytes or as a human readable string (e.g. 1GB for 1 Gigabyte)'
             )
             ->addOption(
                 'enabled',
@@ -218,6 +263,22 @@ class CreateUser extends Command
 
             $user->setEnabled(boolval($enabled));
             $output->writeln('Enabled set to "' . $user->isEnabled() . '"');
+        }
+
+
+        // Don’t do that for Nextcloud
+        /** @var \OCP\Defaults $defaults */
+        $defaults = new \OCP\Defaults();
+
+        if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
+
+            if (!is_null($user) && ($user->getBackendClassName() === 'OC\User\Database' || $user->getBackendClassName() === "Database")) {
+
+                $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
+                $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
+            }
         }
     }
 }

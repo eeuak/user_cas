@@ -187,7 +187,7 @@ class UserHooks
 
                     if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
 
-                        if (!is_null($oldUserObject) && ($oldUserObject->getBackendClassName() === "OC\\User\\Database" || $oldUserObject->getBackendClassName() === "Database")) {
+                        if (!is_null($oldUserObject) && ($oldUserObject->getBackendClassName() === 'OC\User\Database' || $oldUserObject->getBackendClassName() === "Database")) {
 
                             $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
                             $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
