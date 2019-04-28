@@ -155,13 +155,19 @@ class UpdateUser extends Command
                 'quota',
                 'o',
                 InputOption::VALUE_OPTIONAL,
-                'The quota the user should get either as numeric value in bytes or as a human readable string (e.g. 1GB for 1 Gigabyte)'
+                'The quota the user should get, either as numeric value in bytes or as a human readable string (e.g. 1GB for 1 Gigabyte)'
             )
             ->addOption(
                 'enabled',
                 'e',
                 InputOption::VALUE_OPTIONAL,
                 'Set user enabled'
+            )
+            ->addOption(
+                'convert-backend',
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'Convert the backend to CAS'
             );
     }
 
@@ -260,19 +266,32 @@ class UpdateUser extends Command
             $output->writeln('Enabled set to "' . $enabledString . '"');
         }
 
+        # Convert backend
+        $convertBackend = $input->getOption('convert-backend');
 
-        // Don’t do that for Nextcloud
-        /** @var \OCP\Defaults $defaults */
-        $defaults = new \OCP\Defaults();
+        if ($convertBackend) {
 
-        if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
+            // Don’t do that for Nextcloud
+            /** @var \OCP\Defaults $defaults */
+            $defaults = new \OCP\Defaults();
 
-            if (!is_null($user) && $user->getBackendClassName() !== 'CAS' && $user->getBackendClassName() !== get_class($this->userService->getBackend())) {
+            if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
 
-                $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
-                $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+                if (!is_null($user) && $user->getBackendClassName() !== 'CAS' && $user->getBackendClassName() !== get_class($this->userService->getBackend())) {
 
-                $output->writeln('Existing user in old backend has been converted to CAS-Backend.');
+                    $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
+                    $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+
+                    $output->writeln('Existing user in old backend has been converted to CAS-Backend.');
+                }
+                else {
+
+                    $output->writeln('User’s backend is already CAS.');
+                }
+            }
+            else {
+
+                $output->writeln('This option is not available in Nextcloud.');
             }
         }
     }
