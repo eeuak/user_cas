@@ -120,8 +120,8 @@ class CreateUser extends Command
     protected function configure()
     {
         $this
-            ->setName('usercas:create-user')
-            ->setDescription('adds a user_cas user')
+            ->setName('cas:create-user')
+            ->setDescription('Adds a user_cas user to the database.')
             ->addArgument(
                 'uid',
                 InputArgument::REQUIRED,
@@ -274,12 +274,12 @@ class CreateUser extends Command
 
         if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
 
-            if (!is_null($user) && ($user->getBackendClassName() === 'OC\User\Database' || $user->getBackendClassName() === "Database")) {
+            if (!is_null($user) && $user->getBackendClassName() !== 'CAS' && $user->getBackendClassName() !== get_class($this->userService->getBackend())) {
 
                 $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
                 $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
 
-                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
+                $output->writeln('Existing user in old backend has been converted to CAS-Backend.');
             }
         }
     }
