@@ -176,7 +176,7 @@ user_cas has the following OCC commands implemented:
 
 * cas
     * cas:create-user (Adds a user_cas user to the database.)
-    * cas:update-user (Updates an existing user and (if not yet a CAS user( converts the record to CAS backend.)
+    * cas:update-user (Updates an existing user and, if not yet a CAS user, converts the record to CAS backend.)
 
 
 Create a user:
