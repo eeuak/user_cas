@@ -425,7 +425,7 @@ class UserService
     public function updateQuota($user, $newGroupQuota, $quota = 'default')
     {
 
-        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas new UserQuota contents: '.$quota.' | New GroupQuota was: '.$newGroupQuota);
+        $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas new UserQuota contents: ' . $quota . ' | New GroupQuota was: ' . $newGroupQuota);
 
         $defaultQuota = $this->config->getAppValue('files', 'default_quota');
 
@@ -551,6 +551,38 @@ class UserService
     {
 
         $this->userManager->registerBackend($this->backend);
+    }
+
+    /**
+     * Update the backend of the user on ownCloud
+     *
+     * @param \OCP\IUser $user
+     * @return bool|int|\OC_DB_StatementWrapper
+     **/
+    public function updateBackend(\OCP\IUser $user)
+    {
+
+        try {
+
+            $uid = $user->getUID();
+            $result = false;
+
+            if ($this->appService->isNotNextcloud()) {
+
+                if (!is_null($user) && ($user->getBackendClassName() === 'OC\User\Database' || $user->getBackendClassName() === "Database")) {
+
+                    $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
+                    $result = $query->execute([get_class($this->getBackend()), $uid]);
+
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
+                }
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+
+            return false;
+        }
     }
 
     /**

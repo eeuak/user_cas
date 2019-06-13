@@ -180,21 +180,6 @@ class UserHooks
 
                         $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS no new user has been created.');
                     }
-
-                    // Don’t do that for Nextcloud
-                    /** @var \OCP\Defaults $defaults */
-                    $defaults = new \OCP\Defaults();
-
-                    if (strpos(strtolower($defaults->getName()), 'next') === FALSE) {
-
-                        if (!is_null($oldUserObject) && ($oldUserObject->getBackendClassName() === 'OC\User\Database' || $oldUserObject->getBackendClassName() === "Database")) {
-
-                            $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
-                            $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
-
-                            $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user existing in database backend, move to CAS-Backend with result: ' . $result);
-                        }
-                    }
                 }
             }
         } else {
@@ -238,6 +223,11 @@ class UserHooks
 
             $user = $this->userManager->get($uid);
         }
+
+
+        # Update the Backend of the user if necessary
+        $this->userService->updateBackend($user);
+
 
         if (\phpCAS::isAuthenticated() && $this->userSession->isLoggedIn()) {
 
