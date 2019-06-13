@@ -240,7 +240,7 @@ class UpdateUser extends Command
         # Set Groups
         $groups = (array)$input->getOption('group');
 
-        if(count($groups) > 0) {
+        if (count($groups) > 0) {
 
             $this->userService->updateGroups($user, $groups, $this->config->getAppValue('user_cas', 'cas_protected_groups'));
             $output->writeln('Groups have been updated.');
@@ -249,13 +249,12 @@ class UpdateUser extends Command
         # Set Quota
         $quota = $input->getOption('quota');
 
-        if(!empty($quota)) {
+        if (!empty($quota)) {
 
-            if(is_numeric($quota)) {
+            if (is_numeric($quota)) {
 
-                $newQuota  = $quota;
-            }
-            elseif ($quota === 'default') {
+                $newQuota = $quota;
+            } elseif ($quota === 'default') {
 
                 $newQuota = 'default';
             } else {
@@ -274,7 +273,7 @@ class UpdateUser extends Command
 
             $user->setEnabled(boolval($enabled));
 
-            $enabledString =  ($user->isEnabled()) ? 'enabled' : 'not enabled';
+            $enabledString = ($user->isEnabled()) ? 'enabled' : 'not enabled';
             $output->writeln('Enabled set to "' . $enabledString . '"');
         }
 
@@ -283,23 +282,18 @@ class UpdateUser extends Command
 
         if ($convertBackend) {
 
+            # Set Backend
             if ($this->appService->isNotNextcloud()) {
 
-                if (!is_null($user) && $user->getBackendClassName() !== 'CAS' && $user->getBackendClassName() !== get_class($this->userService->getBackend())) {
+                $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
+                $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
 
-                    $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
-                    $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+                $output->writeln('New user added to CAS backend.');
 
-                    $output->writeln('Existing user in old backend has been converted to CAS-Backend.');
-                }
-                else {
+            } else {
 
-                    $output->writeln('User’s backend is already CAS.');
-                }
-            }
-            else {
+                $output->writeln('This is a Nextcloud instance, no backend update needed.');
 
-                $output->writeln('This option is not available in Nextcloud.');
             }
         }
     }

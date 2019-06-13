@@ -250,13 +250,12 @@ class CreateUser extends Command
         # Set Quota
         $quota = $input->getOption('quota');
 
-        if(!empty($quota)) {
+        if (!empty($quota)) {
 
-            if(is_numeric($quota)) {
+            if (is_numeric($quota)) {
 
-                $newQuota  = $quota;
-            }
-            elseif ($quota === 'default') {
+                $newQuota = $quota;
+            } elseif ($quota === 'default') {
 
                 $newQuota = 'default';
             } else {
@@ -275,20 +274,21 @@ class CreateUser extends Command
 
             $user->setEnabled(boolval($enabled));
 
-            $enabledString =  ($user->isEnabled()) ? 'enabled' : 'not enabled';
+            $enabledString = ($user->isEnabled()) ? 'enabled' : 'not enabled';
             $output->writeln('Enabled set to "' . $enabledString . '"');
         }
 
-
+        # Set Backend
         if ($this->appService->isNotNextcloud()) {
 
-            if (!is_null($user) && $user->getBackendClassName() !== 'CAS' && $user->getBackendClassName() !== get_class($this->userService->getBackend())) {
+            $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
+            $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
 
-                $query = \OC_DB::prepare('UPDATE `*PREFIX*accounts` SET `backend` = ? WHERE LOWER(`user_id`) = LOWER(?)');
-                $result = $query->execute([get_class($this->userService->getBackend()), $uid]);
+            $output->writeln('New user added to CAS backend.');
 
-                $output->writeln('New user added to CAS backend.');
-            }
+        } else {
+
+            $output->writeln('This is a Nextcloud instance, no backend update needed.');
         }
     }
 }

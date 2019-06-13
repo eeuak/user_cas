@@ -534,20 +534,24 @@ class AppService
 
     /**
      * Test if the instance is not a Nextcloud instance
-     * TODO: Change logic to use other data than the user editable name
      *
-     * @see Issue#58
-     *
-     * @return bool|int
+     * @return bool
      */
     public function isNotNextcloud()
     {
 
-        // Don’t do that for Nextcloud
-        /** @var \OCP\Defaults $defaults */
-        $defaults = new \OCP\Defaults();
+        require __DIR__ . '/../../../../version.php';
 
-        return strpos(strtolower($defaults->getName()), 'next');
+        /**
+         * @var string $vendor The vendor of this instance
+         */
+
+        if (strpos(strtolower($vendor), 'next') === FALSE) {
+
+            return TRUE;
+        }
+
+        return FALSE;
     }
 
     /**
