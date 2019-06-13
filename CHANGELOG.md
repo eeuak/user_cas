@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+Version 1.7.1
+-------------
+
+* Raises compatibility to ownCloud 10.2 and Nextcloud 16
+* Fixes Create-/UpdateCommand and synchronisation with the user_cas-Backend
+* Fixes user autocreation process and synchronisation with the user_cas-Backend
+* Fixes Nextcloud detection algorithm, it does not depend on a user-editable string anymore
+
+
 Version 1.7.0
 -------------
 
