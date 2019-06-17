@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Version 1.7.2
+-------------
+
+* Adds ActiveDirectory import OCC command, let’s you import specific LDAP users as user_cas users to your ownCloud/Nextcloud instance
+
+
 Version 1.7.1
 -------------
 

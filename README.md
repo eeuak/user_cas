@@ -177,6 +177,7 @@ user_cas has the following OCC commands implemented:
 * cas
     * cas:create-user (Adds a user_cas user to the database.)
     * cas:update-user (Updates an existing user and, if not yet a CAS user, converts the record to CAS backend.)
+    * cas:import-users-ad (Imports users from an ActiveDirectory LDAP.)
 
 
 Create a user:
@@ -214,7 +215,14 @@ Update a user:
     - -c | --convert-backend: Set if the user’s backend should be converted to CAS backend. Setting `-c 1` converts to backend to CAS. **WARNING: This is not revocable!**
     
 **Notice: Protected groups will never be unlinked from the user! See also [Groups](#groups).**
-    
+
+
+Import users from AD:
+--------------------
+
+    cas:import-users-ad
+
+
 
 Bugs and Support
 ==============
