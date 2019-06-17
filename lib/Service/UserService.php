@@ -57,7 +57,7 @@ class UserService
     private $config;
 
     /**
-     * @var \OCP\IUserSession; $userSession
+     * @var \OCP\IUserSession $userSession
      */
     private $userSession;
 
@@ -85,9 +85,6 @@ class UserService
      * @var LoggingService $loggingService
      */
     private $loggingService;
-
-    /** @var \OCP\UserInterface[] */
-    private $oldBackends;
 
 
     /**
