@@ -10,7 +10,6 @@
     }
   ],
   "require": {
-    "ext-ldap": "*",
     "jasig/phpcas": "~1.3",
     "ec-europa/ecas-phpcas-parser": "~0.3"
   }
