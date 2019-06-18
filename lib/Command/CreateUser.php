@@ -8,6 +8,7 @@ use OCA\UserCAS\Service\UserService;
 
 use OCA\UserCAS\User\Backend;
 use OCA\UserCAS\User\NextBackend;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -63,6 +64,11 @@ class CreateUser extends Command
      */
     protected $loggingService;
 
+    /**
+     * @var IConfig
+     */
+    protected $config;
+
 
     /**
      *
@@ -116,6 +122,7 @@ class CreateUser extends Command
         $this->groupManager = $groupManager;
         $this->mailer = $mailer;
         $this->loggingService = $loggingService;
+        $this->config = $config;
     }
 
 
@@ -226,25 +233,12 @@ class CreateUser extends Command
         }
 
         # Set Groups
-        $groups = $input->getOption('group');
+        $groups = (array)$input->getOption('group');
 
-        if (!empty($groups)) {
+        if (count($groups) > 0) {
 
-            // Make sure we init the Filesystem for the user, in case we need to
-            // init some group shares.
-            Filesystem::init($user->getUID(), '');
-        }
-
-        foreach ($groups as $groupName) {
-
-            $group = $this->groupManager->get($groupName);
-            if (!$group) {
-                $this->groupManager->createGroup($groupName);
-                $group = $this->groupManager->get($groupName);
-                $output->writeln('Created group "' . $group->getGID() . '"');
-            }
-            $group->addUser($user);
-            $output->writeln('User "' . $user->getUID() . '" added to group "' . $group->getGID() . '"');
+            $this->userService->updateGroups($user, $groups, $this->config->getAppValue('user_cas', 'cas_protected_groups'), TRUE);
+            $output->writeln('Groups have been set.');
         }
 
         # Set Quota
