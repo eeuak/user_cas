@@ -97,7 +97,7 @@ class AdImporter implements ImporterInterface
         $displayNameAttribute1 = $this->config->getAppValue($this->appName, 'cas_import_map_displayname');
         $displayNameAttribute2 = '';
 
-        if(strpos($displayNameAttribute1, "+") !== FALSE) {
+        if (strpos($displayNameAttribute1, "+") !== FALSE) {
             $displayNameAttributes = explode("+", $displayNameAttribute1);
             $displayNameAttribute1 = $displayNameAttributes[0];
             $displayNameAttribute2 = $displayNameAttributes[1];
@@ -403,19 +403,11 @@ class AdImporter implements ImporterInterface
 
         foreach ($exportData as $fields) {
 
-            for($i = 0; $i < count($fields); $i++) {
+            for ($i = 0; $i < count($fields); $i++) {
 
-                if(is_array($fields[$i])) {
+                if (is_array($fields[$i])) {
 
-                    for ($j = 0; $j < count($fields[$i]); $j++) {
-
-                        if(is_array($fields[$i][$j])) {
-
-                            $fields[$i][$j] = implode(" ", $fields[$i][$j]);
-                        }
-                    }
-
-                    $fields[$i] = implode(" ", $fields[$i]);
+                    $fields[$i] = $this->multiImplode($fields[$i], " ");
                 }
             }
 
@@ -425,5 +417,27 @@ class AdImporter implements ImporterInterface
         fclose($fp);
 
         $this->logger->info("CSV export finished.");
+    }
+
+    /**
+     * @param array $array
+     * @param string $glue
+     * @return bool|string
+     */
+    private function multiImplode($array, $glue)
+    {
+        $ret = '';
+
+        foreach ($array as $item) {
+            if (is_array($item)) {
+                $ret .= $this->multiImplode($item, $glue) . $glue;
+            } else {
+                $ret .= $item . $glue;
+            }
+        }
+
+        $ret = substr($ret, 0, 0 - strlen($glue));
+
+        return $ret;
     }
 }
