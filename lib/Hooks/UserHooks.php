@@ -150,13 +150,13 @@ class UserHooks
 
         if (\phpCAS::isAuthenticated() && !$this->userSession->isLoggedIn()) {
 
-            if (boolval($this->config->getAppValue($this->appName, 'cas_autocreate'))) {
+            $casUid = \phpCAS::getUser();
 
-                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas pre login hook triggered. User: ' . $uid);
+            if ($casUid === $uid) {
 
-                $casUid = \phpCAS::getUser();
+                if (boolval($this->config->getAppValue($this->appName, 'cas_autocreate'))) {
 
-                if ($casUid === $uid) {
+                    $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas pre login hook triggered. User: ' . $uid);
 
                     // Autocreate user if needed or create a new account in CAS Backend
                     if (is_null($user)) {
@@ -184,11 +184,10 @@ class UserHooks
                         $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS no new user has been created.');
                     }
                 }
+
+                # Update the Backend of the user if necessary
+                $this->userService->updateBackend($user);
             }
-
-            # Update the Backend of the user if necessary
-            $this->userService->updateBackend($user);
-
         } else {
 
             $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas pre login hook NOT triggered. User: ' . $uid);
@@ -236,14 +235,14 @@ class UserHooks
 
                 $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCas post login hook triggered. User: ' . $uid);
 
-                # Update the Backend of the user if necessary
-                $this->userService->updateBackend($user);
-
                 // $cas_attributes may vary in name, therefore attributes are fetched to $attributes
 
                 $casUid = \phpCAS::getUser();
 
                 if ($casUid === $uid) {
+
+                    # Update the Backend of the user if necessary
+                    $this->userService->updateBackend($user);
 
                     $casAttributes = \phpCAS::getAttributes();
 
