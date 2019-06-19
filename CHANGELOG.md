@@ -4,6 +4,7 @@ CHANGELOG
 Version 1.7.2
 -------------
 
+* Fixes problems with local database users beeing converted to user_cas backend by accident
 * Adds ActiveDirectory import OCC command, let’s you import specific LDAP users as user_cas users to your ownCloud/Nextcloud instance
 
 
