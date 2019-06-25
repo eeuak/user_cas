@@ -103,8 +103,8 @@ class ImportUsersAd extends Command
 
                 $importer->close();
 
-                $importer->exportAsCsv($allUsers);
-
+                #$importer->exportAsCsv($allUsers);
+                #$importer->exportAsText($allUsers);
                 #exit;
 
                 # Convert backend

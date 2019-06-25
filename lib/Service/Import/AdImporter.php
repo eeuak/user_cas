@@ -420,6 +420,19 @@ class AdImporter implements ImporterInterface
     }
 
     /**
+     * @param array $exportData
+     */
+    public function exportAsText(array $exportData)
+    {
+
+        $this->logger->info("Exporting users to .txt …");
+
+        file_put_contents('accounts.txt', serialize($exportData));
+
+        $this->logger->info("TXT export finished.");
+    }
+
+    /**
      * @param array $array
      * @param string $glue
      * @return bool|string
