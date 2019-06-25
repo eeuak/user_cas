@@ -16,5 +16,5 @@ namespace OCA\UserCAS\Service\Merge;
 interface MergerInterface
 {
 
-    public function mergeUsers(array &$userStack, array $userToMerge);
+    public function mergeUsers(array &$userStack, array $userToMerge, $merge, $primaryAccountDnStartswWith);
 }

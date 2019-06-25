@@ -66,7 +66,7 @@ class AdImporter implements ImporterInterface
     public function init(LoggerInterface $logger)
     {
 
-        $this->merger = new AdUserMerger();
+        $this->merger = new AdUserMerger($logger);
         $this->logger = $logger;
 
         $this->ldapConnect();
@@ -108,8 +108,11 @@ class AdImporter implements ImporterInterface
         $groupsAttribute = $this->config->getAppValue($this->appName, 'cas_import_map_groups');
         $quotaAttribute = $this->config->getAppValue($this->appName, 'cas_import_map_quota');
         $enableAttribute = $this->config->getAppValue($this->appName, 'cas_import_map_enabled');
+        $dnAttribute = $this->config->getAppValue($this->appName, 'cas_import_map_dn');
+        $mergeAttribute = boolval($this->config->getAppValue($this->appName, 'cas_import_merge'));
+        $primaryAccountDnStartswWith = $this->config->getAppValue($this->appName, 'cas_import_map_dn_filter');
 
-        $keep = [$uidAttribute, $displayNameAttribute1, $displayNameAttribute2, $emailAttribute, $groupsAttribute, $quotaAttribute, $enableAttribute];
+        $keep = [$uidAttribute, $displayNameAttribute1, $displayNameAttribute2, $emailAttribute, $groupsAttribute, $quotaAttribute, $enableAttribute, $dnAttribute];
 
         $groupAttrField = $this->config->getAppValue($this->appName, 'cas_import_map_groups_description');
         $groupsKeep = [$groupAttrField];
@@ -131,11 +134,10 @@ class AdImporter implements ImporterInterface
 
                 $m = $memberPage[$key];
 
-                #var_dump($m["sn"][0]);
-
                 # Each attribute is returned as an array, the first key is [count], [0]+ will contain the actual value(s)
                 $employeeID = isset($m[$uidAttribute][0]) ? $m[$uidAttribute][0] : "";
                 $mail = isset($m[$emailAttribute][0]) ? $m[$emailAttribute][0] : "";
+                $dn = isset($m[$dnAttribute]) ? $m[$dnAttribute] : "";
 
                 $displayName = $employeeID;
 
@@ -224,7 +226,7 @@ class AdImporter implements ImporterInterface
                 # Fill the users array only if we have an employeeId and addUser is true
                 if (isset($employeeID) && $addUser) {
 
-                    $this->merger->mergeUsers($users, ['uid' => $employeeID, 'displayName' => $displayName, 'email' => $mail, 'quota' => $quota, 'groups' => $groupsArray, 'enable' => $enable]);
+                    $this->merger->mergeUsers($users, ['uid' => $employeeID, 'displayName' => $displayName, 'email' => $mail, 'quota' => $quota, 'groups' => $groupsArray, 'enable' => $enable, 'dn' => $dn], $mergeAttribute, $primaryAccountDnStartswWith);
                 }
             }
         }

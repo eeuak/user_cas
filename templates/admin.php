@@ -270,7 +270,7 @@ style('user_cas', 'settings');
                 <input
                         id="cas_import_ad_sync_filter"
                         name="cas_import_ad_sync_filter"
-                        value="<?php p($_['cas_import_ad_sync_filter']); ?>" placeholder="(&(objectCategory=user)(objectClass=user)(memberof:1.2.840.113556.1.4.1941:=CN=owncloudusers,CN=Users,DC=mydomain,DC=com))"/>
+                        value="<?php print_unescaped($_['cas_import_ad_sync_filter']); ?>" placeholder="(&(objectCategory=user)(objectClass=user)(memberof:1.2.840.113556.1.4.1941:=CN=owncloudusers,CN=Users,DC=mydomain,DC=com))"/>
             </p>
             <p><label for="cas_import_ad_sync_pagesize_value"><?php p($l->t('LDAP Sync Pagesize (1–1500)')); ?></label>
                 <input
@@ -338,6 +338,24 @@ style('user_cas', 'settings');
                         id="cas_import_map_enabled"
                         name="cas_import_map_enabled"
                         value="<?php p($_['cas_import_map_enabled']); ?>" placeholder="useraccountcontrol"/>
+            </p>
+            <p>
+                <input type="checkbox" id="cas_import_merge"
+                      name="cas_import_merge" <?php print_unescaped((($_['cas_import_merge'] === 'true' || $_['cas_import_merge'] === 'on' || $_['cas_import_merge'] === '1') ? 'checked="checked"' : '')); ?>>
+                <label class='checkbox'
+                       for="cas_import_merge"><?php p($l->t('Merge Accounts')); ?></label>
+            </p>
+            <p><label for="cas_import_map_dn"><?php p($l->t('Merge Attribute')); ?></label>
+                <input
+                        id="cas_import_map_dn"
+                        name="cas_import_map_dn"
+                        value="<?php p($_['cas_import_map_dn']); ?>" placeholder="dn"/>
+            </p>
+            <p><label for="cas_import_map_dn_filter"><?php p($l->t('Filter string for merge attribute')); ?></label>
+                <input
+                        id="cas_import_map_dn_filter"
+                        name="cas_import_map_dn_filter"
+                        value="<?php p($_['cas_import_map_dn_filter']); ?>" placeholder="cn=p"/>
             </p>
         </fieldset>
         <!-- phpCAS Settings -->
