@@ -40,9 +40,10 @@ class AdUserMerger implements MergerInterface
      * @param array $userStack
      * @param array $userToMerge
      * @param bool $merge
+     * @param bool $preferEnabledAccountsOverDisabled
      * @param string $primaryAccountDnStartswWith
      */
-    public function mergeUsers(array &$userStack, array $userToMerge, $merge, $primaryAccountDnStartswWith)
+    public function mergeUsers(array &$userStack, array $userToMerge, $merge, $preferEnabledAccountsOverDisabled, $primaryAccountDnStartswWith)
     {
         # User already in stack
         if ($merge && isset($userStack[$userToMerge["uid"]])) {
@@ -55,7 +56,7 @@ class AdUserMerger implements MergerInterface
             //      if one is enabled, use the information of this one
             //      if both enabled, use information of $primaryAccountDnStartswWith
 
-            if ($userStack[$userToMerge["uid"]]['enabled'] == 0 && $userToMerge['enabled'] == 1) {
+            if ($preferEnabledAccountsOverDisabled && $userStack[$userToMerge["uid"]]['enabled'] == 0 && $userToMerge['enabled'] == 1) {
 
                 $this->logger->info("User " . $userToMerge["uid"] . " is merged because first account was disabled.");
 

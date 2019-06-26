@@ -111,6 +111,7 @@ class AdImporter implements ImporterInterface
         $dnAttribute = $this->config->getAppValue($this->appName, 'cas_import_map_dn');
         $mergeAttribute = boolval($this->config->getAppValue($this->appName, 'cas_import_merge'));
         $primaryAccountDnStartswWith = $this->config->getAppValue($this->appName, 'cas_import_map_dn_filter');
+        $preferEnabledAccountsOverDisabled = boolval($this->config->getAppValue($this->appName, 'cas_import_merge_enabled'));
 
         $keep = [$uidAttribute, $displayNameAttribute1, $displayNameAttribute2, $emailAttribute, $groupsAttribute, $quotaAttribute, $enableAttribute, $dnAttribute];
 
@@ -226,7 +227,7 @@ class AdImporter implements ImporterInterface
                 # Fill the users array only if we have an employeeId and addUser is true
                 if (isset($employeeID) && $addUser) {
 
-                    $this->merger->mergeUsers($users, ['uid' => $employeeID, 'displayName' => $displayName, 'email' => $mail, 'quota' => $quota, 'groups' => $groupsArray, 'enable' => $enable, 'dn' => $dn], $mergeAttribute, $primaryAccountDnStartswWith);
+                    $this->merger->mergeUsers($users, ['uid' => $employeeID, 'displayName' => $displayName, 'email' => $mail, 'quota' => $quota, 'groups' => $groupsArray, 'enable' => $enable, 'dn' => $dn], $mergeAttribute, $preferEnabledAccountsOverDisabled, $primaryAccountDnStartswWith);
                 }
             }
         }

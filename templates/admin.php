@@ -345,6 +345,12 @@ style('user_cas', 'settings');
                 <label class='checkbox'
                        for="cas_import_merge"><?php p($l->t('Merge Accounts')); ?></label>
             </p>
+            <p>
+                <input type="checkbox" id="cas_import_merge_enabled"
+                      name="cas_import_merge_enabled" <?php print_unescaped((($_['cas_import_merge_enabled'] === 'true' || $_['cas_import_merge_enabled'] === 'on' || $_['cas_import_merge_enabled'] === '1') ? 'checked="checked"' : '')); ?>>
+                <label class='checkbox'
+                       for="cas_import_merge_enabled"><?php p($l->t('Prefer enabled over disabled accounts on merge')); ?></label>
+            </p>
             <p><label for="cas_import_map_dn"><?php p($l->t('Merge Attribute')); ?></label>
                 <input
                         id="cas_import_map_dn"

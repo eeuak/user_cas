@@ -126,6 +126,7 @@ class SettingsController extends Controller
      * @param string|null $cas_use_proxy
      * @param string|null $cas_import_map_groups_letter_umlauts
      * @param string|null $cas_import_merge
+     * @param string|null $cas_import_merge_enabled
      * @return mixed
      */
     public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group,
@@ -134,7 +135,7 @@ class SettingsController extends Controller
                                  $cas_import_ad_protocol, $cas_import_ad_host, $cas_import_ad_port, $cas_import_ad_user, $cas_import_ad_domain, $cas_import_ad_password, $cas_import_ad_base_dn, $cas_import_ad_sync_filter, $cas_import_ad_sync_pagesize,
                                  $cas_import_map_uid, $cas_import_map_displayname, $cas_import_map_email, $cas_import_map_groups, $cas_import_map_groups_description, $cas_import_map_groups_letter_filter, $cas_import_map_quota, $cas_import_map_enabled, $cas_import_map_dn, $cas_import_map_dn_filter,
                                  $cas_ecas_attributeparserenabled = NULL, $cas_ecas_request_full_userdetails = NULL, $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL,
-                                 $cas_disable_logout = NULL, $cas_use_proxy = NULL, $cas_import_map_groups_letter_umlauts = NULL, $cas_import_merge = NULL)
+                                 $cas_disable_logout = NULL, $cas_use_proxy = NULL, $cas_import_map_groups_letter_umlauts = NULL, $cas_import_merge = NULL, $cas_import_merge_enabled = NULL)
     {
 
         try {
@@ -209,6 +210,7 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_use_proxy', ($cas_use_proxy !== NULL) ? '1' : '0');
             $this->config->setAppValue($this->appName, 'cas_import_map_groups_letter_umlauts', ($cas_import_map_groups_letter_umlauts !== NULL) ? '1' : '0');
             $this->config->setAppValue($this->appName, 'cas_import_merge', ($cas_import_merge !== NULL) ? '1' : '0');
+            $this->config->setAppValue($this->appName, 'cas_import_merge_enabled', ($cas_import_merge_enabled !== NULL) ? '1' : '0');
 
 
 
