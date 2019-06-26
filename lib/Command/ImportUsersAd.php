@@ -93,6 +93,8 @@ class ImportUsersAd extends Command
             # Check for ldap extension
             if (extension_loaded("ldap")) {
 
+                $output->writeln('Start account import from ActiveDirectory.');
+
                 /**
                  * @var ImporterInterface $importer
                  */
@@ -104,11 +106,15 @@ class ImportUsersAd extends Command
 
                 $importer->close();
 
-                $progressBar = new ProgressBar($output, count($allUsers));
+                $output->writeln('Account import from ActiveDirectory finished.');
 
                 #$importer->exportAsCsv($allUsers);
                 #$importer->exportAsText($allUsers);
                 #exit;
+
+                $output->writeln('Start account import to database.');
+
+                $progressBar = new ProgressBar($output, count($allUsers));
 
                 # Convert backend
                 $convertBackend = $input->getOption('convert-backend');
@@ -126,8 +132,6 @@ class ImportUsersAd extends Command
                     $logger->info("Delta updates: Existing users will be updated.");
                 }
 
-                $logger->info("Start import of user data …");
-
                 $createCommand = $this->getApplication()->find('cas:create-user');
                 $updateCommand = $this->getApplication()->find('cas:update-user');
 
@@ -142,8 +146,6 @@ class ImportUsersAd extends Command
                         '--enabled' => $user["enable"],
                         '--group' => $user["groups"]
                     ];
-
-
 
                     # Create user if he does not exist
                     if (!$this->userManager->userExists($user["uid"])) {
@@ -168,9 +170,11 @@ class ImportUsersAd extends Command
                     $progressBar->advance();
                 }
 
-                $output->writeln('User import finished.');
-
                 $progressBar->finish();
+                $progressBar->clear();
+
+                $output->writeln('Account import to database finished.');
+
             } else {
 
                 throw new \Exception("User import failed. PHP extension 'ldap' is not loaded.");
