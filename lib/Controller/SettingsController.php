@@ -114,6 +114,7 @@ class SettingsController extends Controller
      * @param string $cas_import_map_groups_letter_filter
      * @param string $cas_import_map_quota
      * @param string $cas_import_map_enabled
+     * @param string $cas_import_map_enabled_and_bitwise
      * @param string $cas_import_map_dn
      * @param string $cas_import_map_dn_filter
      * @param string|null $cas_ecas_attributeparserenabled
@@ -133,7 +134,7 @@ class SettingsController extends Controller
                                  $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_quota_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url, $cas_handlelogout_servers,
                                  $cas_access_allow_groups, $cas_ecas_accepted_strengths, $cas_ecas_retrieve_groups, $cas_ecas_assurance_level, $cas_access_group_quotas, $cas_force_login_exceptions, $cas_ecas_internal_ip_range,
                                  $cas_import_ad_protocol, $cas_import_ad_host, $cas_import_ad_port, $cas_import_ad_user, $cas_import_ad_domain, $cas_import_ad_password, $cas_import_ad_base_dn, $cas_import_ad_sync_filter, $cas_import_ad_sync_pagesize,
-                                 $cas_import_map_uid, $cas_import_map_displayname, $cas_import_map_email, $cas_import_map_groups, $cas_import_map_groups_description, $cas_import_map_groups_letter_filter, $cas_import_map_quota, $cas_import_map_enabled, $cas_import_map_dn, $cas_import_map_dn_filter,
+                                 $cas_import_map_uid, $cas_import_map_displayname, $cas_import_map_email, $cas_import_map_groups, $cas_import_map_groups_description, $cas_import_map_groups_letter_filter, $cas_import_map_quota, $cas_import_map_enabled, $cas_import_map_enabled_and_bitwise, $cas_import_map_dn, $cas_import_map_dn_filter,
                                  $cas_ecas_attributeparserenabled = NULL, $cas_ecas_request_full_userdetails = NULL, $cas_force_login = NULL, $cas_autocreate = NULL, $cas_update_user_data = NULL, $cas_link_to_ldap_backend = NULL,
                                  $cas_disable_logout = NULL, $cas_use_proxy = NULL, $cas_import_map_groups_letter_umlauts = NULL, $cas_import_merge = NULL, $cas_import_merge_enabled = NULL)
     {
@@ -196,6 +197,7 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_import_map_groups_letter_filter', $cas_import_map_groups_letter_filter);
             $this->config->setAppValue($this->appName, 'cas_import_map_quota', $cas_import_map_quota);
             $this->config->setAppValue($this->appName, 'cas_import_map_enabled', $cas_import_map_enabled);
+            $this->config->setAppValue($this->appName, 'cas_import_map_enabled_and_bitwise', $cas_import_map_enabled_and_bitwise);
             $this->config->setAppValue($this->appName, 'cas_import_map_dn', $cas_import_map_dn);
             $this->config->setAppValue($this->appName, 'cas_import_map_dn_filter', $cas_import_map_dn_filter);
 

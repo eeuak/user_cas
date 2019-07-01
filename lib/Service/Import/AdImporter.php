@@ -112,6 +112,7 @@ class AdImporter implements ImporterInterface
         $mergeAttribute = boolval($this->config->getAppValue($this->appName, 'cas_import_merge'));
         $primaryAccountDnStartswWith = $this->config->getAppValue($this->appName, 'cas_import_map_dn_filter');
         $preferEnabledAccountsOverDisabled = boolval($this->config->getAppValue($this->appName, 'cas_import_merge_enabled'));
+        $andEnableAttributeBitwise = $this->config->getAppValue($this->appName, 'cas_import_map_enabled_and_bitwise');
 
         $keep = [$uidAttribute, $displayNameAttribute1, $displayNameAttribute2, $emailAttribute, $groupsAttribute, $quotaAttribute, $enableAttribute, $dnAttribute];
 
@@ -160,13 +161,25 @@ class AdImporter implements ImporterInterface
 
                 $quota = isset($m[$quotaAttribute][0]) ? intval($m[$quotaAttribute][0]) : 0;
 
-                if (isset($m[$enableAttribute][0]) && intval($m[$enableAttribute][0]) >= 66080) {
 
-                    $enable = 1;
-                } else {
+                $enable = 1;
 
-                    $enable = 0;
-                };
+                # Shift enable attribute bytewise?
+                if (isset($m[$enableAttribute][0])) {
+
+                    if (strlen($andEnableAttributeBitwise) > 0) {
+
+                        if (is_numeric($andEnableAttributeBitwise)) {
+
+                            $andEnableAttributeBitwise = intval($andEnableAttributeBitwise);
+                        }
+
+                        $enable = intval((intval($m[$enableAttribute][0]) & $andEnableAttributeBitwise) == 0);
+                    } else {
+
+                        $enable = intval($m[$enableAttribute][0]);
+                    }
+                }
 
                 $groupsArray = [];
 

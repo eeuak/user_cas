@@ -333,6 +333,12 @@ style('user_cas', 'settings');
                         name="cas_import_map_enabled"
                         value="<?php p($_['cas_import_map_enabled']); ?>" placeholder="useraccountcontrol"/>
             </p>
+            <p><label for="cas_import_map_enabled_and_bitwise"><?php p($l->t('Calculate enable attribute bitwise AND with')); ?></label>
+                <input
+                        id="cas_import_map_enabled_and_bitwise"
+                        name="cas_import_map_enabled_and_bitwise"
+                        value="<?php p($_['cas_import_map_enabled_and_bitwise']); ?>" placeholder="2"/>
+            </p>
             <p><label for="cas_import_map_dn"><?php p($l->t('Merge attribute')); ?></label>
                 <input
                         id="cas_import_map_dn"
