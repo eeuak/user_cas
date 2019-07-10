@@ -27,9 +27,6 @@ use OC\User\Database;
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
 use OCA\UserCAS\Service\AppService;
 use OCA\UserCAS\Service\LoggingService;
-use OCP\IUserBackend;
-use OCP\User\IProvidesDisplayNameBackend;
-use OCP\User\IProvidesHomeBackend;
 
 
 /**
