@@ -27,6 +27,9 @@ use OC\User\Database;
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
 use OCA\UserCAS\Service\AppService;
 use OCA\UserCAS\Service\LoggingService;
+use OCP\IUserBackend;
+use \OCP\User\Backend\ICheckPasswordBackend;
+use OCP\UserInterface;
 
 
 /**
@@ -39,21 +42,23 @@ use OCA\UserCAS\Service\LoggingService;
  *
  * @since 1.4.0
  */
-class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBackend, UserCasBackendInterface
+class NextBackend extends Database implements UserInterface, IUserBackend, ICheckPasswordBackend, UserCasBackendInterface
 {
 
     /**
      * @var \OCA\UserCAS\Service\LoggingService $loggingService
      */
-    private $loggingService;
+    protected $loggingService;
 
     /**
      * @var \OCA\UserCAS\Service\AppService $appService
      */
-    private $appService;
+    protected $appService;
+
 
     /**
      * Backend constructor.
+     *
      * @param LoggingService $loggingService
      * @param AppService $appService
      */
@@ -68,6 +73,7 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
 
     /**
      * Backend name to be shown in user management
+     *
      * @return string the name of the backend to be shown
      */
     public function getBackendName()
@@ -78,6 +84,8 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
 
 
     /**
+     * Check the password
+     *
      * @param string $loginName
      * @param string $password
      * @return string|bool The users UID or false
@@ -112,7 +120,6 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
             if ($loginName === FALSE) {
 
                 $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS returned no user.');
-                #\OCP\Util::writeLog('cas', 'phpCAS returned no user.', \OCA\UserCas\Service\LoggingService::ERROR);
             }
 
             if (\phpCAS::checkAuthentication()) {
@@ -122,7 +129,6 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
                 if ($casUid === $loginName) {
 
                     $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user password has been checked.');
-                    #\OCP\Util::writeLog('cas', 'phpCAS user password has been checked.', \OCA\UserCas\Service\LoggingService::ERROR);
 
                     return $loginName;
                 }
@@ -132,7 +138,7 @@ class NextBackend extends Database implements \OCP\User\Backend\ICheckPasswordBa
         } else {
 
             $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS has not been initialized.');
-            #\OCP\Util::writeLog('cas', 'phpCAS has not been initialized.', \OCA\UserCas\Service\LoggingService::ERROR);
+
             return FALSE;
         }
     }

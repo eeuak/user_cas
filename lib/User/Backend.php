@@ -54,7 +54,6 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
      */
     protected $appService;
 
-
     /**
      * @var array $possibleActions
      */
@@ -155,6 +154,7 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
         return \OC::$server->getConfig()->getSystemValue("datadirectory", \OC::$SERVERROOT . "/data") . '/' . $uid;
 
     }
+
 
     /**
      * Creates a user
