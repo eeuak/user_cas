@@ -245,3 +245,67 @@ msgstr "Erreur Interne du Serveur. Le serveur a rencontré une erreur. Veuillez 
 #: templates/cas-error.php:28
 msgid "Go back to the login page"
 msgstr "Retourner à la page d'accueil"
+
+
+# Import CLI
+msgid "Import CLI"
+msgstr "Import CLI"
+
+
+msgid "ActiveDirectory (LDAP)"
+msgstr "ActiveDirectory (LDAP)"
+
+msgid "LDAP Host"
+msgstr "Hôte LDAP"
+
+msgid "LDAP User and Domain"
+msgstr "Utilisateur et domaine LDAP"
+
+msgid "LDAP User Password"
+msgstr "Mot de passe utilisateur LDAP"
+
+msgid "LDAP Base DN"
+msgstr "LDAP Base DN"
+
+msgid "LDAP Sync Filter"
+msgstr "Filtre de synchronisation LDAP"
+
+msgid "LDAP Sync Pagesize (1–1500)"
+msgstr "LDAP Sync Pagesize (1–1500)"
+
+
+msgid "CLI Attribute Mapping"
+msgstr "Mappage d'attributs CLI"
+
+msgid "UID/Username"
+msgstr "UID/Nom d'utilisateur"
+
+msgid "Group Name Field"
+msgstr "Nom du groupe"
+
+msgid "Group Name Filter"
+msgstr "Filtre de nom de groupe"
+
+msgid "Attention: You must use PHP (PCRE) Regex syntax for the filter."
+msgstr "Attention: Vous devez utiliser la syntaxe PHP (PCRE) Regex pour le filtre."
+
+msgid "Group Name Replace Umlauts"
+msgstr "Nom du groupe - Remplacer les trémas"
+
+msgid "Enable"
+msgstr "Activer"
+
+msgid "Calculate Enable Attribute Bitwise AND with"
+msgstr "Calculer Activer Attribut Bitwise AND avec"
+
+msgid "Merge Accounts"
+msgstr "Fusionner des comptes"
+
+msgid "Prefer Enabled over Disabled Accounts on Merge"
+msgstr "Préférer activé sur les comptes désactivés lors de la fusion"
+
+msgid "Merge Two Active Accounts by"
+msgstr "Fusionner deux comptes actifs par"
+
+msgid "Merge Two Active Accounts by: Filterstring"
+msgstr "Fusionner deux comptes actifs par: Filtres"

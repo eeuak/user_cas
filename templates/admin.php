@@ -226,7 +226,7 @@ style('user_cas', 'settings');
 
             <h3><?php p($l->t('ActiveDirectory (LDAP)')); ?>:</h3>
 
-            <p><label for="cas_import_ad_host"><?php p($l->t('LDAP-Host')); ?></label>
+            <p><label for="cas_import_ad_host"><?php p($l->t('LDAP Host')); ?></label>
                 <select id="cas_import_ad_protocol" name="cas_import_ad_protocol">
                     <?php $importAdProtocol = $_['cas_import_ad_protocol']; ?>
                     <option value="ldaps://" <?php echo $importAdProtocol === 'ldaps://' ? 'selected' : ''; ?>>ldaps://</option>
@@ -243,7 +243,7 @@ style('user_cas', 'settings');
                         name="cas_import_ad_port"
                         value="<?php p($_['cas_import_ad_port']); ?>" placeholder="636"/>
             </p>
-            <p><label for="cas_import_ad_user"><?php p($l->t('LDAP-User and Domain')); ?></label>
+            <p><label for="cas_import_ad_user"><?php p($l->t('LDAP User and Domain')); ?></label>
                 <input
                         id="cas_import_ad_user"
                         name="cas_import_ad_user"
@@ -254,7 +254,7 @@ style('user_cas', 'settings');
                         name="cas_import_ad_domain"
                         value="<?php p($_['cas_import_ad_domain']); ?>" placeholder="ldap.mydomain.com"/>
             </p>
-            <p><label for="cas_import_ad_password"><?php p($l->t('LDAP-User password')); ?></label>
+            <p><label for="cas_import_ad_password"><?php p($l->t('LDAP User Password')); ?></label>
                 <input
                         type="password"
                         id="cas_import_ad_password"
@@ -303,62 +303,51 @@ style('user_cas', 'settings');
                         name="cas_import_map_email"
                         value="<?php p($_['cas_import_map_email']); ?>" placeholder="email"/>
             </p>
+
             <p><label for="cas_import_map_groups"><?php p($l->t('Groups')); ?></label>
                 <input
                         id="cas_import_map_groups"
                         name="cas_import_map_groups"
                         value="<?php p($_['cas_import_map_groups']); ?>" placeholder="memberof"/>
             </p>
-            <p><label for="cas_import_map_groups_description"><?php p($l->t('Groups description field')); ?></label>
+            <p><label for="cas_import_map_groups_description"><?php p($l->t('Group Name Field')); ?></label>
                 <input
                         id="cas_import_map_groups_description"
                         name="cas_import_map_groups_description"
                         value="<?php p($_['cas_import_map_groups_description']); ?>" placeholder="description"/>
             </p>
-            <p><label for="cas_import_map_groups_letter_filter"><?php p($l->t('Groups naming filter')); ?></label>
+            <p><label for="cas_import_map_groups_letter_filter"><?php p($l->t('Group Name Filter')); ?></label>
                 <input
                         id="cas_import_map_groups_letter_filter"
                         name="cas_import_map_groups_letter_filter"
-                        value="<?php p($_['cas_import_map_groups_letter_filter']); ?>" placeholder="a-zA-Z0-9\.\-_ @"/>
+                        value="<?php p($_['cas_import_map_groups_letter_filter']); ?>" placeholder="a-zA-Z0-9\.\-_ @"/> <span class="csh"><?php p($l->t('Attention: You must use PHP (PCRE) Regex syntax for the filter.')) ?></span>
             </p>
+            <p>
+                <input type="checkbox" id="cas_import_map_groups_letter_umlauts"
+                      name="cas_import_map_groups_letter_umlauts" <?php print_unescaped((($_['cas_import_map_groups_letter_umlauts'] === 'true' || $_['cas_import_map_groups_letter_umlauts'] === 'on' || $_['cas_import_map_groups_letter_umlauts'] === '1') ? 'checked="checked"' : '')); ?>>
+                <label class='checkbox'
+                       for="cas_import_map_groups_letter_umlauts"><?php p($l->t('Group Name Replace Umlauts')); ?></label>
+            </p>
+
             <p><label for="cas_import_map_quota"><?php p($l->t('Quota')); ?></label>
                 <input
                         id="cas_import_map_quota"
                         name="cas_import_map_quota"
                         value="<?php p($_['cas_import_map_quota']); ?>" placeholder="quota"/>
             </p>
-            <p><label for="cas_import_map_enabled"><?php p($l->t('Enable attribute')); ?></label>
+            <p><label for="cas_import_map_enabled"><?php p($l->t('Enable')); ?></label>
                 <input
                         id="cas_import_map_enabled"
                         name="cas_import_map_enabled"
                         value="<?php p($_['cas_import_map_enabled']); ?>" placeholder="useraccountcontrol"/>
             </p>
-            <p><label for="cas_import_map_enabled_and_bitwise"><?php p($l->t('Calculate enable attribute bitwise AND with')); ?></label>
+            <p><label for="cas_import_map_enabled_and_bitwise"><?php p($l->t('Calculate Enable Attribute Bitwise AND with')); ?></label>
                 <input
                         id="cas_import_map_enabled_and_bitwise"
                         name="cas_import_map_enabled_and_bitwise"
                         value="<?php p($_['cas_import_map_enabled_and_bitwise']); ?>" placeholder="2"/>
             </p>
-            <p><label for="cas_import_map_dn"><?php p($l->t('Merge attribute')); ?></label>
-                <input
-                        id="cas_import_map_dn"
-                        name="cas_import_map_dn"
-                        value="<?php p($_['cas_import_map_dn']); ?>" placeholder="dn"/>
-            </p>
-            <p><label for="cas_import_map_dn_filter"><?php p($l->t('Filterstring for merge attribute')); ?></label>
-                <input
-                        id="cas_import_map_dn_filter"
-                        name="cas_import_map_dn_filter"
-                        value="<?php p($_['cas_import_map_dn_filter']); ?>" placeholder="cn=p"/>
-            </p>
 
-
-            <p>
-                <input type="checkbox" id="cas_import_map_groups_letter_umlauts"
-                      name="cas_import_map_groups_letter_umlauts" <?php print_unescaped((($_['cas_import_map_groups_letter_umlauts'] === 'true' || $_['cas_import_map_groups_letter_umlauts'] === 'on' || $_['cas_import_map_groups_letter_umlauts'] === '1') ? 'checked="checked"' : '')); ?>>
-                <label class='checkbox'
-                       for="cas_import_map_groups_letter_umlauts"><?php p($l->t('Groups replace umlauts')); ?></label>
-            </p>
             <p>
                 <input type="checkbox" id="cas_import_merge"
                       name="cas_import_merge" <?php print_unescaped((($_['cas_import_merge'] === 'true' || $_['cas_import_merge'] === 'on' || $_['cas_import_merge'] === '1') ? 'checked="checked"' : '')); ?>>
@@ -369,7 +358,19 @@ style('user_cas', 'settings');
                 <input type="checkbox" id="cas_import_merge_enabled"
                       name="cas_import_merge_enabled" <?php print_unescaped((($_['cas_import_merge_enabled'] === 'true' || $_['cas_import_merge_enabled'] === 'on' || $_['cas_import_merge_enabled'] === '1') ? 'checked="checked"' : '')); ?>>
                 <label class='checkbox'
-                       for="cas_import_merge_enabled"><?php p($l->t('Prefer enabled over disabled accounts on merge')); ?></label>
+                       for="cas_import_merge_enabled"><?php p($l->t('Prefer Enabled over Disabled Accounts on Merge')); ?></label>
+            </p>
+            <p><label for="cas_import_map_dn"><?php p($l->t('Merge Two Active Accounts by')); ?></label>
+                <input
+                        id="cas_import_map_dn"
+                        name="cas_import_map_dn"
+                        value="<?php p($_['cas_import_map_dn']); ?>" placeholder="dn"/>
+            </p>
+            <p><label for="cas_import_map_dn_filter"><?php p($l->t('Merge Two Active Accounts by: Filterstring')); ?></label>
+                <input
+                        id="cas_import_map_dn_filter"
+                        name="cas_import_map_dn_filter"
+                        value="<?php p($_['cas_import_map_dn_filter']); ?>" placeholder="cn=p"/>
             </p>
         </fieldset>
         <!-- phpCAS Settings -->

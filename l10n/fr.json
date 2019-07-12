@@ -51,7 +51,27 @@
     "Forbidden. You do not have access to this application. Please refer to your administrator if something feels wrong to you.": "Interdit. Vous n'avez pas accès à cette application. Veuillez vous adresser à votre administrateur si quelque chose vous semble incorrect.",
     "You do not have access to the JRCbox application. Please contact the JRCbox administrator if something feels wrong to you.": "Vous n'avez pas accès à cette application JRCbox. Veuillez vous adresser à votre administrateur JRCbox si quelque chose vous semble incorrect.",
     "Internal Server Error. The server encountered an error. Please try again.": "Erreur Interne du Serveur. Le serveur a rencontré une erreur. Veuillez réessayer.",
-    "Go back to the login page": "Retourner à la page d'accueil"
+    "Go back to the login page": "Retourner à la page d'accueil",
+    "Import CLI": "Import CLI",
+    "ActiveDirectory (LDAP)": "ActiveDirectory (LDAP)",
+    "LDAP Host": "Hôte LDAP",
+    "LDAP User and Domain": "Utilisateur et domaine LDAP",
+    "LDAP User Password": "Mot de passe utilisateur LDAP",
+    "LDAP Base DN": "LDAP Base DN",
+    "LDAP Sync Filter": "Filtre de synchronisation LDAP",
+    "LDAP Sync Pagesize (1–1500)": "LDAP Sync Pagesize (1–1500)",
+    "CLI Attribute Mapping": "Mappage d'attributs CLI",
+    "UID/Username": "UID/Nom d'utilisateur",
+    "Group Name Field": "Nom du groupe",
+    "Group Name Filter": "Filtre de nom de groupe",
+    "Attention: You must use PHP (PCRE) Regex syntax for the filter.": "Attention: Vous devez utiliser la syntaxe PHP (PCRE) Regex pour le filtre.",
+    "Group Name Replace Umlauts": "Nom du groupe - Remplacer les trémas",
+    "Enable": "Activer",
+    "Calculate Enable Attribute Bitwise AND with": "Calculer Activer Attribut Bitwise AND avec",
+    "Merge Accounts": "Fusionner des comptes",
+    "Prefer Enabled over Disabled Accounts on Merge": "Préférer activé sur les comptes désactivés lors de la fusion",
+    "Merge Two Active Accounts by": "Fusionner deux comptes actifs par",
+    "Merge Two Active Accounts by: Filterstring": "Fusionner deux comptes actifs par: Filtres"
   },
   "pluralForm": "nplurals=2; plural=(n != 1);"
 }

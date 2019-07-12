@@ -243,3 +243,67 @@ msgstr "Interner Serverfehler. Die Serveranfrage war fehlerhaft, bitte versuchen
 #: templates/cas-error.php:28
 msgid "Go back to the login page"
 msgstr "Zurück zur Startseite"
+
+
+# Import CLI
+msgid "Import CLI"
+msgstr "Import CLI"
+
+
+msgid "ActiveDirectory (LDAP)"
+msgstr "ActiveDirectory (LDAP)"
+
+msgid "LDAP Host"
+msgstr "LDAP Host"
+
+msgid "LDAP User and Domain"
+msgstr "LDAP Benutzer und Domain"
+
+msgid "LDAP User Password"
+msgstr "LDAP Benutzerpasswort"
+
+msgid "LDAP Base DN"
+msgstr "LDAP Basis DN"
+
+msgid "LDAP Sync Filter"
+msgstr "LDAP Sync Filter"
+
+msgid "LDAP Sync Pagesize (1–1500)"
+msgstr "LDAP Sync Seitengröße (1–1500)"
+
+
+msgid "CLI Attribute Mapping"
+msgstr "CLI Attributzuordnung"
+
+msgid "UID/Username"
+msgstr "UID/Benutzername"
+
+msgid "Group Name Field"
+msgstr "Gruppen Namensfeld"
+
+msgid "Group Name Filter"
+msgstr "Gruppen Namensfeld Filter"
+
+msgid "Attention: You must use PHP (PCRE) Regex syntax for the filter."
+msgstr "Achtung: Sie müssen die PHP (PCRE) Regex Syntax für diesen Filter einhalten."
+
+msgid "Group Name Replace Umlauts"
+msgstr "Gruppen Name: Ersetze Umlaute"
+
+msgid "Enable"
+msgstr "Aktivierung"
+
+msgid "Calculate Enable Attribute Bitwise AND with"
+msgstr "Berechne die Nutzer-Aktivierung 'Bitwise AND' mit"
+
+msgid "Merge Accounts"
+msgstr "Accounts zusammenführen"
+
+msgid "Prefer Enabled over Disabled Accounts on Merge"
+msgstr "Aktivierte Accounts beim Zusammenführen bevorzugen"
+
+msgid "Merge Two Active Accounts by"
+msgstr "Zwei aktivierte Accounts zusammenfügen mit Hilfe vom Attribut"
+
+msgid "Merge Two Active Accounts by: Filterstring"
+msgstr "Filterstring für das Zusammenfügen zweier aktivierter Accounts"

@@ -239,3 +239,67 @@ msgstr ""
 #: templates/cas-error.php:28
 msgid "Go back to the login page"
 msgstr ""
+
+
+# Import CLI
+msgid "Import CLI"
+msgstr ""
+
+
+msgid "ActiveDirectory (LDAP)"
+msgstr ""
+
+msgid "LDAP Host"
+msgstr ""
+
+msgid "LDAP User and Domain"
+msgstr ""
+
+msgid "LDAP User Password"
+msgstr ""
+
+msgid "LDAP Base DN"
+msgstr ""
+
+msgid "LDAP Sync Filter"
+msgstr ""
+
+msgid "LDAP Sync Pagesize (1–1500)"
+msgstr ""
+
+
+msgid "CLI Attribute Mapping"
+msgstr ""
+
+msgid "UID/Username"
+msgstr ""
+
+msgid "Group Name Field"
+msgstr ""
+
+msgid "Group Name Filter"
+msgstr ""
+
+msgid "Attention: You must use PHP (PCRE) Regex syntax for the filter."
+msgstr ""
+
+msgid "Group Name Replace Umlauts"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Calculate Enable Attribute Bitwise AND with"
+msgstr ""
+
+msgid "Merge Accounts"
+msgstr ""
+
+msgid "Prefer Enabled over Disabled Accounts on Merge"
+msgstr ""
+
+msgid "Merge Two Active Accounts by"
+msgstr ""
+
+msgid "Merge Two Active Accounts by: Filterstring"
+msgstr ""

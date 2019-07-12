@@ -51,7 +51,27 @@
     "Forbidden. You do not have access to this application. Please refer to your administrator if something feels wrong to you.": "Verboten. Sie haben keinen Zugriff auf diese Anwendung. Bitte wenden Sie sich an Ihren Administrator, wenn Sie denken, dass etwas nicht stimmt.",
     "You do not have access to the JRCbox application. Please contact the JRCbox administrator if something feels wrong to you.": "Sie haben keinen Zugriff auf diese JRCbox Anwendung. Bitte wenden Sie sich an den JRCbox Administrator, wenn Sie denken, dass etwas nicht stimmt.",
     "Internal Server Error. The server encountered an error. Please try again.": "Interner Serverfehler. Die Serveranfrage war fehlerhaft, bitte versuchen Sie es erneut.",
-    "Go back to the login page": "Zurück zur Startseite"
+    "Go back to the login page": "Zurück zur Startseite",
+    "Import CLI": "Import CLI",
+    "ActiveDirectory (LDAP)": "ActiveDirectory (LDAP)",
+    "LDAP Host": "LDAP Host",
+    "LDAP User and Domain": "LDAP Benutzer und Domain",
+    "LDAP User Password": "LDAP Benutzerpasswort",
+    "LDAP Base DN": "LDAP Basis DN",
+    "LDAP Sync Filter": "LDAP Sync Filter",
+    "LDAP Sync Pagesize (1–1500)": "LDAP Sync Seitengröße (1–1500)",
+    "CLI Attribute Mapping": "CLI Attributzuordnung",
+    "UID/Username": "UID/Benutzername",
+    "Group Name Field": "Gruppen Namensfeld",
+    "Group Name Filter": "Gruppen Namensfeld Filter",
+    "Attention: You must use PHP (PCRE) Regex syntax for the filter.": "Achtung: Sie müssen die PHP (PCRE) Regex Syntax für diesen Filter einhalten.",
+    "Group Name Replace Umlauts": "Gruppen Name: Ersetze Umlaute",
+    "Enable": "Aktivierung",
+    "Calculate Enable Attribute Bitwise AND with": "Berechne die Nutzer-Aktivierung 'Bitwise AND' mit",
+    "Merge Accounts": "Accounts zusammenführen",
+    "Prefer Enabled over Disabled Accounts on Merge": "Aktivierte Accounts beim Zusammenführen bevorzugen",
+    "Merge Two Active Accounts by": "Zwei aktivierte Accounts zusammenfügen mit Hilfe vom Attribut",
+    "Merge Two Active Accounts by: Filterstring": "Filterstring für das Zusammenfügen zweier aktivierter Accounts"
   },
   "pluralForm": "nplurals=2; plural=(n != 1);"
 }
