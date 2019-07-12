@@ -4,8 +4,10 @@ CHANGELOG
 Version 1.7.2
 -------------
 
-* Adds the license file for AGPL 3.0 or later
+* Fixes double backend synchronisation for displayName attribute
 * Fixes problems with local database users being converted to user_cas backend by accident
+
+* Adds the license file for AGPL 3.0 or later
 * Adds ActiveDirectory import OCC command, let’s you import specific LDAP users as user_cas users to your ownCloud/Nextcloud instance
 
 

@@ -12,6 +12,7 @@ INSTALLATION
 * ownCloud >= 10.0.0 and Nextcloud >= 13.0.0
 * PHP >= 5.6, PHP 7.0 if possible
 * Optional: [Composer Dependency Manager](https://getcomposer.org/), if you want to install via GIT.
+* Optional: your own phpCAS installation with at least phpCAS 1.3.4.
 
 This app does not require a standalone version of jasig’s/apereo’s phpCAS any longer. The library is shipped within composer dependencies, in the archive file you downloaded or the Market/App-Store version if used. Although you can configure to use your own version of jasig’s/apereo’s phpCAS library later on.
 
@@ -23,7 +24,7 @@ This app does not require a standalone version of jasig’s/apereo’s phpCAS an
 3. Navigate to the Security category and find **CAS user and group backend**.
 4. Install the app.
 5. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
-6. Access the administration panel => Authentication (Security on Nextcloud) and configure the app.
+6. Access the administration panel => User Authentication and configure the app.
 
 
 3\. Basic - Release archive/Nextcloud Appstore:
@@ -36,7 +37,7 @@ This app does not require a standalone version of jasig’s/apereo’s phpCAS an
 5. Adjust the settings for the `user_cas` folder according to your webserver setup.
 6. Access the platform web interface with a locally created platform user with admin privileges.
 7. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
-8. Access the administration panel => Authentication (Security on Nextcloud) and configure the app.
+8. Access the administration panel => Security and configure the app.
 
 
 4\. Advanced – GIT clone with composer:
@@ -47,7 +48,7 @@ This app does not require a standalone version of jasig’s/apereo’s phpCAS an
 3. Adjust the settings for the `user_cas` folder according to your webserver setup.
 4. Access the platform web interface with a locally created platform user with admin privileges.
 5. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
-6. Access the administration panel => Authentication (Security on Nextcloud) and configure the app.
+6. Access the administration panel => User Authentication/Security and configure the app.
 
 
 CONFIGURATION
@@ -67,9 +68,9 @@ CAS Server
 
 **CAS Server Path**: The directory of your CAS. In common setups this path is `/cas`. 
 
-**Service URL**: Service URL used for CAS authentication and redirection. Useful when behind a reverse proxy. This url must end in `/apps/user_cas/login`.
+**Service URL**: Service URL pointing to your plattform used for CAS authentication and redirection. Useful when behind a reverse proxy. This url must end in `/apps/user_cas/login`.
 
-**Certification file path (.crt)**: If you don't want to validate the certificate (i.e. self-signed certificates) then leave this blank. Otherwise enter the path to the certificate (.crt) on your server, beginning at root level.
+**Certification file path (.crt)**: If you don't want to validate the certificate (i.e. self-signed certificates) then leave this blank. Otherwise enter the absolute path to the certificate (.crt) on your server, beginning at root level.
 
 **Use CAS proxy initialization**: If active, the CAS-Client is initialized as a proxy. Default off. Activate only, if you know what you’re doing.
 
@@ -77,7 +78,7 @@ CAS Server
 Basic
 -----
 
-**Force user login using CAS?**: If checked, users will immediately be redirected to CAS login page, after visiting the ownCloud URL. If checked, **Disable CAS logout** is automatically disabled. Default: off
+**Force user login using CAS?**: If checked, users will immediately be redirected to CAS login page, after visiting the ownCloud URL. If checked, *Disable CAS logout* is automatically disabled. Default: off
 
 **Don’t use force login on these client-IPs**: Comma separated list of client IP addresses (or address ranges), which won’t be forced to login if "Force user login" is enabled (e.g. 192.168.1.1-254,192.168.2.5). Default: empty
 
@@ -111,9 +112,9 @@ If CAS provides extra attributes, `user_cas` can retrieve the values of them. Si
 Groups
 ------
 
-**Groups that will not be unlinked**: These groups are preserved, when updating a user after login and are not unlinked. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
+**Locked Groups**: Groups that will not be unlinked. These groups are preserved, when updating a user after login and are not unlinked. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
 
-**Default groups when autocreating users**: When auto creating users after authentication, these groups are set as default if the user has no CAS groups. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
+**Default group (when autocreating users)**: When auto creating users after authentication, these groups are set as default if the user has no CAS groups. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
 
 **Authorized CAS Groups**: Members of these groups are authorized to use the ownCloud instance. This setting is especially helpful, if your CAS instance is not handling authorization itself. Please provide a comma separated list without blanks (eg.: group1,group2). Default: empty
 
@@ -136,6 +137,41 @@ Since Version 1.5 user_cas provides support for using a European Commission ECAS
 **Query ECAS groups**: Define which ECAS groups should be queried when validating a user’s ticket. Please provide a comma separated list without blanks (eg.: GROUP1,GROUP2 or use * for all groups). (Do **NOT** select until you know what you are doing).
 
 **Don’t use Multi-Factor-Authentication on these client-IPs**: Comma separated list of client IP addresses (or address ranges), which won’t be forced to use Multi-Factor-Authentication if "ECAS AssuranceLevel" is at least MEDIUM (e.g. 192.168.1.1-254,192.168.2.5). (Do **NOT** fill until you know what you are doing).
+
+
+Import CLI:
+-----------
+
+Since Version Version 1.7.2 user_cas provides support for importing users from an ActiveDirectory LDAP.
+
+#### ActiveDirectory (LDAP): Provide the necessary information to connect to your AD LDAP Server
+
+**LDAP-Host**: Provide the LDAP-host information. Set the protocol, host and port to use. Default: empty
+**LDAP-User and Domain**: Provide the LDAP user and domain to authenticate the LDAP connection Default: empty
+**LDAP-User Password**: Set the password for the user (see above). Default: empty
+**LDAP Base DN**: Set the LDAP Base Distinguished Name (DN) for the query. Default: empty
+**LDAP Sync Filter**: Define the filter to be used when querying the according user’s from LDAP. Default: empty
+**LDAP Syn Pagesize (1-1500)**: Define the pagesize of the LDAP query response according to your LDAP server’s settings. Default: 1500
+
+#### CLI Attribute Mapping: Provide the necessary information to map your AD LDAP users to ownCloud
+
+**UID/Username**:  Name of uid/username attribute in your LDAP response. Default: empty
+**Display Name**:  Name of display name attribute(s) in your LDAP response (this might be the "real name" of a user or a combination of two fields like: givenname+sn). Default: empty
+**Email**: Name of email attribute in your LDAP response. Default: empty
+
+**Group**: Name of group attribute in your LDAP response. Default: empty
+**Group Name Field**: Name of the LDAP attribute in your group node to set a group’s name. If no name filed is set or found, the DN of the group will be used as the group’s name. Default: empty
+**Group Name Filter**: Define a filter (RegExp syntax!) with only the allowed characters for a group name. Group names are cut after 64 characters per definition by ownCloud/Nextcloud core. Default: empty. E.g.: a-zA-Z0-9\.\-_ @ 
+**Group Name Replace Umlauts**: Activate to filter german umlauts out of the group’s name. Only works, if *Group* and *Group Name Field* are filled. Default: off
+
+**Quota**: Name of quota attribute in your LDAP response. Quota can be a numeric byte value or a human readable string, like 1GB or 512MB. Default: empty
+**Enable**: Name of the enable attribute in your LDAP response. This sets the account to enabled/disabled on import, while enabled = 1 and disabled = 0. Default: empty
+**Calculate Enable Attribute Bitwise AND with**: Provide to use a bitwise AND calculation to define the enabled status of the account. Only use if your LDAP’s enabled attribute value is not 0|1. Default: empty
+
+**Merge Accounts**: Activate to enable account merging. Default: off
+**Prefer Enabled over Disabled Accounts on Merge**: Activate to prefer enabled second accounts over disabled primary accounts. Only works, if *Merge Accounts* is enabled. Default: off
+**Merge two active accounts by**: Name of the attribute in your LDAP response by which you want to merge two activated accounts. Only works, if *Merge Accounts* is enabled. Default: empty
+**Merge two active accounts by: Filterstring**: Define a filterstring for the *Merge by* attribute, that defines which activated account should be preferred on merge. Only works, if *Merge by* is set and *Merge Accounts* is enabled. Default: empty
 
 
 
@@ -163,10 +199,10 @@ EXTRA INFO
 
 * If you enable the "Autocreate user after CAS login" option, a user will be created if he does not exist. If this option is disabled and the user does not exist, then the user will be not allowed to log into ownCloud. <!-- You might not want this if you check "Link to LDAP backend" -->
 
-* If you enable the "Update user data" option, the app updates the user's Display Name, Email and Group Membership and overwrites manually changed data in the ownCloud users table.
+* If you enable the "Update user data" option, the app updates the user's Display Name, Email, Group Membership and Quota on each login.
 
-By default the CAS App will unlink all the groups from a user and will provide the groups defined at the [**Mapping**](#mapping) attributes. If this mapping is not defined, the value of the **Default group when autocreating users** field will be used instead. If both are undefined, then the user will be set with no groups.
-If you set the "protected groups" field, those groups will not be unlinked from the user.
+By default the CAS App will unlink all the groups from a user and will provide the groups defined at the [**Mapping**](#mapping) attributes. If this mapping is not defined, the value of the *Default group* field will be used instead. If both are undefined, then the user will be set with no groups.
+If you set the *Locked Groups* field, those groups will not be unlinked from the user.
 
 
 OCC Commands
@@ -235,10 +271,14 @@ Import users from ActiveDirectory (LDAP):
 
     0 0 * * * /usr/bin/php /path/to/owncloud/occ cas:import-users-ad -d 1 -c 1 -q >/dev/null 2>&1
 
+
 Bugs and Support
 ==============
 
 Please contribute bug reports and feedback to [GitHub Issues](https://github.com/felixrupp/user_cas/issues).  
+
+Commercial support and feature implementation is available via [felixrupp.com](http://www.felixrupp.com).
+
 
 ABOUT
 =====
