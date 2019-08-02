@@ -23,10 +23,12 @@
 
 namespace OCA\UserCAS\User;
 
+use OC\User\Database;
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
 use OCA\UserCAS\Service\AppService;
 use OCA\UserCAS\Service\LoggingService;
 use OCP\IUserBackend;
+use OCP\User\IProvidesDisplayNameBackend;
 use OCP\User\IProvidesHomeBackend;
 use OCP\UserInterface;
 
@@ -41,7 +43,7 @@ use OCP\UserInterface;
  *
  * @since 1.4.0
  */
-class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, IProvidesHomeBackend, UserCasBackendInterface
+class Backend extends Database implements UserInterface, IUserBackend, IProvidesHomeBackend, IProvidesDisplayNameBackend, UserCasBackendInterface
 {
 
     /**
@@ -55,24 +57,14 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
     protected $appService;
 
     /**
-     * @var array $possibleActions
-     */
-    protected $possibleActions = [
-        self::CREATE_USER => 'createUser',
-        self::CHECK_PASSWORD => 'checkPassword',
-        self::GET_HOME => 'getHome',
-    ];
-
-
-    /**
      * Backend constructor.
-     *
      * @param LoggingService $loggingService
      * @param AppService $appService
      */
     public function __construct(LoggingService $loggingService, AppService $appService)
     {
 
+        parent::__construct();
         $this->loggingService = $loggingService;
         $this->appService = $appService;
     }
@@ -80,7 +72,6 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
 
     /**
      * Backend name to be shown in user management
-     *
      * @return string the name of the backend to be shown
      */
     public function getBackendName()
@@ -91,13 +82,11 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
 
 
     /**
-     * Check the password
-     *
-     * @param string $loginName
+     * @param string $uid
      * @param string $password
      * @return string|bool The users UID or false
      */
-    public function checkPassword(string $loginName, string $password)
+    public function checkPassword($uid, $password)
     {
 
         if (!$this->appService->isCasInitialized()) {
@@ -115,7 +104,14 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
 
         if (\phpCAS::isInitialized()) {
 
-            if ($loginName === FALSE) {
+            if (!\phpCAS::isAuthenticated()) {
+
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user has not been authenticated.');
+
+                return parent::checkPassword($uid, $password);
+            }
+
+            if ($uid === FALSE) {
 
                 $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS returned no user.');
             }
@@ -124,11 +120,11 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
 
                 $casUid = \phpCAS::getUser();
 
-                if ($casUid === $loginName) {
+                if ($casUid === $uid) {
 
                     $this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'phpCAS user password has been checked.');
 
-                    return $loginName;
+                    return $uid;
                 }
             }
 
@@ -136,35 +132,7 @@ class Backend extends \OC\User\Backend implements UserInterface, IUserBackend, I
         } else {
 
             $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS has not been initialized.');
-
             return FALSE;
         }
-    }
-
-
-    /**
-     * Get a users absolute home folder path
-     *
-     * @param string $uid The username
-     * @return string|null
-     * @since 1.8.0
-     */
-    public function getHome($uid)
-    {
-        return \OC::$server->getConfig()->getSystemValue("datadirectory", \OC::$SERVERROOT . "/data") . '/' . $uid;
-
-    }
-
-
-    /**
-     * Creates a user
-     *
-     * @param string $uid
-     * @param string $password
-     * @return bool TRUE
-     */
-    public function createUser($uid, $password)
-    {
-        return TRUE;
     }
 }

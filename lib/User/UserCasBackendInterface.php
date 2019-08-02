@@ -18,11 +18,4 @@ namespace OCA\UserCAS\User;
  */
 interface UserCasBackendInterface
 {
-
-    /**
-     * @param string $loginName
-     * @param string $password
-     * @return string|bool The users UID or false
-     */
-    public function checkPassword(string $loginName, string $password);
 }
