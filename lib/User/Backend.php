@@ -27,6 +27,7 @@ use OC\User\Database;
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
 use OCA\UserCAS\Service\AppService;
 use OCA\UserCAS\Service\LoggingService;
+use OCP\IConfig;
 use OCP\IUserBackend;
 use OCP\User\IProvidesDisplayNameBackend;
 use OCP\User\IProvidesHomeBackend;
@@ -47,6 +48,16 @@ class Backend extends Database implements UserInterface, IUserBackend, IProvides
 {
 
     /**
+     * @var string
+     */
+    protected $appName;
+
+    /**
+     * @var IConfig
+     */
+    protected $config;
+
+    /**
      * @var \OCA\UserCAS\Service\LoggingService $loggingService
      */
     protected $loggingService;
@@ -56,17 +67,23 @@ class Backend extends Database implements UserInterface, IUserBackend, IProvides
      */
     protected $appService;
 
+
     /**
      * Backend constructor.
+     * @param string $appName
+     * @param IConfig $config
      * @param LoggingService $loggingService
      * @param AppService $appService
+     *
      */
-    public function __construct(LoggingService $loggingService, AppService $appService)
+    public function __construct($appName, IConfig $config, LoggingService $loggingService, AppService $appService)
     {
 
         parent::__construct();
+        $this->appName = $appName;
         $this->loggingService = $loggingService;
         $this->appService = $appService;
+        $this->config = $config;
     }
 
 
@@ -134,5 +151,71 @@ class Backend extends Database implements UserInterface, IUserBackend, IProvides
             $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'phpCAS has not been initialized.');
             return FALSE;
         }
+    }
+
+
+    /**
+     * @param string $uid
+     * @return bool|string
+     */
+    public function getDisplayName($uid)
+    {
+
+        $displayName = $uid;
+
+        if (!$this->appService->isCasInitialized()) {
+
+            try {
+
+                $this->appService->init();
+            } catch (PhpUserCasLibraryNotFoundException $e) {
+
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+
+                return $displayName;
+            }
+        }
+
+        if (\phpCAS::isInitialized()) {
+
+            if (\phpCAS::isAuthenticated()) {
+
+                $casAttributes = \phpCAS::getAttributes();
+
+                # Test if an attribute parser added a new dimension to our attributes array
+                if (array_key_exists('attributes', $casAttributes)) {
+
+                    $newAttributes = $casAttributes['attributes'];
+
+                    unset($casAttributes['attributes']);
+
+                    $casAttributes = array_merge($casAttributes, $newAttributes);
+                }
+
+                // DisplayName
+                $displayNameMapping = $this->config->getAppValue($this->appName, 'cas_displayName_mapping');
+
+                $displayNameMappingArray = explode("+", $displayNameMapping);
+
+                $displayName = '';
+
+                foreach ($displayNameMappingArray as $displayNameMapping) {
+
+                    if (array_key_exists($displayNameMapping, $casAttributes)) {
+
+                        $displayName .= $casAttributes[$displayNameMapping] . " ";
+                    }
+                }
+
+               $displayName = trim($displayName);
+
+                if ($displayName === '' && array_key_exists('displayName', $casAttributes)) {
+
+                    $displayName = $casAttributes['displayName'];
+                }
+            }
+        }
+
+        return $displayName;
     }
 }

@@ -91,6 +91,8 @@ class CreateUser extends Command
         if ($this->appService->isNotNextcloud()) {
 
             $backend = new Backend(
+                'user_cas',
+                $config,
                 $loggingService,
                 $this->appService
             );

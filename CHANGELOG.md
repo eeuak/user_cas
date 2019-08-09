@@ -4,6 +4,7 @@ CHANGELOG
 Version 1.7.2
 -------------
 
+* Fixes double synchronisation of DisplayName, causing overlays in DisplayName on first login
 * Fixes problems with local database users being converted to user_cas backend by accident
 
 * Adds the license file for AGPL 3.0 or later

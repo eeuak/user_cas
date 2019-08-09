@@ -110,6 +110,8 @@ class Application extends App
              */
             $container->registerService('Backend', function (IContainer $c) {
                 return new Backend(
+                    $c->query('AppName'),
+                    $c->query('Config'),
                     $c->query('LoggingService'),
                     $c->query('AppService')
                 );
