@@ -120,7 +120,7 @@ Groups
 
 **Group Quotas**: Define quotas for groups of the users authenticated via CAS. Please provide a comma separated list without blanks and with : between group names and quotas (eg.: group1:10GB,group2:500MB). Default: empty
 
-**Group Name Filter**: Define a filter (RegExp syntax!) with only the allowed characters for a group name. Group names are cut after 63 characters per definition by ownCloud/Nextcloud core. Default when empty: `a-zA-Z0-9\.\-_ @`
+**Group Name Filter**: Define a filter (PHP RegExp syntax!) with only the allowed characters for a group name. Group names are cut after 63 characters per definition by ownCloud/Nextcloud core and appended by an horizontal ellipsis. Default when empty: `a-zA-Z0-9\.\-_ @`
 
 **Group Name Replace Umlauts**: Activate to filter german umlauts out of the group’s name. Only works, if *Group* in "Mapping" is filled. Default: off
 
@@ -174,10 +174,6 @@ Since Version Version 1.7.2 user_cas provides support for importing users from a
 **Group**: Name of group attribute in your LDAP response. Default: empty
 
 **Group Name Field**: Name of the LDAP attribute in your group node to set a group’s name. If no name filed is set or found, the DN of the group will be used as the group’s name. Default: empty
-
-**Group Name Filter**: Define a filter (RegExp syntax!) with only the allowed characters for a group name. Group names are cut after 63 characters per definition by ownCloud/Nextcloud core. Default: empty. E.g.: a-zA-Z0-9\.\-_ @ 
-
-**Group Name Replace Umlauts**: Activate to filter german umlauts out of the group’s name. Only works, if *Group* and *Group Name Field* are filled. Default: off
 
 **Quota**: Name of quota attribute in your LDAP response. Quota can be a numeric byte value or a human readable string, like 1GB or 512MB. Default: empty
 

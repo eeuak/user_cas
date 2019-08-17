@@ -205,7 +205,7 @@ class AdImporter implements ImporterInterface
 
                                 $groupName = $groupAttr[$groupAttrField][0];
 
-                                # Replace umlauts
+                                /*# Replace umlauts
                                 if (boolval($this->config->getAppValue($this->appName, 'cas_import_map_groups_letter_umlauts'))) {
 
                                     $groupName = str_replace("Ä", "Ae", $groupName);
@@ -226,7 +226,7 @@ class AdImporter implements ImporterInterface
                                 }
 
                                 # Filter length to max 64 chars
-                                $groupName = substr($groupName, 0, 64);
+                                $groupName = substr($groupName, 0, 64);*/
                             }
                             else {
 
