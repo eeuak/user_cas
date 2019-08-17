@@ -415,8 +415,10 @@ class UserService
             }
 
             # Filter length to max 64 chars
-            $group = substr($group, 0, 63)."…";
+            if(strlen($group) > 63) {
 
+                $group = substr($group, 0, 63)."…";
+            }
 
             if (!$this->groupManager->isInGroup($uid, $group)) {
 
