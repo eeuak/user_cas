@@ -66,7 +66,7 @@ CAS Server
 
 **CAS Server Port**: The port CAS is listening to. Default for HTTPS should be `443`.
 
-**CAS Server Path**: The directory of your CAS. In common setups this path is `/cas`. 
+**CAS Server Path**: The directory of your CAS. In common setups this path is `/cas`. Use `/` if your CAS is in your document root.
 
 **Service URL**: Service URL pointing to your plattform used for CAS authentication and redirection. Useful when behind a reverse proxy. This url must end in `/apps/user_cas/login`.
 

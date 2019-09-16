@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Version 1.7.3
+-------------
+
+* Adds support for cas server path "/" - thanks to [@dattn](https://github.com/dattn)
+
+
 Version 1.7.2
 -------------
 

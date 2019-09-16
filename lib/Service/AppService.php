@@ -201,7 +201,7 @@ class AppService
         $this->casServiceUrl = $this->config->getAppValue($this->appName, 'cas_service_url', '');
         $this->casCertPath = $this->config->getAppValue($this->appName, 'cas_cert_path', '');
 
-        // correctly handle root cas server path
+        // Correctly handle cas server path for document root
         if ($this->casPath === '/') {
             $this->casPath = '';
         }
@@ -708,7 +708,8 @@ class AppService
     /**
      * UnregisterLogin
      */
-    public function unregisterLogin() {
+    public function unregisterLogin()
+    {
 
         if ($this->isNotNextcloud()) {
 
@@ -729,13 +730,14 @@ class AppService
     /**
      * @return bool
      */
-    public function isSetupValid() {
+    public function isSetupValid()
+    {
 
         $casHostname = $this->config->getAppValue($this->appName, 'cas_server_hostname');
         $casPort = intval($this->config->getAppValue($this->appName, 'cas_server_port'));
         $casPath = $this->config->getAppValue($this->appName, 'cas_server_path');
 
-        if(is_string($casHostname) && strlen($casHostname) > 1 && is_int($casPort) && $casPort > 1 && is_string($casPath) && strpos($casPath, "/") === 0) {
+        if (is_string($casHostname) && strlen($casHostname) > 1 && is_int($casPort) && $casPort > 1 && is_string($casPath) && strpos($casPath, "/") === 0) {
 
             return TRUE;
         }
