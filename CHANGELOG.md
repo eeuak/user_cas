@@ -4,6 +4,7 @@ CHANGELOG
 Version 1.7.3
 -------------
 
+* Raises compatibility to ownCloud 10.3
 * Adds support for cas server path "/" - thanks to [@dattn](https://github.com/dattn)
 
 
