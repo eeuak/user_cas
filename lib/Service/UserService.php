@@ -218,6 +218,17 @@ class UserService
         }
     }
 
+
+    /**
+     * Logout function
+     *
+     * @return bool|void
+     */
+    public function logout() {
+
+        return $this->userSession->logout();
+    }
+
     /**
      * IsLoggedIn method.
      *

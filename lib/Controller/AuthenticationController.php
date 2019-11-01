@@ -196,6 +196,39 @@ class AuthenticationController extends Controller
         }
     }
 
+
+    /**
+     * Logout method for CAS Single-Logout-Feature.
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @PublicPage
+     * @UseSession
+     */
+    public function casLogout()
+    {
+        if (!$this->appService->isCasInitialized()) {
+
+            try {
+
+                $this->appService->init();
+            } catch (PhpUserCasLibraryNotFoundException $e) {
+
+                $this->loggingService->write(\OCA\UserCas\Service\LoggingService::FATAL, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+
+                header("Location: " . $this->appService->getAbsoluteURL('/'));
+                die();
+            }
+        }
+
+        // Logout oC/NC user
+        if ($this->userService->isLoggedIn()) {
+
+            $this->userService->logout();
+        }
+    }
+
+
     /**
      * Render error view
      *

@@ -28,6 +28,7 @@ $application = new \OCA\UserCAS\AppInfo\Application();
 $application->registerRoutes($this, array(
     'routes' => [
         array('name' => 'settings#saveSettings', 'url' => '/settings/save', 'verb' => 'POST'),
-        array('name' => 'authentication#casLogin', 'url' => '/login', 'verb' => 'GET')
+        array('name' => 'authentication#casLogin', 'url' => '/login', 'verb' => 'GET'),
+        array('name' => 'authentication#casLogout', 'url' => '/login', 'verb' => 'POST')
     ]
 ));
