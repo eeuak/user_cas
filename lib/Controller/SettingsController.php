@@ -91,6 +91,7 @@ class SettingsController extends Controller
      * @param string $cas_php_cas_path
      * @param string $cas_service_url
      * @param string $cas_handlelogout_servers
+     * @param string $cas_login_button_label
      * @param string $cas_access_allow_groups
      * @param string $cas_ecas_accepted_strengths
      * @param string $cas_ecas_retrieve_groups
@@ -132,7 +133,7 @@ class SettingsController extends Controller
      * @return mixed
      */
     public function saveSettings($cas_server_version, $cas_server_hostname, $cas_server_port, $cas_server_path, $cas_protected_groups, $cas_default_group, $cas_groups_letter_filter,
-                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_quota_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url, $cas_handlelogout_servers,
+                                 $cas_email_mapping, $cas_displayName_mapping, $cas_group_mapping, $cas_quota_mapping, $cas_cert_path, $cas_debug_file, $cas_php_cas_path, $cas_service_url, $cas_handlelogout_servers, $cas_login_button_label,
                                  $cas_access_allow_groups, $cas_ecas_accepted_strengths, $cas_ecas_retrieve_groups, $cas_ecas_assurance_level, $cas_access_group_quotas, $cas_force_login_exceptions, $cas_ecas_internal_ip_range,
                                  $cas_import_ad_protocol, $cas_import_ad_host, $cas_import_ad_port, $cas_import_ad_user, $cas_import_ad_domain, $cas_import_ad_password, $cas_import_ad_base_dn, $cas_import_ad_sync_filter, $cas_import_ad_sync_pagesize,
                                  $cas_import_map_uid, $cas_import_map_displayname, $cas_import_map_email, $cas_import_map_groups, $cas_import_map_groups_description, $cas_import_map_quota, $cas_import_map_enabled, $cas_import_map_enabled_and_bitwise, $cas_import_map_dn, $cas_import_map_dn_filter,
@@ -157,6 +158,7 @@ class SettingsController extends Controller
             $this->config->setAppValue($this->appName, 'cas_cert_path', $cas_cert_path);
             $this->config->setAppValue($this->appName, 'cas_service_url', $cas_service_url);
             $this->config->setAppValue($this->appName, 'cas_handlelogout_servers', $cas_handlelogout_servers);
+            $this->config->setAppValue($this->appName, 'cas_login_button_label', $cas_login_button_label);
 
             # Mapping
             $this->config->setAppValue($this->appName, 'cas_email_mapping', $cas_email_mapping);

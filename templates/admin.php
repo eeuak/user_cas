@@ -132,6 +132,12 @@ style('user_cas', 'settings');
                 <span class="csh"><?php p($l->t('Beware: Potential security risk! Only activate, if you know what you are doing.')) ?></span>
 
             </p>
+            <p>
+                <label for="cas_login_button_label"><?php p($l->t('Overwrite Login Button Label')); ?></label><input
+                        id="cas_login_button_label"
+                        name="cas_login_button_label"
+                        value="<?php p($_['cas_login_button_label']); ?>" />
+            </p>
 
             <!-- <p><input type="checkbox" id="cas_link_to_ldap_backend"
                       name="cas_link_to_ldap_backend" <?php /*print_unescaped((($_['cas_link_to_ldap_backend'] === 'true' || $_['cas_link_to_ldap_backend'] === 'on' || $_['cas_link_to_ldap_backend'] === '1') ? 'checked="checked"' : ''));*/ ?>>

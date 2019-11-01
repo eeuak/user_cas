@@ -206,6 +206,7 @@ class AppService
         $this->casServiceUrl = $this->config->getAppValue($this->appName, 'cas_service_url', '');
         $this->casCertPath = $this->config->getAppValue($this->appName, 'cas_cert_path', '');
 
+
         // Correctly handle cas server path for document root
         if ($this->casPath === '/') {
             $this->casPath = '';
@@ -687,16 +688,26 @@ class AppService
     public function registerLogIn()
     {
 
+        $loginButtonLabel = $this->config->getAppValue($this->appName, 'cas_login_button_label', 'CAS Login');
+
+        // Login Button handling
+        if(strlen($loginButtonLabel) <= 0) {
+
+            $loginButtonLabel = 'CAS Login';
+        }
+
+        $this->unregisterLogin();
+
         if ($this->isNotNextcloud()) {
 
             /** @var array $loginAlternatives */
-            $loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
+            /*$loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
 
             $loginAlreadyRegistered = FALSE;
 
             foreach ($loginAlternatives as $key => $loginAlternative) {
 
-                if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
+                if (isset($loginAlternative['name']) && $loginAlternative['name'] === $loginButtonLabel) {
 
                     $loginAlternatives[$key]['href'] = $this->linkToRoute($this->appName . '.authentication.casLogin');
                     $this->config->setSystemValue('login.alternatives', $loginAlternatives);
@@ -704,16 +715,16 @@ class AppService
                 }
             }
 
-            if (!$loginAlreadyRegistered) {
+            if (!$loginAlreadyRegistered) {*/
 
-                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login', 'img' => substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "/index.php/")) . '/apps/user_cas/img/cas-logo.png'];
+                $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => $loginButtonLabel, 'img' => substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "/index.php/")) . '/apps/user_cas/img/cas-logo.png'];
 
                 $this->config->setSystemValue('login.alternatives', $loginAlternatives);
-            }
+            #}
         } else {
 
             #$this->loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, "phpCAS Nextcloud " . $version[0] . "." . $version[1] . "." . $version[2] . "." . " detected.");
-            \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => 'CAS Login'));
+            \OC_App::registerLogIn(array('href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => $loginButtonLabel));
         }
     }
 
@@ -723,13 +734,21 @@ class AppService
     public function unregisterLogin()
     {
 
+        $loginButtonLabel = $this->config->getAppValue($this->appName, 'cas_login_button_label', 'CAS Login');
+
+        // Login Button handling
+        if(strlen($loginButtonLabel) <= 0) {
+
+            $loginButtonLabel = 'CAS Login';
+        }
+
         if ($this->isNotNextcloud()) {
 
             $loginAlternatives = $this->config->getSystemValue('login.alternatives', []);
 
             foreach ($loginAlternatives as $key => $loginAlternative) {
 
-                if (isset($loginAlternative['name']) && $loginAlternative['name'] === 'CAS Login') {
+                if (isset($loginAlternative['name']) && ($loginAlternative['name'] === $loginButtonLabel || $loginAlternative['name'] === 'CAS Login')) {
 
                     unset($loginAlternatives[$key]);
                 }
