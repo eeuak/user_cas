@@ -40,7 +40,7 @@ This app does not require a standalone version of jasig’s/apereo’s phpCAS an
 8. Access the administration panel => Security and configure the app.
 
 
-4\. Advanced – GIT clone with composer:
+4\. Advanced for development purposes only – GIT clone with composer:
 -------------------------
 
 1. Git clone/copy the downloaded `user_cas` folder into the platform’s apps folder and make sure to set correct permissions for your webserver.
@@ -49,6 +49,8 @@ This app does not require a standalone version of jasig’s/apereo’s phpCAS an
 4. Access the platform web interface with a locally created platform user with admin privileges.
 5. Access the administrations panel => Apps and enable the **CAS user and group backend** app.
 6. Access the administration panel => User Authentication/Security and configure the app.
+
+
 
 
 CONFIGURATION
@@ -272,7 +274,7 @@ Update a user:
 Import users from ActiveDirectory (LDAP):
 -----------------------------------------
 
-    cas:import-users-ad
+    cas:import-users-ad [--delta-update [1]] [--convert-backend [1]]
 
 - Options (optional):
     - -d | --delta-update: Enable or disable delta updates of accounts. Setting `-d 1` enables account updates.
