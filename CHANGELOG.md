@@ -4,7 +4,7 @@ CHANGELOG
 Version 1.8.0
 -------------
 
-* Adds option to overwrite the CAS login button’s label
+* Adds option to overwrite the CAS login button’s label in Nextcloud
 * Adds option to keep CAS-ticket-ids in URL (see [Issue #17](https://github.com/felixrupp/user_cas/issues/17))
 * Adds fully functional CAS Single-Logout Feature
 

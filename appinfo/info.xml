@@ -30,7 +30,7 @@
 
     <dependencies>
         <owncloud min-version="10.0" max-version="10.3"/>
-        <nextcloud min-version="13" max-version="17"/>
+        <nextcloud min-version="13" max-version="16"/>
     </dependencies>
 
     <commands>
