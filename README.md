@@ -274,7 +274,7 @@ Update a user:
 Import users from ActiveDirectory (LDAP):
 -----------------------------------------
 
-    cas:import-users-ad [--delta-update [1]] [--convert-backend [1]]
+    cas:import-users-ad [-d|--delta-update [1]] [-c|--convert-backend [1]]
 
 - Options (optional):
     - -d | --delta-update: Enable or disable delta updates of accounts. Setting `-d 1` enables account updates.
