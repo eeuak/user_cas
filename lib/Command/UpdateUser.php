@@ -265,6 +265,9 @@ class UpdateUser extends Command
             } elseif ($quota === 'default') {
 
                 $newQuota = 'default';
+            } elseif ($quota === 'none') {
+
+                $newQuota = 'none';
             } else {
 
                 $newQuota = \OCP\Util::computerFileSize($quota);
