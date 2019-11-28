@@ -197,7 +197,7 @@ class UserHooks
                 }
 
                 # Update the Backend of the user if necessary
-                $this->userService->updateBackend($user);
+                #$this->userService->updateBackend($user);
             }
         } else {
 
@@ -253,7 +253,7 @@ class UserHooks
                 if ($casUid === $uid) {
 
                     # Update the Backend of the user if necessary
-                    $this->userService->updateBackend($user);
+                    #$this->userService->updateBackend($user);
 
                     $casAttributes = \phpCAS::getAttributes();
 

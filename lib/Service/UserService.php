@@ -589,6 +589,8 @@ class UserService
      *
      * @param \OCP\IUser $user
      * @return bool|int|\OC_DB_StatementWrapper
+     *
+     * @deprecated
      **/
     public function updateBackend(\OCP\IUser $user)
     {
