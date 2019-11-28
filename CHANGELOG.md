@@ -4,9 +4,14 @@ CHANGELOG
 Version 1.8.0
 -------------
 
-* Adds option to overwrite the CAS login button’s label in Nextcloud
+* Raises compatibility to Nextcloud 17
+
+* Fixes a security bug, where a user, not authorized by any groups, still had the possibility to gain access to a read only account
+* Fixes deprecated quota handling: all quotas should now be handled correctly (even 'none' and 'default')
+
+* Adds option to overwrite the CAS login button’s label
 * Adds option to keep CAS-ticket-ids in URL (see [Issue #17](https://github.com/felixrupp/user_cas/issues/17))
-* Adds fully functional CAS Single-Logout Feature
+* Adds feature to use CAS Single-Logout 
 
 
 Version 1.7.4
