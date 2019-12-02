@@ -36,7 +36,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
         // Register User Backend
         $userService->registerBackend($c->query('Backend'));
 
-        if (strpos($requestUri, '/login') !== FALSE) {
+        if ($requestUri === '/' || (strpos($requestUri, '/login') !== FALSE && strpos($requestUri, '/apps/user_cas/login') === FALSE)) {
 
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') { // POST is used for single logout requests
 
@@ -76,7 +76,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
                             $appService->init();
 
-                            if (!\phpCAS::isAuthenticated()) {
+                            //if (!\phpCAS::isAuthenticated()) {
 
                                 $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
 
@@ -84,7 +84,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
                                 header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin'));
                                 die();
-                            }
+                            //}
 
                         } catch (\OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException $e) {
 

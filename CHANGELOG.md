@@ -4,8 +4,10 @@ CHANGELOG
 Version 1.8.0
 -------------
 
+* Drops compatibility for Nextcloud 13
 * Raises compatibility to Nextcloud 17
 
+* Fixes a redirect error with enabled enforce-authentication and non-authorized users
 * Fixes a security bug, where a user, not authorized by any groups, still had the possibility to gain access to a read only account
 * Fixes deprecated quota handling: all quotas should now be handled correctly (even 'none' and 'default')
 

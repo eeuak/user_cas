@@ -273,7 +273,7 @@ class AuthenticationController extends Controller
             $params['errorMessage'] = $exception->getMessage();
         }
 
-        if ($this->config->getAppValue($this->appName, 'cas_force_login') === '1') {
+        /*if ($this->config->getAppValue($this->appName, 'cas_force_login') === '1') {
 
             $newProtocol = 'http://';
 
@@ -283,10 +283,10 @@ class AuthenticationController extends Controller
             }
 
             $params['backUrl'] = $newProtocol . $this->config->getAppValue($this->appName, 'cas_server_hostname') . $this->config->getAppValue($this->appName, 'cas_server_path');
-        } else {
+        } else {*/
 
             $params['backUrl'] = $this->appService->getAbsoluteURL('/');
-        }
+        //}
 
         $response = new TemplateResponse($this->appName, 'cas-error', $params, 'guest');
 
