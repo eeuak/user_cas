@@ -15,6 +15,8 @@ Version 1.8.0
 * Adds option to keep CAS-ticket-ids in URL (see [Issue #17](https://github.com/felixrupp/user_cas/issues/17))
 * Adds feature to use CAS Single-Logout 
 
+* Bumps phpCAS library to 1.3.8
+
 
 Version 1.7.4
 -------------
