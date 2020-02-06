@@ -1,6 +1,16 @@
 CHANGELOG
 =========
 
+Version 1.8.1
+-------------
+
+* Raises compatibility to Nextcloud 18
+
+* Fixes Nextcloud 18 WebDAV bug - thanks to [@landryb](https://github.com/landryb)
+* Fixes internal ip checks for *»Don’t use Multi-Factor-Authentication on these client-IPs«*
+* Fixes typo in acceptedStrength \[ECAS\]
+
+
 Version 1.8.0
 -------------
 
