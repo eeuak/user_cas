@@ -30,7 +30,7 @@ This app does not require a standalone version of jasig’s/apereo’s phpCAS an
 3\. Basic - Release archive/Nextcloud Appstore:
 ---------------------------
 
-1. Download the current stable release from [the github releases page](https://github.com/felixrupp/user_cas/releases) according to your platform (ownCloud or Nextcloud) or use the link provided on [https://apps.nextcloud.com/apps/user_cas](apps.nextcloud.com) for Nextcloud.
+1. Download the current stable release from [the github releases page](https://github.com/felixrupp/user_cas/releases) according to your platform (ownCloud or Nextcloud) or use the link provided on [apps.nextcloud.com](https://apps.nextcloud.com/apps/user_cas) for Nextcloud.
 2. Unzip/Untar the archive.
 3. Rename the unarchived folder to `user_cas` if not already named like that.
 4. Move the `user_cas` folder to the apps folder of your platform installation.
