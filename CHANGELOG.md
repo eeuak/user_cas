@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+Version 1.8.4
+-------------
+
+* Adds option to disable SingleSignout requests to the ownCloud/Nextcloud instance in admin panel
+* Adds missing translations for options and readme entries
+
+
 Version 1.8.3
 -------------
 
