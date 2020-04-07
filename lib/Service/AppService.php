@@ -603,6 +603,11 @@ class AppService
             $isEnforced = FALSE;
         }
 
+        # An app use flow ... let it do the job!
+        if (preg_match ("/^\/index.php\/login\/flow/",$_SERVER['PHP_SELF'])) {
+            $isEnforced = FALSE;
+        }
+
         return $isEnforced;
     }
 
