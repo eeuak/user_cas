@@ -605,7 +605,7 @@ class AppService
         }
 
         # Disable on Nextcloud login-flow use
-        if (strpos($requestUri, "/login/flow") !== FALSE) {
+        if (!$this->isNotNextcloud() && strpos($requestUri, "/login/flow") !== FALSE) {
 
             $isEnforced = FALSE;
         }
