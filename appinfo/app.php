@@ -61,12 +61,14 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
                 // Register alternative LogIn
                 $appService->registerLogIn();
 
+                $isEnforced = $appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR'], $requestUri);
+
                 // Check for enforced authentication
-                if ($appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']) && (!isset($_COOKIE['user_cas_enforce_authentication']) || (isset($_COOKIE['user_cas_enforce_authentication']) && $_COOKIE['user_cas_enforce_authentication'] === '0'))) {
+                if ($isEnforced && (!isset($_COOKIE['user_cas_enforce_authentication']) || (isset($_COOKIE['user_cas_enforce_authentication']) && $_COOKIE['user_cas_enforce_authentication'] === '0'))) {
 
                     $loggingService = $c->query("LoggingService");
 
-                    $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was: ' . $appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']));
+                    $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was: ' . $isEnforced);
                     setcookie("user_cas_enforce_authentication", '1', null, '/');
 
                     // Initialize app

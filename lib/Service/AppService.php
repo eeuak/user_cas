@@ -505,9 +505,10 @@ class AppService
      * Check if login should be enforced using user_cas.
      *
      * @param $remoteAddress
+     * @param string $requestUri
      * @return bool TRUE|FALSE
      */
-    public function isEnforceAuthentication($remoteAddress)
+    public function isEnforceAuthentication($remoteAddress, $requestUri)
     {
 
         $isEnforced = TRUE;
@@ -603,8 +604,9 @@ class AppService
             $isEnforced = FALSE;
         }
 
-        # An app use flow ... let it do the job!
-        if (preg_match ("/^\/index.php\/login\/flow/",$_SERVER['PHP_SELF'])) {
+        # Disable on Nextcloud login-flow use
+        if (strpos($requestUri, "/login/flow") !== FALSE) {
+
             $isEnforced = FALSE;
         }
 
