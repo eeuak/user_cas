@@ -20,14 +20,23 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$app = new \OCA\UserCAS\AppInfo\Application();
+use OCA\UserCAS\AppInfo\Application;
+use OCA\UserCAS\Service\AppService;
+use OCA\UserCAS\Service\LoggingService;
+use OCA\UserCAS\Service\UserService;
+
+/** @var Application $app */
+$app = new Application();
 $c = $app->getContainer();
 
 $requestUri = (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 
 if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
+    /** @var UserService $userService */
     $userService = $c->query('UserService');
+
+    /** @var AppService $appService */
     $appService = $c->query('AppService');
 
     # Check for valid setup, only enable app if we have at least a CAS host, port and path
@@ -61,14 +70,16 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
                 // Register alternative LogIn
                 $appService->registerLogIn();
 
+                /** @var boolean $isEnforced */
                 $isEnforced = $appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR'], $requestUri);
 
                 // Check for enforced authentication
                 if ($isEnforced && (!isset($_COOKIE['user_cas_enforce_authentication']) || (isset($_COOKIE['user_cas_enforce_authentication']) && $_COOKIE['user_cas_enforce_authentication'] === '0'))) {
 
+                    /** @var LoggingService $loggingService */
                     $loggingService = $c->query("LoggingService");
 
-                    $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was: ' . $isEnforced);
+                    $loggingService->write(LoggingService::DEBUG, 'Enforce Authentication was: ' . $isEnforced);
                     setcookie("user_cas_enforce_authentication", '1', null, '/');
 
                     // Initialize app
@@ -80,17 +91,17 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
 
                             //if (!\phpCAS::isAuthenticated()) {
 
-                                $loggingService->write(\OCA\UserCas\Service\LoggingService::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
+                            $loggingService->write(LoggingService::DEBUG, 'Enforce Authentication was on and phpCAS is not authenticated. Redirecting to CAS Server.');
 
-                                $cookie = setcookie("user_cas_redirect_url", urlencode($requestUri), null, '/');
+                            $cookie = setcookie("user_cas_redirect_url", urlencode($requestUri), null, '/');
 
-                                header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin'));
-                                die();
+                            header("Location: " . $appService->linkToRouteAbsolute($c->getAppName() . '.authentication.casLogin'));
+                            die();
                             //}
 
                         } catch (\OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException $e) {
 
-                            $loggingService->write(\OCA\UserCas\Service\LoggingService::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
+                            $loggingService->write(LoggingService::ERROR, 'Fatal error with code: ' . $e->getCode() . ' and message: ' . $e->getMessage());
                         }
                     }
                 }
