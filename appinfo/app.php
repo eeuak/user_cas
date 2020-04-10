@@ -36,7 +36,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
         // Register User Backend
         $userService->registerBackend($c->query('Backend'));
 
-        if ($requestUri === '/' || (strpos($requestUri, '/login') !== FALSE && strpos($requestUri, '/apps/user_cas/login') === FALSE)) {
+        if ($requestUri === '/' || (strpos($requestUri, '/login') !== FALSE && strpos($requestUri, '/apps/user_cas/login') === FALSE) && strpos($requestUri, '/login/flow') === FALSE) {
 
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') { // POST is used for single logout requests
 
@@ -62,7 +62,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
                 $appService->registerLogIn();
 
                 // Check for enforced authentication
-                if (strpos($requestUri, '/login/flow') === FALSE && $appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']) && (!isset($_COOKIE['user_cas_enforce_authentication']) || (isset($_COOKIE['user_cas_enforce_authentication']) && $_COOKIE['user_cas_enforce_authentication'] === '0'))) {
+                if ($appService->isEnforceAuthentication($_SERVER['REMOTE_ADDR']) && (!isset($_COOKIE['user_cas_enforce_authentication']) || (isset($_COOKIE['user_cas_enforce_authentication']) && $_COOKIE['user_cas_enforce_authentication'] === '0'))) {
 
                     $loggingService = $c->query("LoggingService");
 
