@@ -97,7 +97,8 @@ class Application extends App
                 $c->query('LoggingService'),
                 $c->query('ServerContainer')->getUserManager(),
                 $c->query('ServerContainer')->getUserSession(),
-                $c->query('ServerContainer')->getURLGenerator()
+                $c->query('ServerContainer')->getURLGenerator(),
+                $c->query('ServerContainer')->getAppManager()
             );
         });
 

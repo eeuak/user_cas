@@ -25,6 +25,7 @@ namespace OCA\UserCAS\Service;
 
 use OC\Authentication\Token\IToken;
 use OCA\UserCAS\Exception\PhpCas\PhpUserCasLibraryNotFoundException;
+use OCP\App\IAppManager;
 use \OCP\IConfig;
 use \OCP\IUserSession;
 use \OCP\IUserManager;
@@ -72,6 +73,11 @@ class AppService
      * @var \OCP\IURLGenerator $urlGenerator
      */
     private $urlGenerator;
+
+    /**
+     * @var IAppManager $appManager
+     */
+    private $appManager;
 
     /**
      * @var string
@@ -181,8 +187,9 @@ class AppService
      * @param \OCP\IUserManager $userManager
      * @param \OCP\IUserSession $userSession
      * @param \OCP\IURLGenerator $urlGenerator
+     * @param IAppManager $appManager
      */
-    public function __construct($appName, IConfig $config, LoggingService $loggingService, IUserManager $userManager, IUserSession $userSession, IURLGenerator $urlGenerator)
+    public function __construct($appName, IConfig $config, LoggingService $loggingService, IUserManager $userManager, IUserSession $userSession, IURLGenerator $urlGenerator, IAppManager $appManager)
     {
 
         $this->appName = $appName;
@@ -191,6 +198,7 @@ class AppService
         $this->userManager = $userManager;
         $this->userSession = $userSession;
         $this->urlGenerator = $urlGenerator;
+        $this->appManager = $appManager;
         $this->casInitialized = FALSE;
     }
 
@@ -650,7 +658,8 @@ class AppService
 
             if (!$loginAlreadyRegistered) {*/
 
-            $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => $loginButtonLabel, 'img' => substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], "/index.php/")) . '/apps/user_cas/img/cas-logo.png'];
+            //TODO: get app path
+            $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => $loginButtonLabel, 'img' => $this->appManager->getAppWebPath($this->appName).'/img/cas-logo.png'];
 
             $this->config->setSystemValue('login.alternatives', $loginAlternatives);
             #}
