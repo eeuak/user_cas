@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+Version 1.8.6
+-------------
+
+* Raises compatibility to ownCloud 10.5 and Nextcloud 19
+* Fixes a static file path to the CAS login button logo on ownCloud
+
+
 Version 1.8.5
 -------------
 

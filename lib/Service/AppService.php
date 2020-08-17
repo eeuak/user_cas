@@ -658,7 +658,6 @@ class AppService
 
             if (!$loginAlreadyRegistered) {*/
 
-            //TODO: get app path
             $loginAlternatives[] = ['href' => $this->linkToRoute($this->appName . '.authentication.casLogin'), 'name' => $loginButtonLabel, 'img' => $this->appManager->getAppWebPath($this->appName).'/img/cas-logo.png'];
 
             $this->config->setSystemValue('login.alternatives', $loginAlternatives);

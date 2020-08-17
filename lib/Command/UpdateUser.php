@@ -88,9 +88,10 @@ class UpdateUser extends Command
         $userSession = \OC::$server->getUserSession();
         $logger = \OC::$server->getLogger();
         $urlGenerator = \OC::$server->getURLGenerator();
+        $appManager = \OC::$server->getAppManager();
 
         $loggingService = new LoggingService('user_cas', $config, $logger);
-        $this->appService = new AppService('user_cas', $config, $loggingService, $userManager, $userSession, $urlGenerator);
+        $this->appService = new AppService('user_cas', $config, $loggingService, $userManager, $userSession, $urlGenerator, $appManager);
 
         $userService = new UserService(
             'user_cas',
