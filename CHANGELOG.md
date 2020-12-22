@@ -5,6 +5,7 @@ Unreleased
 ----------
 
 * Add setting to allow json-decode for mapped group attribute (see: Issue [#51](https://github.com/felixrupp/user_cas/issues/51))
+* Add mapping for user-id attribute (see: Issue [#70](https://github.com/felixrupp/user_cas/issues/70))
 
 
 Version 1.8.7

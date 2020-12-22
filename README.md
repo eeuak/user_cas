@@ -114,6 +114,8 @@ Mapping
 
 If CAS provides extra attributes, `user_cas` can retrieve the values of them. Since their name differs in various setups it is necessary to map ownCloud-attribute-names to CAS-attribute-names.
 
+**User-ID**: Name of user-id attribute in CAS. Only fill this out, if you need to use a specific CAS attribute for the user-id. If left empty, the default CAS user-id is used. Default: empty
+
 **Email**: Name of email attribute in CAS. Default: empty
 
 **Display Name**: Name of display name attribute(s) in CAS (this might be the "real name" of a user or a combination of two fields like: firstnames+surnames). Default: empty
