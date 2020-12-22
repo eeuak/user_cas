@@ -208,8 +208,16 @@ style('user_cas', 'settings');
             </p>
             <p>
                 <input type="checkbox" id="cas_groups_letter_umlauts"
-                      name="cas_groups_letter_umlauts" <?php print_unescaped((($_['cas_groups_letter_umlauts'] === 'true' || $_['cas_groups_letter_umlauts'] === 'on' || $_['cas_groups_letter_umlauts'] === '1') ? 'checked="checked"' : '')); ?>><label class='checkbox'
-                       for="cas_groups_letter_umlauts"><?php p($l->t('Group Name Replace Umlauts')); ?></label>
+                      name="cas_groups_letter_umlauts" <?php print_unescaped((($_['cas_groups_letter_umlauts'] === 'true' || $_['cas_groups_letter_umlauts'] === 'on' || $_['cas_groups_letter_umlauts'] === '1') ? 'checked="checked"' : '')); ?>>
+                <label class='checkbox'
+                       for="cas_groups_letter_umlauts"><?php p($l->t('Group Name: Replace Umlauts')); ?></label>
+            </p>
+            <p>
+                <input type="checkbox" id="cas_groups_json_decode"
+                      name="cas_groups_json_decode" <?php print_unescaped((($_['cas_groups_json_decode'] === 'true' || $_['cas_groups_json_decode'] === 'on' || $_['cas_groups_json_decode'] === '1') ? 'checked="checked"' : '')); ?>>
+                <label class='checkbox'
+                       for="cas_groups_json_decode"><?php p($l->t('Group Name: JSON Decode')); ?></label>
+                <span class="csh">(<?php p($l->t('Beware: Potential security risk! Only activate, if you know what you are doing.')) ?>)</span>
             </p>
         </fieldset>
         <!-- ECAS Settings -->

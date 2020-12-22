@@ -201,6 +201,10 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
+#: templates/admin.php:99
+msgid "Group Name: JSON Decode"
+msgstr ""
+
 #: templates/admin.php:107
 msgid "Overwrite phpCAS path (CAS.php file)"
 msgstr ""
@@ -295,7 +299,7 @@ msgstr ""
 msgid "Attention: You must use PHP (PCRE) Regex syntax for the filter."
 msgstr ""
 
-msgid "Group Name Replace Umlauts"
+msgid "Group Name: Replace Umlauts"
 msgstr ""
 
 msgid "Enable"

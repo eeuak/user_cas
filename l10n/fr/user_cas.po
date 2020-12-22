@@ -206,6 +206,10 @@ msgstr "Nom affiché"
 msgid "Groups"
 msgstr "Groupes"
 
+#: templates/admin.php:99
+msgid "Group Name: JSON Decode"
+msgstr "Nom du groupe: activer le décodage JSON"
+
 #: templates/admin.php:107
 msgid "Overwrite phpCAS path (CAS.php file)"
 msgstr "Chemin PHP CAS (fichier CAS.php)"
@@ -301,7 +305,7 @@ msgstr "Filtre de nom de groupe"
 msgid "Attention: You must use PHP (PCRE) Regex syntax for the filter."
 msgstr "Attention: Vous devez utiliser la syntaxe PHP (PCRE) Regex pour le filtre."
 
-msgid "Group Name Replace Umlauts"
+msgid "Group Name: Replace Umlauts"
 msgstr "Nom du groupe - Remplacer les trémas"
 
 msgid "Enable"

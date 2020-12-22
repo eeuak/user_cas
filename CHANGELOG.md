@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+Unreleased
+----------
+
+* Add setting to allow json-decode for mapped group attribute (see: Issue [#51](https://github.com/felixrupp/user_cas/issues/51))
+
+
 Version 1.8.7
 -------------
 

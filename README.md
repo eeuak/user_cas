@@ -138,7 +138,9 @@ Groups
 
 **Group Name Filter**: Define a filter (PHP RegExp syntax!) with only the allowed characters for a group name. Group names are cut after 63 characters per definition by ownCloud/Nextcloud core and appended by an horizontal ellipsis. Default when empty: `a-zA-Z0-9\.\-_ @`
 
-**Group Name Replace Umlauts**: Activate to filter german umlauts out of the group’s name. Only works, if *Group* in "Mapping" is filled. Default: off
+**Group Name: Replace Umlauts**: Activate to filter german umlauts out of the group’s name. Only works, if *Group* in "Mapping" is filled. Default: off
+
+**Group Name: JSON Decode**: Activate to JSON decode the delivered data in the group field. Only works, if *Group* in "Mapping" is filled and your CAS-Server uses JSON syntax for it. Default: off
 
 
 

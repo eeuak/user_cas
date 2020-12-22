@@ -168,7 +168,13 @@ class Backend extends Database implements UserInterface, IUserBackend, IProvides
                     } # Test for standard 'groups' attribute
                     else if (array_key_exists('groups', $casAttributes)) {
 
-                        $casGroups = (array)$casAttributes['groups'];
+                        if ($this->config->getAppValue($this->appName, 'cas_groups_json_decode')) {
+
+                            $casGroups = json_decode($casAttributes['groups']);
+                        } else {
+
+                            $casGroups = (array)$casAttributes['groups'];
+                        }
                     }
 
                     $isAuthorized = FALSE;
