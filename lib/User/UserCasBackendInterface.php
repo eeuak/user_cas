@@ -8,6 +8,8 @@
 
 namespace OCA\UserCAS\User;
 
+use OCP\UserInterface;
+
 /**
  * Interface UserCasBackendInterface
  *
@@ -16,6 +18,6 @@ namespace OCA\UserCAS\User;
  * @author Felix Rupp <kontakt@felixrupp.com>
  * @copyright Felix Rupp <kontakt@felixrupp.com>
  */
-interface UserCasBackendInterface
+interface UserCasBackendInterface extends UserInterface
 {
 }
