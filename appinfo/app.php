@@ -108,8 +108,11 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
             }
         } else {
 
-            // Register UserHooks
-            $c->query('UserHooks')->register();
+            # Filter DAV requests
+            if(strpos($requestUri, '/remote.php') === FALSE) {
+                // Register UserHooks
+                $c->query('UserHooks')->register();
+            }
         }
     } else {
 
