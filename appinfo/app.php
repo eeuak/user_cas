@@ -117,7 +117,7 @@ if (\OCP\App::isEnabled($c->getAppName()) && !\OC::$CLI) {
         } else {
 
             # Filter DAV requests
-            if(strpos($requestUri, '/remote.php') === FALSE && strpos($requestUri, '/webdav') === FALSE) {
+            if(strpos($requestUri, '/remote.php') === FALSE && strpos($requestUri, '/webdav') === FALSE && strpos($requestUri, '/dav') === FALSE) {
                 // Register UserHooks
                 $c->query('UserHooks')->register();
             }
