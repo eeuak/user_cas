@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+Version 1.10.0
+--------------
+
+* Add compatibility for owncloud 10.10 and up to Nextcloud 24 with PHP 8.0
+* Bumps phpCAS library to 1.5.0
+
+
 Version 1.9.0
 -------------
 
