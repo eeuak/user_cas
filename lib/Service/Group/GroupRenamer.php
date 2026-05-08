@@ -192,7 +192,35 @@ class GroupRenamer
                     $updatedMap[$dn] = $newGid;
                 }
 
+            } elseif ($prevGid === null && $newExists) {
+                // Target appears to exist — but the DB may match case-insensitively,
+                // so "kuenstlerisch…" satisfies groupExists("Kuenstlerisch…").
+                // If the matched group is empty it is a phantom; check for a populated
+                // legacy group and rename it (renameOne will delete the phantom first).
+                $targetGroup  = $this->groupManager->get($newGid);
+                $memberCount  = ($targetGroup !== null) ? count($targetGroup->getUsers()) : -1;
+
+                if ($memberCount === 0) {
+                    $candidate = $this->findLegacyCandidate($rawName, $newGid);
+                    if ($candidate !== null) {
+                        $outcome = $this->renameOne($candidate, $newGid, 'auto-detect');
+                        if ($outcome === true) {
+                            $updatedMap[$dn] = $newGid;
+                            $result['renamed']++;
+                        } else {
+                            $updatedMap[$dn] = $newGid;
+                            if (is_string($outcome)) $result['warnings'][] = $outcome;
+                        }
+                    } else {
+                        $updatedMap[$dn] = $newGid;
+                    }
+                } else {
+                    // Target exists and has members — nothing to do
+                    $updatedMap[$dn] = $newGid;
+                }
+
             } else {
+                // prevGid === newGid — name unchanged
                 $updatedMap[$dn] = $newGid;
             }
         }

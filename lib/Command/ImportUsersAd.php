@@ -110,7 +110,8 @@ protected function execute(InputInterface $input, OutputInterface $output)
 
         $renameResult = ['renamed' => 0, 'warnings' => []];
         $groupDns = $importer->getResolvedGroupDns();
-        if (!empty($groupDns)) {
+        $umloutsEnabled = boolval($this->config->getAppValue('user_cas', 'cas_groups_letter_umlauts'));
+        if (!empty($groupDns) && $umloutsEnabled) {
             $output->writeln(sprintf('Checking %d group(s) for rename …', count($groupDns)));
             $renamer = new GroupRenamer(
                 $this->config,
