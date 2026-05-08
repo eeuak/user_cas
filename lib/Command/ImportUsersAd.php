@@ -4,6 +4,7 @@
 namespace OCA\UserCAS\Command;
 
 use OC\User\Manager;
+use OCA\UserCAS\Service\Group\GroupRenamer;
 use OCA\UserCAS\Service\Import\AdImporter;
 use OCA\UserCAS\Service\Import\ImporterInterface;
 use OCP\IConfig;
@@ -104,6 +105,20 @@ protected function execute(InputInterface $input, OutputInterface $output)
         $importer->init($logger);
 
         $allUsers = $importer->getUsers();
+
+        $groupDns = $importer->getResolvedGroupDns();
+        if (!empty($groupDns)) {
+            $renamer = new GroupRenamer(
+                $this->config,
+                $this->groupManager,
+                \OC::$server->getDatabaseConnection(),
+                $logger
+            );
+            $renamedCount = $renamer->renameGroups($groupDns);
+            if ($renamedCount > 0) {
+                $output->writeln(sprintf('<info>Renamed %d group(s) to match current normalization settings.</info>', $renamedCount));
+            }
+        }
 
         $output->writeln('Account import from ActiveDirectory finished.');
         $output->writeln('Start account import to database.');

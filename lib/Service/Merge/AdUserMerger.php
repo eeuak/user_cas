@@ -59,34 +59,56 @@ class AdUserMerger implements MergerInterface
 
                 $this->logger->info("User " . $userToMerge["uid"] . " is merged because first account was disabled.");
 
+                $mergedGroups = $this->mergeGroupLists($userStack[$userToMerge["uid"]]['groups'], $userToMerge['groups']);
                 $userStack[$userToMerge["uid"]] = $userToMerge;
-            }
-            elseif(!$preferEnabledAccountsOverDisabled && $userStack[$userToMerge["uid"]]['enable'] == 0 && $userToMerge['enable'] == 1) {  # First disabled, second enabled and $preferEnabledAccountsOverDisabled is false
+                $userStack[$userToMerge["uid"]]['groups'] = $mergedGroups;
+
+            } elseif (!$preferEnabledAccountsOverDisabled && $userStack[$userToMerge["uid"]]['enable'] == 0 && $userToMerge['enable'] == 1) { # First disabled, second enabled and $preferEnabledAccountsOverDisabled is false
 
                 $this->logger->info("User " . $userToMerge["uid"] . " has not been merged, second enabled account was not preferred, because of preferEnabledAccountsOverDisabled option.");
-            }
-            elseif ($userStack[$userToMerge["uid"]]['enable'] == 1 && $userToMerge['enable'] == 1) { # Both enabled
+                $userStack[$userToMerge["uid"]]['groups'] = $this->mergeGroupLists($userStack[$userToMerge["uid"]]['groups'], $userToMerge['groups']);
 
-		 $this->logger->info("Mergeparams " . $userToMerge["dn"] . "-      -" .$primaryAccountDnStartswWith);
+            } elseif ($userStack[$userToMerge["uid"]]['enable'] == 1 && $userToMerge['enable'] == 1) { # Both enabled
 
-		if (strpos(strtolower($userToMerge['dn']), strtolower($primaryAccountDnStartswWith)) !== FALSE) {
-//                if (strpos(strtolower($userToMerge['dn']), strtolower($primaryAccountDnStartswWith) !== FALSE)) {
+                $this->logger->info("Mergeparams " . $userToMerge["dn"] . "-      -" . $primaryAccountDnStartswWith);
+
+                # Bug fix: strpos(x, '') === 0, not false — guard against unconfigured filter matching everything
+                if ($primaryAccountDnStartswWith !== '' && strpos(strtolower($userToMerge['dn']), strtolower($primaryAccountDnStartswWith)) !== false) {
 
                     $this->logger->info("User " . $userToMerge["uid"] . " is merged because second account is primary, based on merge filter.");
 
+                    $mergedGroups = $this->mergeGroupLists($userStack[$userToMerge["uid"]]['groups'], $userToMerge['groups']);
                     $userStack[$userToMerge["uid"]] = $userToMerge;
-                }
-                else {
+                    $userStack[$userToMerge["uid"]]['groups'] = $mergedGroups;
+
+                } else {
 
                     $this->logger->info("User " . $userToMerge["uid"] . " has not been merged, second account was not primary, based on merge filter.");
+                    $userStack[$userToMerge["uid"]]['groups'] = $this->mergeGroupLists($userStack[$userToMerge["uid"]]['groups'], $userToMerge['groups']);
                 }
+
             } else {
 
                 $this->logger->info("User " . $userToMerge["uid"] . " has not been merged, second account was disabled, first account was enabled.");
             }
+
+        } elseif (isset($userStack[$userToMerge["uid"]])) { # User in stack but merge disabled — skip duplicate, log warning
+
+            $this->logger->warning("User " . $userToMerge["uid"] . " appears multiple times in LDAP but merge is disabled. Keeping first entry, skipping duplicate.");
+
         } else { # User not in stack
 
             $userStack[$userToMerge["uid"]] = $userToMerge;
         }
+    }
+
+    /**
+     * @param array<int, string> $groupsA
+     * @param array<int, string> $groupsB
+     * @return array<int, string>
+     */
+    private function mergeGroupLists(array $groupsA, array $groupsB): array
+    {
+        return array_values(array_unique(array_merge($groupsA, $groupsB)));
     }
 }

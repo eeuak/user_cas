@@ -26,6 +26,11 @@ class AdImporter implements ImporterInterface
     private $excludedGroups = [];
 
     /**
+     * @var array<string, string>  dn => raw resolved name, populated by getUsers()
+     */
+    private $resolvedGroupDns = [];
+
+    /**
      * @var boolean|resource
      */
     private $ldapConnection;
@@ -119,7 +124,7 @@ class AdImporter implements ImporterInterface
                 $mappedUser = $this->mapLdapEntry($m, $mapping);
 
                 # Fill the users array only if we have an employeeId and addUser is true
-                if ($mappedUser['uid'] !== '' && $mappedUser['hasGroups']) {
+                if ($mappedUser['user']['uid'] !== '' && $mappedUser['hasGroups']) {
        # 	$this->logger->info("Merge User");
 
                     $this->merger->mergeUsers($users, $mappedUser['user'], $mergeAttribute, $preferEnabledAccountsOverDisabled, $primaryAccountDnStartswWith);
@@ -138,6 +143,14 @@ class AdImporter implements ImporterInterface
     public function getExcludedGroups()
     {
         return array_values($this->excludedGroups);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getResolvedGroupDns(): array
+    {
+        return $this->resolvedGroupDns;
     }
 
     /**
@@ -353,6 +366,10 @@ class AdImporter implements ImporterInterface
                 $hasGroups = true;
                 $resolvedGroup = $this->resolveGroupFromDn($groupCn, $groupAttrField);
                 $groupName = $resolvedGroup['name'];
+
+                if ($groupName !== '') {
+                    $this->resolvedGroupDns[$groupCn] = $groupName;
+                }
 
                 if (strlen($groupName) > 0) {
                     $resolvedGroups[] = $resolvedGroup;

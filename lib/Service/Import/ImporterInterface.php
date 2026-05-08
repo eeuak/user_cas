@@ -28,6 +28,12 @@ interface ImporterInterface
     public function getUsers();
 
     /**
+     * Returns all non-excluded group DNs → raw resolved names collected during getUsers().
+     * @return array<string, string>
+     */
+    public function getResolvedGroupDns(): array;
+
+    /**
      * @param array $userData
      */
     public function exportAsCsv(array $userData);
