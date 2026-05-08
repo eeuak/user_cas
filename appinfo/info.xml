@@ -39,6 +39,7 @@
         <command>OCA\UserCAS\Command\UpdateUser</command>
         <command>OCA\UserCAS\Command\ImportUsersAd</command>
         <command>OCA\UserCAS\Command\DebugUserAd</command>
+        <command>OCA\UserCAS\Command\DebugImportUserAd</command>
     </commands>
 
     <settings>
