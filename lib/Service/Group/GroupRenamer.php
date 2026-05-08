@@ -161,11 +161,15 @@ class GroupRenamer
                         if (is_string($outcome)) $result['warnings'][] = $outcome;
                     }
                 } elseif ($prevExists && $newExists) {
-                    $msg = sprintf("Cannot rename '%s' → '%s': both exist in Nextcloud; shares remain on '%s'.", $prevGid, $newGid, $prevGid);
-                    $this->writeln('<comment>  [group-rename] ' . $msg . '</comment>');
-                    $this->logger->warning('GroupRenamer [DN map]: ' . $msg);
-                    $result['warnings'][] = $msg;
-                    $updatedMap[$dn] = $prevGid;
+                    // renameOne() will handle this: empty target → delete+rename, non-empty → warn
+                    $outcome = $this->renameOne($prevGid, $newGid, 'DN map');
+                    if ($outcome === true) {
+                        $updatedMap[$dn] = $newGid;
+                        $result['renamed']++;
+                    } else {
+                        $updatedMap[$dn] = $prevGid;
+                        if (is_string($outcome)) $result['warnings'][] = $outcome;
+                    }
                 } else {
                     $updatedMap[$dn] = $newGid;
                 }
@@ -253,6 +257,11 @@ class GroupRenamer
 
     /**
      * Rename a single group inside a transaction.
+     *
+     * If the target GID already exists but has zero members it is treated as a
+     * ghost group (e.g. created by a previous failed import) and deleted inside
+     * the same transaction before the rename proceeds.
+     *
      * Returns true on success, a warning string on a skippable conflict,
      * or false on DB error (already logged).
      *
@@ -267,17 +276,54 @@ class GroupRenamer
             return $msg;
         }
 
+        $deleteTargetFirst = false;
+
         if ($this->groupManager->groupExists($newGid)) {
-            $msg = sprintf("Cannot rename '%s' → '%s': target already exists.", $oldGid, $newGid);
-            $this->writeln('<comment>  [group-rename] ' . $msg . '</comment>');
-            $this->logger->warning("GroupRenamer [$source]: $msg");
-            return $msg;
+            $targetGroup  = $this->groupManager->get($newGid);
+            $memberCount  = ($targetGroup !== null) ? count($targetGroup->getUsers()) : -1;
+
+            if ($memberCount === 0) {
+                $deleteTargetFirst = true;
+                $this->writeln(sprintf(
+                    '  [group-rename] Target <comment>"%s"</comment> exists but has no members — will delete it and rename <comment>"%s"</comment>.',
+                    $newGid, $oldGid
+                ));
+                $this->logger->info(sprintf(
+                    "GroupRenamer [%s]: target '%s' is empty, will delete before renaming '%s'.",
+                    $source, $newGid, $oldGid
+                ));
+            } else {
+                $msg = sprintf(
+                    "Cannot rename '%s' → '%s': target already exists and has %d member(s).",
+                    $oldGid, $newGid, $memberCount
+                );
+                $this->writeln('<comment>  [group-rename] ' . $msg . '</comment>');
+                $this->logger->warning("GroupRenamer [$source]: $msg");
+                return $msg;
+            }
         }
 
         $this->writeln(sprintf('  [group-rename] Renaming <comment>"%s"</comment> → <info>"%s"</info> …', $oldGid, $newGid));
 
         $this->db->beginTransaction();
         try {
+            if ($deleteTargetFirst) {
+                // Remove the empty target group from all core tables so the rename
+                // can take its name. Any stale shares on the empty group are also
+                // cleaned up — they carried no real access anyway.
+                foreach (['groups', 'group_user', 'group_admin'] as $table) {
+                    $qb = $this->db->getQueryBuilder();
+                    $qb->delete($table)
+                        ->where($qb->expr()->eq('gid', $qb->createNamedParameter($newGid)))
+                        ->executeStatement();
+                }
+                $qb = $this->db->getQueryBuilder();
+                $qb->delete('share')
+                    ->where($qb->expr()->eq('share_with', $qb->createNamedParameter($newGid)))
+                    ->andWhere($qb->expr()->eq('share_type', $qb->createNamedParameter(1, \OCP\DB\QueryBuilder\IQueryBuilder::PARAM_INT)))
+                    ->executeStatement();
+            }
+
             foreach (['groups' => 'gid', 'group_user' => 'gid', 'group_admin' => 'gid'] as $table => $col) {
                 $qb = $this->db->getQueryBuilder();
                 $qb->update($table)
@@ -296,16 +342,17 @@ class GroupRenamer
 
             $this->db->commit();
 
-            $this->writeln(sprintf('  [group-rename] <info>Done</info> — groups, memberships, shares updated.'));
+            $detail = $deleteTargetFirst ? 'empty target deleted, ' : '';
+            $this->writeln('  [group-rename] <info>Done</info> — ' . $detail . 'groups, memberships, shares updated.');
             $this->logger->info(sprintf(
-                "GroupRenamer [%s]: renamed '%s' → '%s' (groups, group_user, group_admin, shares updated).",
-                $source, $oldGid, $newGid
+                "GroupRenamer [%s]: renamed '%s' → '%s' (%sgroups, group_user, group_admin, shares updated).",
+                $source, $oldGid, $newGid, $detail
             ));
             return true;
 
         } catch (\Throwable $e) {
             $this->db->rollBack();
-            $this->writeln(sprintf('  [group-rename] <error>DB error renaming "%s" → "%s": %s</error>', $oldGid, $newGid, $e->getMessage()));
+            $this->writeln(sprintf('  [group-rename] <error>DB error: %s</error>', $e->getMessage()));
             $this->logger->error(sprintf(
                 "GroupRenamer [%s]: DB error renaming '%s' → '%s': %s",
                 $source, $oldGid, $newGid, $e->getMessage()
