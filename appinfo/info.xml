@@ -16,17 +16,17 @@
 
     <category>security</category>
 
-    <website>https://github.com/example/user_cas</website>
+    <website>https://github.com/eeuak/user_cas</website>
 
     <documentation>
-        <user>https://github.com/example/user_cas/blob/master/README.md</user>
-        <admin>https://github.com/example/user_cas/blob/master/README.md</admin>
-        <developer>https://github.com/example/user_cas/blob/master/README.md</developer>
+        <user>https://github.com/eeuak/user_cas/blob/master/README.md</user>
+        <admin>https://github.com/eeuak/user_cas/blob/master/README.md</admin>
+        <developer>https://github.com/eeuak/user_cas/blob/master/README.md</developer>
     </documentation>
 
-    <bugs>https://github.com/example/user_cas/issues</bugs>
+    <bugs>https://github.com/eeuak/user_cas/issues</bugs>
 
-    <repository type="git">https://github.com/example/user_cas.git</repository>
+    <repository type="git">https://github.com/eeuak/user_cas.git</repository>
 
     <dependencies>
         <owncloud min-version="10.0" max-version="10.10"/>

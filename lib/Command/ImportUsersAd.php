@@ -363,6 +363,23 @@ protected function execute(InputInterface $input, OutputInterface $output)
             }
         }
 
+        $gidChanges         = $renameResult['gid_changes']         ?? [];
+        $displaynameChanges = $renameResult['displayname_changes'] ?? [];
+        if (count($gidChanges) > 0 || count($displaynameChanges) > 0) {
+            $output->writeln('<info>Group changes summary:</info>');
+            foreach ($gidChanges as $change) {
+                $output->writeln(sprintf(
+                    '  <info>GID renamed:</info> "%s" → "%s" [%s]',
+                    $change['old'],
+                    $change['new'],
+                    $change['source']
+                ));
+            }
+            foreach ($displaynameChanges as $gid) {
+                $output->writeln(sprintf('  <info>Displayname fixed:</info> "%s"', $gid));
+            }
+        }
+
         if (count($failedUsers) > 0) {
             $output->writeln(sprintf(
                 '<comment>Import completed with %d skipped user(s):</comment>',

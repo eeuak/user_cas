@@ -55,6 +55,12 @@ class GroupRenamer
     /** @var OutputInterface|null */
     private $output;
 
+    /** @var list<array{old: string, new: string, source: string}> */
+    private $gidChanges = [];
+
+    /** @var list<string>  gids whose displayname was corrected */
+    private $displaynameChanges = [];
+
 
     public function __construct(IConfig $config, IGroupManager $groupManager, IDBConnection $db, LoggerInterface $logger)
     {
@@ -68,11 +74,13 @@ class GroupRenamer
     /**
      * @param array<string, string> $dnToRawName  dn => raw group name from LDAP
      * @param OutputInterface|null  $output        when provided, key events are written live
-     * @return array{renamed: int, warnings: list<string>}
+     * @return array{renamed: int, warnings: list<string>, gid_changes: list<array{old: string, new: string, source: string}>, displayname_changes: list<string>}
      */
     public function renameGroups(array $dnToRawName, ?OutputInterface $output = null): array
     {
-        $this->output = $output;
+        $this->output             = $output;
+        $this->gidChanges         = [];
+        $this->displaynameChanges = [];
 
         $result = ['renamed' => 0, 'warnings' => []];
 
@@ -83,6 +91,9 @@ class GroupRenamer
         $dnResult = $this->applyDnMapping($dnToRawName);
         $result['renamed']  += $dnResult['renamed'];
         $result['warnings']  = array_merge($result['warnings'], $dnResult['warnings']);
+
+        $result['gid_changes']         = $this->gidChanges;
+        $result['displayname_changes'] = $this->displaynameChanges;
 
         return $result;
     }
@@ -259,6 +270,7 @@ class GroupRenamer
                 if ($affected > 0) {
                     $this->writeln(sprintf('  [group-rename] Fixed stale displayname for <info>"%s"</info>.', $gid));
                     $this->logger->info(sprintf("GroupRenamer: corrected displayname for '%s'.", $gid));
+                    $this->displaynameChanges[] = $gid;
                 }
             } catch (\Throwable $e) {
                 $this->logger->warning(sprintf("GroupRenamer: could not sync displayname for '%s': %s", $gid, $e->getMessage()));
@@ -421,6 +433,7 @@ class GroupRenamer
                 "GroupRenamer [%s]: renamed '%s' → '%s' (%sgid+displayname, group_user, group_admin, shares updated).",
                 $source, $oldGid, $newGid, $detail
             ));
+            $this->gidChanges[] = ['old' => $oldGid, 'new' => $newGid, 'source' => $source];
             return true;
 
         } catch (\Throwable $e) {
