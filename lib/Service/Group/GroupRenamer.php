@@ -352,7 +352,15 @@ class GroupRenamer
                     ->executeStatement();
             }
 
-            foreach (['groups' => 'gid', 'group_user' => 'gid', 'group_admin' => 'gid'] as $table => $col) {
+            // oc_groups: update both gid and displayname so the UI shows the correct name
+            $qb = $this->db->getQueryBuilder();
+            $qb->update('groups')
+                ->set('gid', $qb->createNamedParameter($newGid))
+                ->set('displayname', $qb->createNamedParameter($newGid))
+                ->where($qb->expr()->eq('gid', $qb->createNamedParameter($oldGid)))
+                ->executeStatement();
+
+            foreach (['group_user' => 'gid', 'group_admin' => 'gid'] as $table => $col) {
                 $qb = $this->db->getQueryBuilder();
                 $qb->update($table)
                     ->set($col, $qb->createNamedParameter($newGid))
@@ -371,9 +379,9 @@ class GroupRenamer
             $this->db->commit();
 
             $detail = $deleteTargetFirst ? 'empty target deleted, ' : '';
-            $this->writeln('  [group-rename] <info>Done</info> — ' . $detail . 'groups, memberships, shares updated.');
+            $this->writeln('  [group-rename] <info>Done</info> — ' . $detail . 'gid + displayname, memberships, shares updated.');
             $this->logger->info(sprintf(
-                "GroupRenamer [%s]: renamed '%s' → '%s' (%sgroups, group_user, group_admin, shares updated).",
+                "GroupRenamer [%s]: renamed '%s' → '%s' (%sgid+displayname, group_user, group_admin, shares updated).",
                 $source, $oldGid, $newGid, $detail
             ));
             return true;
